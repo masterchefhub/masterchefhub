@@ -27,7 +27,7 @@ button,input{font-family:inherit}
 .ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .ico.sm{width:16px;height:16px}
 
-.split{display:grid;grid-template-columns:1fr 1.05fr;min-height:100vh}
+.split{display:grid;grid-template-columns:1fr 1.05fr;min-height:100vh;overflow-x:clip}
 
 /* ---------- brand side ---------- */
 .bs{position:relative;background:var(--ink);color:#fff;overflow:hidden;padding:44px 56px;display:flex;flex-direction:column}
@@ -65,8 +65,8 @@ button,input{font-family:inherit}
 .top a:hover{background:#fff;box-shadow:0 10px 26px rgba(0,0,0,.08)}
 .top a:first-child:hover .ico{transform:translateX(-4px)}
 .top .ico{transition:transform .25s}
-.wrapc{flex:1;display:grid;place-items:center;padding:20px 0}
-.card{width:100%;max-width:460px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:38px 36px;box-shadow:0 24px 70px rgba(0,0,0,.07);animation:rise .7s cubic-bezier(.2,.9,.3,1) both}
+.wrapc{flex:1;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;padding:20px 0;min-width:0}
+.card{width:100%;min-width:0;max-width:460px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:38px 36px;box-shadow:0 24px 70px rgba(0,0,0,.07);animation:rise .7s cubic-bezier(.2,.9,.3,1) both}
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 .card.shake{animation:shake .5s}
 @keyframes shake{0%,100%{transform:none}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
@@ -90,22 +90,6 @@ button,input{font-family:inherit}
 .soc.soon svg{opacity:.45}
 .soc.soon:hover{border-color:var(--line);transform:none;box-shadow:none}
 .soonTag{font-style:normal;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:#fff;border-radius:99px;padding:3px 8px}
-.phrow{position:relative;display:flex;gap:8px}
-.phrow .inp{flex:1;min-width:0}
-.cc{display:flex;align-items:center;gap:8px;height:50px;padding:0 12px;border:1.5px solid var(--line);border-radius:15px;background:#fff;cursor:pointer;font-weight:600;font-size:.92rem;transition:.2s;color:var(--ink);flex-shrink:0}
-.cc:hover,.cc[aria-expanded="true"]{border-color:var(--ink)}
-.cc b{background:var(--ink);color:#fff;border-radius:7px;padding:2px 7px;font-size:.72rem;letter-spacing:.06em}
-.cc .ico{transition:transform .2s}.cc[aria-expanded="true"] .ico{transform:rotate(180deg)}
-.ccpanel{position:absolute;left:0;top:58px;width:min(340px,100%);background:#fff;border:1.5px solid var(--ink);border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.18);z-index:20;overflow:hidden}
-.ccsearch{display:flex;align-items:center;gap:10px;padding:0 14px;height:48px;border-bottom:1px solid var(--line)}
-.ccsearch input{flex:1;border:0;outline:0;font-size:.92rem;background:transparent;height:100%;min-width:0}
-.ccpanel ul{list-style:none;max-height:260px;overflow-y:auto;padding:6px}
-.ccpanel li{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:11px;cursor:pointer;font-size:.9rem;font-weight:500}
-.ccpanel li:hover,.ccpanel li.on{background:#f0f0ed}
-.ccpanel li b{width:30px;font-size:.7rem;letter-spacing:.06em;color:var(--muted)}
-.ccpanel li span{flex:1}.ccpanel li i{font-style:normal;color:var(--muted);font-weight:600}
-.ccpanel .none{padding:16px;color:var(--muted);font-size:.88rem;cursor:default}
-@media(max-width:480px){.ccpanel{width:100%}}
 .soc[disabled]{opacity:.55;pointer-events:none}
 .soc .sp{display:none}
 .soc.loading .sp{display:block}.soc.loading .lb,.soc.loading svg:not(.sp){display:none}
@@ -157,6 +141,10 @@ button,input{font-family:inherit}
 .fine a{text-decoration:underline;font-weight:600}
 .back-row{margin-top:16px;text-align:center}
 
+.spwho{display:flex;align-items:center;gap:12px;background:#f6f6f4;border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:20px 0 18px}
+.spwho .av2{width:42px;height:42px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;overflow:hidden;flex-shrink:0}
+.spwho .av2 img{width:100%;height:100%;object-fit:cover}
+.spwho b{display:block;font-size:.92rem;line-height:1.2}.spwho small{color:var(--muted);font-size:.8rem;word-break:break-all}
 .signed{text-align:center}
 .signed .av{width:96px;height:96px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:2.4rem;margin:0 auto 18px;overflow:hidden;box-shadow:0 0 0 6px #fff,0 0 0 8px var(--line);animation:pop .6s cubic-bezier(.2,.9,.3,1.4) both}
 .signed .av img{width:100%;height:100%;object-fit:cover}
@@ -174,7 +162,8 @@ button,input{font-family:inherit}
 .ft a:hover{text-decoration:underline}
 
 @media(max-width:1000px){
-  .split{grid-template-columns:1fr}
+  .split{grid-template-columns:minmax(0,1fr)}
+  .bs,.fs{min-width:0}
   .bs{padding:26px 24px 30px}
   .hero{padding:26px 0 8px}.badge{width:72px;height:72px;border-radius:22px;margin-bottom:20px}.badge .ico{width:42px;height:42px}
   .hero h2{font-size:2.4rem;min-height:2.1em}.hero p,.feats{display:none}
@@ -216,12 +205,12 @@ button,input{font-family:inherit}
     </a>
     <div class="hero">
       <div class="badge"><svg class="ico"><use href="#i-hat"/></svg></div>
-      <h2 class="serif" id="phrase">Save every recipe <em>you love.</em></h2>
-      <p>Join home cooks who plan, save and cook with chef-tested recipes, step-by-step videos and weekly meal plans.</p>
+      <h2 class="serif" id="phrase">Cook better <em>every day.</em></h2>
+      <p>Join MasterChefHub for chef-tested recipes and step-by-step video lessons.</p>
     </div>
     <div class="feats">
-      <div class="feat"><i><svg class="ico"><use href="#i-book"/></svg></i>Save recipes and build your collection</div>
-      <div class="feat"><i><svg class="ico"><use href="#i-cal"/></svg></i>Plan your week with meal plans</div>
+      <div class="feat"><i><svg class="ico"><use href="#i-book"/></svg></i>Browse chef-tested recipes by category</div>
+      <div class="feat"><i><svg class="ico"><use href="#i-cal"/></svg></i>Watch step-by-step video lessons</div>
       <div class="feat"><i><svg class="ico"><use href="#i-note"/></svg></i>Relaxing music while you cook</div>
     </div>
   </aside>
@@ -266,7 +255,6 @@ button,input{font-family:inherit}
                 <i class="sp"></i><span class="lb">Microsoft</span>
               </button>
             </div>
-            <button type="button" class="soc" id="phoneBtn"><svg class="ico"><use href="#i-phone"/></svg><span class="lb">Continue with phone</span></button>
           </div>
 
           <div class="or"><span>or use your email</span></div>
@@ -325,32 +313,26 @@ button,input{font-family:inherit}
           <p class="fine"><button type="button" class="lnk" id="backBtn">Back to log in</button></p>
         </section>
 
-        <!-- phone -->
-        <section id="v-phone" hidden>
-          <div class="head"><h1 class="serif">Phone sign-in</h1><p id="phSub">Enter your number and we will text you a 6-digit code.</p></div>
-          <form id="pform" novalidate style="margin-top:24px">
-            <div class="field" id="pf-num">
-              <label for="pnum">Phone number</label>
-              <div class="phrow">
-                <button type="button" class="cc" id="ccBtn" aria-haspopup="listbox" aria-expanded="false"><b id="ccIso">US</b><span id="ccDial">+1</span><svg class="ico sm"><use href="#i-chev"/></svg></button>
-                <div class="inp"><svg class="ico"><use href="#i-phone"/></svg><input id="pnum" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="555 123 4567"></div>
-                <div class="ccpanel" id="ccPanel" hidden>
-                  <div class="ccsearch"><svg class="ico sm"><use href="#i-search"/></svg><input id="ccQ" type="text" placeholder="Search country or code" autocomplete="off" aria-label="Search country"></div>
-                  <ul id="ccList" role="listbox"></ul>
-                </div>
-              </div>
+        <!-- create a password (Google / Microsoft accounts) -->
+        <section id="v-setpw" hidden>
+          <div class="head"><h1 class="serif">Create a password</h1><p>Every MasterChefHub account needs a password. You can then log in with your email and this password too.</p></div>
+          <div class="spwho" id="spWho"></div>
+          <form id="spform" novalidate>
+            <div class="field" id="sp-pw">
+              <label for="sppw">Password</label>
+              <div class="inp"><svg class="ico"><use href="#i-lock"/></svg><input id="sppw" type="password" autocomplete="new-password" placeholder="At least 6 characters"><button type="button" class="eye" data-eye="sppw" aria-label="Show password"><svg class="ico"><use href="#i-eye"/></svg></button></div>
+              <div class="strength" id="spStrength" data-s="0"><i></i><i></i><i></i><i></i><span id="spStrengthLbl"></span></div>
               <small class="err"></small>
             </div>
-            <div class="field" id="pf-code" hidden>
-              <label for="pcode">Verification code</label>
-              <div class="inp"><svg class="ico"><use href="#i-lock"/></svg><input id="pcode" type="text" autocomplete="one-time-code" inputmode="numeric" maxlength="6" placeholder="123456"></div>
+            <div class="field" id="sp-pw2">
+              <label for="sppw2">Confirm password</label>
+              <div class="inp"><svg class="ico"><use href="#i-lock"/></svg><input id="sppw2" type="password" autocomplete="new-password" placeholder="Repeat your password"><button type="button" class="eye" data-eye="sppw2" aria-label="Show password"><svg class="ico"><use href="#i-eye"/></svg></button></div>
               <small class="err"></small>
             </div>
-            <div id="recaptcha"></div>
-            <div class="msg" id="pmsg" role="alert" aria-live="assertive" hidden></div>
-            <button class="submit" id="psubmit" type="submit"><i class="spin"></i><span class="lbl">Send code</span></button>
+            <div class="msg" id="spmsg" role="alert" aria-live="assertive" hidden></div>
+            <button class="submit" id="spsubmit" type="submit"><i class="spin"></i><span class="lbl">Save password and continue</span></button>
           </form>
-          <p class="fine"><button type="button" class="lnk" id="pResend" hidden>Send a new code</button> <button type="button" class="lnk" id="pBack">Back to log in</button></p>
+          <p class="fine"><button type="button" class="lnk" id="spOut">Use a different account</button></p>
         </section>
 
         <!-- signed in -->
@@ -381,7 +363,7 @@ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll
 const params=new URLSearchParams(location.search);
 const NEXT=(function(){ const n=params.get('next'); return n&&n.charAt(0)==='/'&&n.charAt(1)!=='/'?n:'/'; })();
 const FBV='10.14.1';
-let mode='login', busy=false, fb=null, auth=null, db=null, fs=null, confirmation=null, verifier=null, setupErr=null, justSignedIn=false, view='auth';
+let mode='login', busy=false, fb=null, auth=null, db=null, fs=null, setupErr=null, justSignedIn=false, view='auth';
 
 /* ---------- helpers ---------- */
 const say=(type,title,message)=>{ try{ if(window.MCH&&MCH.notify) MCH.notify({type:type,title:title,message:message}); }catch(e){} };
@@ -406,19 +388,12 @@ function clearErrs(){ $$('.field').forEach(f=>f.classList.remove('bad')); $('#te
 async function initFirebase(){
   try{
     if(window.__fbMock){ fb=window.__fbMock.fb; auth=window.__fbMock.auth; db=window.__fbMock.db||null; fs=window.__fbMock.fs||null; return true; }   /* test hook */
-    const mod=await import('/firebase-config.js');
-    const cfg=mod.firebaseConfig;
-    if(!cfg||!cfg.apiKey||/^YOUR_|PASTE/i.test(cfg.apiKey)||/YOUR_/i.test(cfg.projectId||'')){ setupErr='not-configured'; return false; }
-    const A=await import('https://www.gstatic.com/firebasejs/'+FBV+'/firebase-auth.js');
-    const App=await import('https://www.gstatic.com/firebasejs/'+FBV+'/firebase-app.js');
-    const app=App.initializeApp(cfg);
-    auth=A.getAuth(app); fb=A;
-    try{ fs=await import('https://www.gstatic.com/firebasejs/'+FBV+'/firebase-firestore.js'); db=fs.getFirestore(app); }catch(e){ db=null; }
+    const D=await import('/data.js');
+    const c=await D.init();
+    if(!c){ setupErr=D.state.error||'load-failed'; return false; }
+    auth=c.auth; fb=c.A; db=c.db; fs=c.F;
     return true;
-  }catch(e){
-    setupErr=(e&&/firebase-config/i.test(String(e.message||e)))?'not-configured':'load-failed';
-    return false;
-  }
+  }catch(e){ setupErr='load-failed'; return false; }
 }
 const ready=initFirebase();
 
@@ -468,6 +443,8 @@ function friendly(err,prov){
     'auth/quota-exceeded':['error','Too many texts','The SMS limit was reached. Try again later.'],
     'auth/captcha-check-failed':['error','Security check failed','Refresh the page and try again.'],
     'auth/billing-not-enabled':['error','Phone sign-in is not enabled yet','The site owner must upgrade Firebase to the Blaze plan to send real texts.'],
+    'auth/credential-already-in-use':['error','Already in use','That email already has an account. Log in with it instead.'],
+    'auth/requires-recent-login':['error','Please log in again','For safety, log in again and then add your password.'],
     'auth/internal-error':['error','Something went wrong','Please try again in a moment.']
   };
   return M[c]||['error','Sign-in failed',(err&&err.message?String(err.message).replace(/^Firebase:\s*/,'').replace(/\s*\(auth\/.*\)\.?$/,''):'Please try again.')];
@@ -481,10 +458,13 @@ function fail(err,prov,target){
 }
 
 /* ---------- user cache + signed-in view ---------- */
+const OWNER='chrisw81114@gmail.com';
+function hasPw(u){ return !!(u&&u.providerData&&u.providerData.some(p=>p.providerId==='password')); }
 function cacheUser(u){
   try{
     const pid=u.providerData&&u.providerData[0]?u.providerData[0].providerId:'password';
-    localStorage.setItem('mch_user',JSON.stringify({uid:u.uid,name:u.displayName||u.phoneNumber||'',email:u.email||'',photo:u.photoURL||'',provider:pid}));
+    const own=(u.email||'').toLowerCase()===OWNER&&u.emailVerified===true;
+    localStorage.setItem('mch_user',JSON.stringify({uid:u.uid,name:u.displayName||'',email:u.email||'',photo:u.photoURL||'',provider:pid,hasPw:hasPw(u),owner:own}));
   }catch(e){}
 }
 function paintSigned(u){
@@ -527,15 +507,17 @@ async function saveSettingsNow(){
   try{ await fs.setDoc(fs.doc(db,'users',auth.currentUser.uid),{settings:mySettings()},{merge:true}); }catch(e){}
 }
 function success(user,title,message,extra){
-  justSignedIn=true; cacheUser(user); paintSigned(user); showView('signed'); startRedirect();
+  justSignedIn=true; cacheUser(user);
   say('success',title,message); snd('success');
   syncData(user,extra);
+  if(!hasPw(user)){ enterSetPw(user); return; }          /* Google / Microsoft: add a password to continue */
+  paintSigned(user); showView('signed'); startRedirect();
 }
 
 /* ---------- views / modes ---------- */
 function showView(v){
   view=v;
-  $('#v-auth').hidden=v!=='auth'; $('#v-forgot').hidden=v!=='forgot'; $('#v-phone').hidden=v!=='phone'; $('#v-signed').hidden=v!=='signed';
+  $('#v-auth').hidden=v!=='auth'; $('#v-forgot').hidden=v!=='forgot'; $('#v-setpw').hidden=v!=='setpw'; $('#v-signed').hidden=v!=='signed';
   if(v==='forgot'){ $('#femail').value=$('#email').value; setTimeout(()=>$('#femail').focus(),50); }
 }
 function setMode(m){
@@ -687,93 +669,42 @@ $('#fform').addEventListener('submit',async e=>{
   finally{ busyOn(btn,false); }
 });
 
-/* ---------- phone sign-in ---------- */
-const COUNTRIES=[["United States","US","1"],["Canada","CA","1"],["Mexico","MX","52"],["United Kingdom","GB","44"],["Afghanistan","AF","93"],["Albania","AL","355"],["Algeria","DZ","213"],["Argentina","AR","54"],["Armenia","AM","374"],["Australia","AU","61"],["Austria","AT","43"],["Azerbaijan","AZ","994"],["Bahamas","BS","1242"],["Bahrain","BH","973"],["Bangladesh","BD","880"],["Barbados","BB","1246"],["Belarus","BY","375"],["Belgium","BE","32"],["Belize","BZ","501"],["Bolivia","BO","591"],["Bosnia and Herzegovina","BA","387"],["Brazil","BR","55"],["Bulgaria","BG","359"],["Cambodia","KH","855"],["Cameroon","CM","237"],["Chile","CL","56"],["China","CN","86"],["Colombia","CO","57"],["Costa Rica","CR","506"],["Croatia","HR","385"],["Cuba","CU","53"],["Cyprus","CY","357"],["Czechia","CZ","420"],["Denmark","DK","45"],["Dominican Republic","DO","1809"],["Ecuador","EC","593"],["Egypt","EG","20"],["El Salvador","SV","503"],["Estonia","EE","372"],["Ethiopia","ET","251"],["Finland","FI","358"],["France","FR","33"],["Georgia","GE","995"],["Germany","DE","49"],["Ghana","GH","233"],["Greece","GR","30"],["Guatemala","GT","502"],["Haiti","HT","509"],["Honduras","HN","504"],["Hong Kong","HK","852"],["Hungary","HU","36"],["Iceland","IS","354"],["India","IN","91"],["Indonesia","ID","62"],["Iraq","IQ","964"],["Ireland","IE","353"],["Israel","IL","972"],["Italy","IT","39"],["Jamaica","JM","1876"],["Japan","JP","81"],["Jordan","JO","962"],["Kazakhstan","KZ","7"],["Kenya","KE","254"],["Kuwait","KW","965"],["Latvia","LV","371"],["Lebanon","LB","961"],["Lithuania","LT","370"],["Luxembourg","LU","352"],["Malaysia","MY","60"],["Malta","MT","356"],["Morocco","MA","212"],["Nepal","NP","977"],["Netherlands","NL","31"],["New Zealand","NZ","64"],["Nicaragua","NI","505"],["Nigeria","NG","234"],["Norway","NO","47"],["Oman","OM","968"],["Pakistan","PK","92"],["Panama","PA","507"],["Paraguay","PY","595"],["Peru","PE","51"],["Philippines","PH","63"],["Poland","PL","48"],["Portugal","PT","351"],["Puerto Rico","PR","1787"],["Qatar","QA","974"],["Romania","RO","40"],["Russia","RU","7"],["Saudi Arabia","SA","966"],["Serbia","RS","381"],["Singapore","SG","65"],["Slovakia","SK","421"],["Slovenia","SI","386"],["South Africa","ZA","27"],["South Korea","KR","82"],["Spain","ES","34"],["Sri Lanka","LK","94"],["Sweden","SE","46"],["Switzerland","CH","41"],["Taiwan","TW","886"],["Thailand","TH","66"],["Trinidad and Tobago","TT","1868"],["Tunisia","TN","216"],["Turkey","TR","90"],["Ukraine","UA","380"],["United Arab Emirates","AE","971"],["Uruguay","UY","598"],["Venezuela","VE","58"],["Vietnam","VN","84"]];
-let cc=COUNTRIES[0];
-(function guess(){ try{ const m=(navigator.language||'').split('-')[1]; if(m){ const f=COUNTRIES.find(c=>c[1]===m.toUpperCase()); if(f) cc=f; } }catch(e){} })();
-function paintCC(){ $('#ccIso').textContent=cc[1]; $('#ccDial').textContent='+'+cc[2]; }
-function listCC(q){
-  q=(q||'').trim().toLowerCase().replace(/^\+/,'');
-  const rows=COUNTRIES.filter(c=>!q||c[0].toLowerCase().includes(q)||c[1].toLowerCase()===q||c[2].startsWith(q));
-  $('#ccList').innerHTML=rows.length?rows.map(c=>'<li role="option" data-i="'+c[1]+'"'+(c===cc?' class="on"':'')+'><b>'+c[1]+'</b><span>'+esc(c[0])+'</span><i>+'+c[2]+'</i></li>').join(''):'<li class="none">No match</li>';
+/* ---------- password step for Google / Microsoft accounts ---------- */
+let pwUser=null;
+function emailFor(u){ return u.email||((u.providerData||[]).find(p=>p.email)||{}).email||''; }
+function enterSetPw(user){
+  pwUser=user;
+  const name=user.displayName||emailFor(user)||'your account';
+  $('#spWho').innerHTML='<div class="av2">'+(user.photoURL?'<img src="'+esc(user.photoURL)+'" alt="" referrerpolicy="no-referrer">':esc(name.charAt(0).toUpperCase()))+'</div><div><b>'+esc(name)+'</b><small>'+esc(emailFor(user))+'</small></div>';
+  $('#sppw').value=''; $('#sppw2').value=''; $('#spStrength').dataset.s=0; $('#spStrengthLbl').textContent='';
+  msg($('#spmsg'),'error',''); showView('setpw'); setTimeout(()=>$('#sppw').focus(),60);
 }
-function openCC(o){
-  $('#ccPanel').hidden=!o; $('#ccBtn').setAttribute('aria-expanded',String(o));
-  if(o){ $('#ccQ').value=''; listCC(''); setTimeout(()=>{ $('#ccQ').focus(); const on=$('#ccList li.on'); if(on&&on.scrollIntoView) on.scrollIntoView({block:'center'}); },30); }
-}
-$('#ccBtn').addEventListener('click',e=>{ e.stopPropagation(); openCC($('#ccPanel').hidden); });
-$('#ccQ').addEventListener('input',()=>listCC($('#ccQ').value));
-$('#ccList').addEventListener('click',e=>{
-  const li=e.target.closest('li[data-i]'); if(!li) return;
-  cc=COUNTRIES.find(c=>c[1]===li.dataset.i)||cc; paintCC(); openCC(false); $('#pnum').focus(); $('#pf-num').classList.remove('bad');
+$('#sppw').addEventListener('input',()=>{ const s=score($('#sppw').value); $('#spStrength').dataset.s=s; $('#spStrengthLbl').textContent=['','Weak','Fair','Good','Strong'][s]; fieldErr('sp-pw',''); });
+$('#sppw2').addEventListener('input',()=>fieldErr('sp-pw2',''));
+$('#spform').addEventListener('submit',async e=>{
+  e.preventDefault(); if(busy||!pwUser) return;
+  fieldErr('sp-pw',''); fieldErr('sp-pw2',''); msg($('#spmsg'),'error','');
+  const pw=$('#sppw').value, pw2=$('#sppw2').value; let bad=0;
+  if(pw.length<6){ fieldErr('sp-pw','Use at least 6 characters.'); bad++; }
+  if(pw2!==pw){ fieldErr('sp-pw2','The passwords do not match.'); bad++; }
+  if(bad){ shake(); snd('whoops'); say('warning','Check your password','Please fix the highlighted fields.'); return; }
+  const email=emailFor(pwUser);
+  if(!email){ msg($('#spmsg'),'error','This account has no email address, so a password cannot be added. Please log in another way.'); shake(); snd('whoops'); return; }
+  const btn=$('#spsubmit'); busyOn(btn,true);
+  try{
+    const cur=auth.currentUser||pwUser;
+    try{ await fb.linkWithCredential(cur,fb.EmailAuthProvider.credential(email,pw)); }
+    catch(er){ if(!(er&&er.code==='auth/provider-already-linked')) throw er; }
+    const u=auth.currentUser||cur;
+    justSignedIn=true; cacheUser(u); paintSigned(u); showView('signed'); startRedirect();
+    say('success','Password saved','You can now log in with your email and password.'); snd('success');
+    syncData(u);
+  }catch(err){
+    fail(err,null,$('#spmsg'));
+    if(err&&err.code==='auth/requires-recent-login'){ try{ await fb.signOut(auth); }catch(x){} try{ localStorage.removeItem('mch_user'); }catch(x){} pwUser=null; setTimeout(()=>showView('auth'),1800); }
+  }finally{ busyOn(btn,false); }
 });
-document.addEventListener('click',e=>{ if(!$('#ccPanel').hidden&&!e.target.closest('#ccPanel')&&!e.target.closest('#ccBtn')) openCC(false); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('#ccPanel').hidden){ openCC(false); $('#ccBtn').focus(); } });
-paintCC();
-/* builds +<country code><number>. A number typed with + or 00 is used as is. */
-function normPhone(v){
-  v=v.trim().replace(/[\s().-]/g,'');
-  if(/^00/.test(v)) v='+'+v.slice(2);
-  if(v.charAt(0)==='+') return v;
-  v=v.replace(/\D/g,'');
-  if(cc[2]!=='1') v=v.replace(/^0+/,'');           /* drop the local leading 0 */
-  return v?('+'+cc[2]+v):'';
-}
-function dropVerifier(){
-  try{ if(verifier&&verifier.clear) verifier.clear(); }catch(e){}
-  verifier=null; const box=$('#recaptcha'); if(box) box.innerHTML='';
-}
-function freshVerifier(){                 /* a new reCAPTCHA box for every attempt */
-  dropVerifier();
-  const el=document.createElement('div'); el.id='rc'+Date.now(); $('#recaptcha').appendChild(el);
-  verifier=new fb.RecaptchaVerifier(auth,el,{size:'invisible'});
-}
-function phoneReset(){
-  confirmation=null; $('#pf-code').hidden=true; $('#pcode').value='';
-  $('#psubmit .lbl').textContent='Send code'; $('#pResend').hidden=true; $('#pnum').disabled=false; $('#ccBtn').disabled=false;
-  $('#phSub').textContent='Enter your number and we will text you a 6-digit code.';
-  msg($('#pmsg'),'error','');
-  dropVerifier();
-}
-$('#phoneBtn').addEventListener('click',()=>{ clearErrs(); phoneReset(); showView('phone'); setTimeout(()=>$('#pnum').focus(),50); });
-$('#pBack').addEventListener('click',()=>{ phoneReset(); showView('auth'); });
-$('#pResend').addEventListener('click',()=>{ phoneReset(); $('#pnum').focus(); });
-$('#pnum').addEventListener('input',()=>$('#pf-num').classList.remove('bad'));
-$('#pcode').addEventListener('input',()=>$('#pf-code').classList.remove('bad'));
-$('#pform').addEventListener('submit',async e=>{
-  e.preventDefault(); if(busy) return;
-  msg($('#pmsg'),'error','');
-  const btn=$('#psubmit');
-  if(!confirmation){
-    const num=normPhone($('#pnum').value);
-    if(!/^\+\d{8,15}$/.test(num)){
-      fieldErr('pf-num','Enter your phone number after choosing your country.');
-      shake(); snd('whoops'); say('warning','Check the phone number','Choose your country and enter the number.'); return;
-    }
-    if(!(await needAuth($('#pmsg')))) return;
-    busyOn(btn,true);
-    try{
-      freshVerifier();
-      confirmation=await fb.signInWithPhoneNumber(auth,num,verifier);
-      $('#pf-code').hidden=false; $('#pnum').disabled=true; $('#ccBtn').disabled=true; $('#pcode').focus();
-      $('#psubmit .lbl').textContent='Verify and continue'; $('#pResend').hidden=false;
-      $('#phSub').textContent='We sent a code to '+num+'. Enter it below.';
-      say('info','Code sent','Check your text messages.');
-    }catch(err){ fail(err,null,$('#pmsg')); dropVerifier(); }
-    finally{ busyOn(btn,false); }
-  }else{
-    const code=$('#pcode').value.replace(/\D/g,'');
-    if(code.length!==6){ fieldErr('pf-code','Enter the 6-digit code.'); shake(); snd('whoops'); return; }
-    busyOn(btn,true);
-    try{
-      await fb.setPersistence(auth,fb.browserLocalPersistence);
-      const res=await confirmation.confirm(code);
-      const isNew=res.additionalUserInfo&&res.additionalUserInfo.isNewUser;
-      success(res.user,isNew?'Account created':'Welcome back','Phone number verified.');
-    }catch(err){ fail(err,null,$('#pmsg')); }
-    finally{ busyOn(btn,false); }
-  }
-});
+$('#spOut').addEventListener('click',async()=>{ pwUser=null; await doSignOut(true); });
 
 /* ---------- signed-in actions ---------- */
 async function doSignOut(silent){
@@ -806,14 +737,21 @@ $('#resend').addEventListener('click',async()=>{
     if(r&&r.user) success(r.user,'Welcome back','You are signed in.');
   }catch(err){ fail(err); }
   fb.onAuthStateChanged(auth,u=>{
-    if(u){ cacheUser(u); if(view!=='signed'){ paintSigned(u); showView('signed'); } }
-    else if(view==='signed'){ showView('auth'); }
+    if(u){
+      cacheUser(u);
+      if(!hasPw(u)){ if(view!=='setpw') enterSetPw(u); }
+      else if(params.get('setpw')&&view==='auth'){ location.replace(NEXT); }
+      else if(view!=='signed'&&view!=='setpw'){ paintSigned(u); showView('signed'); }
+    }else{
+      try{ localStorage.removeItem('mch_user'); }catch(e){}           /* signed out somewhere else: clear the old copy */
+      if(view==='signed'||view==='setpw') showView('auth');
+    }
   });
 })();
 
 /* ---------- rotating headline on the brand side ---------- */
 (function(){
-  const lines=['Save every recipe <em>you love.</em>','Plan your week in <em>minutes.</em>','Cook with <em>confidence.</em>','Your kitchen, <em>everywhere.</em>'];
+  const lines=['Cook better <em>every day.</em>','Watch, pause, <em>and cook.</em>','Cook with <em>confidence.</em>','Your kitchen, <em>everywhere.</em>'];
   const h=$('#phrase'); let i=0;
   setInterval(()=>{ h.classList.add('sw'); setTimeout(()=>{ i=(i+1)%lines.length; h.innerHTML=lines[i]; h.classList.remove('sw'); },450); },3600);
 })();
