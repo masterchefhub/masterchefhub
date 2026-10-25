@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/loader.js"></script>
+<title>Log in | MasterChefHub</title>
+<meta name="description" content="Log in or create your MasterChefHub account with email, Google, Apple or Microsoft.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f6f4;--ink:#0a0a0a;--muted:#737373;--line:#e4e4e1;--card:#fff;--accent:#ff5a1f;--bad:#e5484d;--good:#16a34a;--r:22px}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button,input{font-family:inherit}
+.serif{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.02em}
+.ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.ico.sm{width:16px;height:16px}
+
+.split{display:grid;grid-template-columns:1fr 1.05fr;min-height:100vh}
+
+/* ---------- brand side ---------- */
+.bs{position:relative;background:var(--ink);color:#fff;overflow:hidden;padding:44px 56px;display:flex;flex-direction:column}
+.bs .ring{position:absolute;left:50%;top:46%;border:1px solid #242424;border-radius:50%;transform:translate(-50%,-50%);animation:breathe 7s ease-in-out infinite}
+.bs .ring:nth-child(1){width:360px;height:360px}.bs .ring:nth-child(2){width:600px;height:600px;animation-delay:-1.6s}.bs .ring:nth-child(3){width:860px;height:860px;animation-delay:-3.2s}.bs .ring:nth-child(4){width:1140px;height:1140px;animation-delay:-4.8s}
+@keyframes breathe{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}}
+.logo{position:relative;z-index:2;display:flex;align-items:center;gap:12px;width:max-content}
+.logo-mark{width:44px;height:44px;border-radius:14px;background:#fff;color:var(--ink);display:grid;place-items:center;transition:.4s;--mark-bg:#fff}
+.logo-mark .ico{width:26px;height:26px}
+.logo:hover .logo-mark{transform:rotate(-8deg) scale(1.08)}
+.logo:hover .hat{animation:hat .7s ease}
+@keyframes hat{0%,100%{transform:translateY(0)}30%{transform:translateY(-4px) rotate(-6deg)}60%{transform:translateY(0) rotate(4deg)}}
+.logo-text{font-weight:800;font-size:1.55rem;letter-spacing:.03em;line-height:1}
+.logo-text small{display:block;font-weight:600;font-size:.56rem;letter-spacing:.2em;color:#8a8a8a;text-transform:uppercase;margin-top:4px;white-space:nowrap}
+.hero{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;max-width:520px}
+.badge{position:relative;width:104px;height:104px;border-radius:30px;background:#fff;color:var(--ink);display:grid;place-items:center;margin-bottom:34px;--mark-bg:#fff;animation:bob 5s ease-in-out infinite}
+.badge .ico{width:62px;height:62px}
+.badge::before,.badge::after{content:"";position:absolute;inset:0;border-radius:30px;border:1.5px solid #fff;animation:ping 3s ease-out infinite}
+.badge::after{animation-delay:1.5s}
+@keyframes ping{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.7);opacity:0}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+.hero h2{font-size:clamp(2.8rem,4.6vw,4.4rem);line-height:1;min-height:2.1em;transition:opacity .45s,transform .45s}
+.hero h2.sw{opacity:0;transform:translateY(12px)}
+.hero h2 em{font-style:italic;color:#b5b5b5}
+.hero p{color:#a3a3a3;max-width:420px;margin-top:18px}
+.feats{position:relative;z-index:2;display:grid;gap:12px}
+.feat{display:flex;align-items:center;gap:14px;color:#d4d4d4;font-size:.94rem;font-weight:500}
+.feat i{width:40px;height:40px;border-radius:12px;border:1px solid #333;display:grid;place-items:center;flex-shrink:0;transition:.3s}
+.feat:hover i{background:#fff;color:var(--ink);transform:rotate(-6deg)}
+
+/* ---------- form side ---------- */
+.fs{display:flex;flex-direction:column;min-height:100vh;padding:26px 40px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.top a{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.9rem;padding:9px 16px;border-radius:99px;transition:.25s}
+.top a:hover{background:#fff;box-shadow:0 10px 26px rgba(0,0,0,.08)}
+.top a:first-child:hover .ico{transform:translateX(-4px)}
+.top .ico{transition:transform .25s}
+.wrapc{flex:1;display:grid;place-items:center;padding:20px 0}
+.card{width:100%;max-width:460px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:38px 36px;box-shadow:0 24px 70px rgba(0,0,0,.07);animation:rise .7s cubic-bezier(.2,.9,.3,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.card.shake{animation:shake .5s}
+@keyframes shake{0%,100%{transform:none}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+.head h1{font-size:2.6rem;line-height:1.02}
+.head p{color:var(--muted);margin-top:6px;font-size:.95rem}
+.setup{margin-bottom:20px;background:#fff7f2;border:1px solid #ffd9c7;color:#7a2a0e;border-radius:16px;padding:14px 16px;font-size:.84rem;line-height:1.5}
+.setup b{display:block;margin-bottom:2px}
+.setup code{background:#ffe9dd;padding:1px 6px;border-radius:6px;font-size:.8rem}
+.tabs{position:relative;display:grid;grid-template-columns:1fr 1fr;background:#f0f0ed;border-radius:99px;padding:5px;margin:24px 0 20px}
+.tabs .ind{position:absolute;top:5px;bottom:5px;left:5px;width:calc(50% - 5px);background:var(--ink);border-radius:99px;transition:transform .4s cubic-bezier(.7,0,.2,1)}
+.tabs[data-mode="signup"] .ind{transform:translateX(100%)}
+.tabs button{position:relative;z-index:2;border:0;background:none;padding:11px 8px;border-radius:99px;font-weight:700;font-size:.9rem;cursor:pointer;color:#555;transition:color .3s}
+.tabs button[aria-selected="true"]{color:#fff}
+.socials{display:grid;gap:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.soc{display:flex;align-items:center;justify-content:center;gap:12px;height:50px;border-radius:15px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:.92rem;cursor:pointer;transition:.25s;color:var(--ink)}
+.soc:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.08)}
+.soc:active{transform:none}
+.soc svg{width:20px;height:20px;flex-shrink:0}
+.soc[disabled]{opacity:.55;pointer-events:none}
+.soc .sp{display:none}
+.soc.loading .sp{display:block}.soc.loading .lb,.soc.loading svg:not(.sp){display:none}
+.or{display:flex;align-items:center;gap:14px;margin:22px 0;color:var(--muted);font-size:.8rem;font-weight:600}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:7px}
+.inp{display:flex;align-items:center;gap:10px;height:50px;padding:0 14px;border:1.5px solid var(--line);border-radius:15px;background:#fff;transition:.2s}
+.inp:focus-within{border-color:var(--ink);box-shadow:0 0 0 4px rgba(0,0,0,.06)}
+.inp .ico{color:#9a9a9a;transition:.2s}.inp:focus-within .ico{color:var(--ink)}
+.inp input{flex:1;border:0;outline:0;background:transparent;font-size:.95rem;min-width:0;height:100%}
+.eye{border:0;background:none;cursor:pointer;color:#8a8a8a;display:grid;place-items:center;padding:4px;border-radius:8px}
+.eye:hover{color:var(--ink);background:#f0f0ed}
+.field.bad .inp{border-color:var(--bad);box-shadow:0 0 0 4px rgba(229,72,77,.1)}
+.err{display:none;color:var(--bad);font-size:.78rem;font-weight:600;margin-top:6px}
+.field.bad .err{display:block}
+.strength{display:flex;align-items:center;gap:6px;margin-top:9px}
+.strength i{flex:1;height:4px;border-radius:4px;background:#e8e8e5;transition:.3s}
+.strength span{font-size:.74rem;font-weight:700;color:var(--muted);width:52px;text-align:right}
+.strength[data-s="1"] i:nth-child(-n+1){background:var(--bad)}
+.strength[data-s="2"] i:nth-child(-n+2){background:#f5a524}
+.strength[data-s="3"] i:nth-child(-n+3){background:#84cc16}
+.strength[data-s="4"] i:nth-child(-n+4){background:var(--good)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 18px;font-size:.86rem}
+.chk{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.86rem;color:#3f3f3f;line-height:1.35}
+.chk input{position:absolute;opacity:0;pointer-events:none}
+.chk span{width:20px;height:20px;border-radius:7px;border:1.5px solid #bdbdb8;display:grid;place-items:center;flex-shrink:0;transition:.2s;background:#fff}
+.chk input:checked + span{background:var(--ink);border-color:var(--ink)}
+.chk span::after{content:"";width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) scale(0);margin-top:-2px;transition:.2s}
+.chk input:checked + span::after{transform:rotate(-45deg) scale(1)}
+.chk input:focus-visible + span{box-shadow:0 0 0 4px rgba(0,0,0,.12)}
+.chk a{font-weight:700;text-decoration:underline}
+.chk.bad span{border-color:var(--bad)}
+.lnk{border:0;background:none;cursor:pointer;font-weight:700;font-size:.86rem;text-decoration:underline;color:var(--ink)}
+.msg{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;font-size:.84rem;font-weight:600;margin:0 0 14px;line-height:1.4}
+.msg.error{background:#fff1f1;color:#9f1c20;border:1px solid #ffd0d1}
+.msg.success{background:#effaf3;color:#11683a;border:1px solid #c5ecd4}
+.msg.info{background:#f3f3f0;color:#333;border:1px solid var(--line)}
+.msg svg{width:18px;height:18px;flex-shrink:0;margin-top:1px}
+.submit{position:relative;width:100%;height:52px;border-radius:99px;border:0;background:var(--ink);color:#fff;font-weight:700;font-size:.98rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:.25s;overflow:hidden}
+.submit:hover{background:#262626;transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.22)}
+.submit:active{transform:none}
+.submit .spin,.sp{display:none;width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .7s linear infinite}
+.soc .sp{border-color:#ddd;border-top-color:var(--ink)}
+.submit.loading .spin{display:block}.submit.loading .lbl{opacity:.8}
+.submit[disabled]{pointer-events:none;opacity:.85}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fine{margin-top:18px;text-align:center;color:var(--muted);font-size:.78rem}
+.fine a{text-decoration:underline;font-weight:600}
+.back-row{margin-top:16px;text-align:center}
+
+.signed{text-align:center}
+.signed .av{width:96px;height:96px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:2.4rem;margin:0 auto 18px;overflow:hidden;box-shadow:0 0 0 6px #fff,0 0 0 8px var(--line);animation:pop .6s cubic-bezier(.2,.9,.3,1.4) both}
+.signed .av img{width:100%;height:100%;object-fit:cover}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.signed h1{font-size:2.4rem;line-height:1.05}
+.signed p{color:var(--muted);margin:6px 0 22px;word-break:break-all}
+.redir{height:4px;border-radius:4px;background:#ececea;overflow:hidden;margin:0 0 16px}
+.redir i{display:block;height:100%;width:0;background:var(--ink);transition:width 1.6s linear}
+.signed .submit{margin-bottom:10px}
+.ghost{width:100%;height:50px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:.92rem;cursor:pointer;transition:.25s;color:var(--ink)}
+.ghost:hover{border-color:var(--ink)}
+.verify{margin:0 0 16px}
+
+.ft{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.8rem;padding-top:6px}
+.ft a:hover{text-decoration:underline}
+
+@media(max-width:1000px){
+  .split{grid-template-columns:1fr}
+  .bs{padding:26px 24px 30px}
+  .hero{padding:26px 0 8px}.badge{width:72px;height:72px;border-radius:22px;margin-bottom:20px}.badge .ico{width:42px;height:42px}
+  .hero h2{font-size:2.4rem;min-height:2.1em}.hero p,.feats{display:none}
+  .fs{min-height:0;padding:18px 18px 28px}
+}
+@media(max-width:480px){.card{padding:28px 20px;border-radius:24px}.head h1{font-size:2.2rem}.two{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body data-mch-player="off">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-hat" viewBox="9 8 47 47"><g fill="currentColor" stroke="none"><circle cx="20.5" cy="25" r="9.5"/><circle cx="32" cy="20" r="11.5"/><circle cx="43.5" cy="25" r="9.5"/><rect x="17" y="25" width="30" height="19"/><rect x="17" y="47" width="30" height="8" rx="2.5"/></g><path d="M26 33.5v9M38 33.5v9" fill="none" stroke-width="1.7" stroke-linecap="round" style="stroke:var(--mark-bg,#fff)"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h10M19 18h2"/><circle cx="15" cy="6" r="2.5"/><circle cx="9" cy="12" r="2.5"/><circle cx="16" cy="18" r="2.5"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3.5 7.5 8.5 6 8.5-6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-eyeoff" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.1A9.7 9.7 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.5 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M6.5 17H20v4H6.5a2 2 0 0 1 0-4z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5h.01"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.5"/></symbol>
+</svg>
+
+<div class="split">
+
+  <!-- ============ brand side ============ -->
+  <aside class="bs">
+    <i class="ring"></i><i class="ring"></i><i class="ring"></i><i class="ring"></i>
+    <a href="/" class="logo" aria-label="MasterChefHub home">
+      <div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div>
+      <div class="logo-text">MCH<small>Master Chef Hub</small></div>
+    </a>
+    <div class="hero">
+      <div class="badge"><svg class="ico"><use href="#i-hat"/></svg></div>
+      <h2 class="serif" id="phrase">Save every recipe <em>you love.</em></h2>
+      <p>Join home cooks who plan, save and cook with chef-tested recipes, step-by-step videos and weekly meal plans.</p>
+    </div>
+    <div class="feats">
+      <div class="feat"><i><svg class="ico"><use href="#i-book"/></svg></i>Save recipes and build your collection</div>
+      <div class="feat"><i><svg class="ico"><use href="#i-cal"/></svg></i>Plan your week with meal plans</div>
+      <div class="feat"><i><svg class="ico"><use href="#i-note"/></svg></i>Relaxing music while you cook</div>
+    </div>
+  </aside>
+
+  <!-- ============ form side ============ -->
+  <main class="fs">
+    <div class="top">
+      <a href="/"><svg class="ico sm"><use href="#i-back"/></svg>Back to home</a>
+      <a href="/settings"><svg class="ico sm"><use href="#i-gear"/></svg>Settings</a>
+    </div>
+
+    <div class="wrapc">
+      <div class="card" id="card">
+
+        <div class="setup" id="setup" hidden>
+          <b>Almost there: connect Firebase</b>
+          Open <code>firebase-config.js</code> and paste your Firebase keys. Until then, signing in will show a notification instead.
+        </div>
+
+        <!-- log in / create account -->
+        <section id="v-auth">
+          <div class="head"><h1 class="serif" id="title">Welcome back</h1><p id="subtitle">Log in to your MasterChefHub account.</p></div>
+
+          <div class="tabs" id="tabs" data-mode="login" role="tablist">
+            <i class="ind"></i>
+            <button type="button" role="tab" id="tab-login" aria-selected="true">Log in</button>
+            <button type="button" role="tab" id="tab-signup" aria-selected="false">Create account</button>
+          </div>
+
+          <div class="socials">
+            <button type="button" class="soc" data-p="google">
+              <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+              <i class="sp"></i><span class="lb">Continue with Google</span>
+            </button>
+            <div class="two">
+              <button type="button" class="soc" data-p="apple">
+                <svg viewBox="0 0 24 24" fill="#0a0a0a"><path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.613 0 2.886.06 4.374 2.19-.13.09-2.383 1.37-2.383 4.19 0 3.26 2.854 4.42 2.955 4.45z"/></svg>
+                <i class="sp"></i><span class="lb">Apple</span>
+              </button>
+              <button type="button" class="soc" data-p="microsoft">
+                <svg viewBox="0 0 24 24"><rect x="1.5" y="1.5" width="10" height="10" fill="#F25022"/><rect x="12.5" y="1.5" width="10" height="10" fill="#7FBA00"/><rect x="1.5" y="12.5" width="10" height="10" fill="#00A4EF"/><rect x="12.5" y="12.5" width="10" height="10" fill="#FFB900"/></svg>
+                <i class="sp"></i><span class="lb">Microsoft</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="or"><span>or use your email</span></div>
+
+          <form id="form" novalidate>
+            <div class="field" id="f-name" data-only="signup" hidden>
+              <label for="name">Full name</label>
+              <div class="inp"><svg class="ico"><use href="#i-user"/></svg><input id="name" type="text" autocomplete="name" placeholder="Your name"></div>
+              <small class="err"></small>
+            </div>
+            <div class="field" id="f-email">
+              <label for="email">Email</label>
+              <div class="inp"><svg class="ico"><use href="#i-mail"/></svg><input id="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></div>
+              <small class="err"></small>
+            </div>
+            <div class="field" id="f-pw">
+              <label for="pw">Password</label>
+              <div class="inp"><svg class="ico"><use href="#i-lock"/></svg><input id="pw" type="password" autocomplete="current-password" placeholder="Enter your password"><button type="button" class="eye" data-eye="pw" aria-label="Show password"><svg class="ico"><use href="#i-eye"/></svg></button></div>
+              <div class="strength" id="strength" data-s="0" data-only="signup" hidden><i></i><i></i><i></i><i></i><span id="strengthLbl"></span></div>
+              <small class="err"></small>
+            </div>
+            <div class="field" id="f-pw2" data-only="signup" hidden>
+              <label for="pw2">Confirm password</label>
+              <div class="inp"><svg class="ico"><use href="#i-lock"/></svg><input id="pw2" type="password" autocomplete="new-password" placeholder="Repeat your password"><button type="button" class="eye" data-eye="pw2" aria-label="Show password"><svg class="ico"><use href="#i-eye"/></svg></button></div>
+              <small class="err"></small>
+            </div>
+
+            <div class="row" id="r-login" data-only="login">
+              <label class="chk"><input type="checkbox" id="remember" checked><span></span>Remember me</label>
+              <button type="button" class="lnk" id="forgotBtn">Forgot password?</button>
+            </div>
+            <div class="row" id="r-terms" data-only="signup" hidden>
+              <label class="chk" id="termsLbl"><input type="checkbox" id="terms"><span></span><div>I agree to the <a href="/terms" target="_blank" rel="noopener">Terms</a> and <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a></div></label>
+            </div>
+
+            <div class="msg" id="msg" role="alert" aria-live="assertive" hidden></div>
+
+            <button class="submit" id="submit" type="submit"><i class="spin"></i><span class="lbl">Log in</span></button>
+          </form>
+
+          <p class="fine" id="fine">New here? <button type="button" class="lnk" id="switchBtn">Create an account</button></p>
+        </section>
+
+        <!-- forgot password -->
+        <section id="v-forgot" hidden>
+          <div class="head"><h1 class="serif">Reset password</h1><p>Enter your email and we will send you a link to choose a new password.</p></div>
+          <form id="fform" novalidate style="margin-top:24px">
+            <div class="field" id="ff-email">
+              <label for="femail">Email</label>
+              <div class="inp"><svg class="ico"><use href="#i-mail"/></svg><input id="femail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></div>
+              <small class="err"></small>
+            </div>
+            <div class="msg" id="fmsg" role="alert" aria-live="assertive" hidden></div>
+            <button class="submit" id="fsubmit" type="submit"><i class="spin"></i><span class="lbl">Send reset link</span></button>
+          </form>
+          <p class="fine"><button type="button" class="lnk" id="backBtn">Back to log in</button></p>
+        </section>
+
+        <!-- signed in -->
+        <section id="v-signed" class="signed" hidden>
+          <div class="av" id="sAv"></div>
+          <h1 class="serif" id="sName">Welcome</h1>
+          <p id="sEmail"></p>
+          <div class="msg info verify" id="verify" hidden><svg><use href="#i-warn"/></svg><div>Please verify your email. We sent you a link. <button type="button" class="lnk" id="resend">Send again</button></div></div>
+          <div class="redir" id="redir" hidden><i></i></div>
+          <a class="submit" id="cont" href="/"><span class="lbl">Continue to MasterChefHub</span></a>
+          <button type="button" class="ghost" id="signOut">Sign out</button>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="ft"><span>&copy; 2026 MasterChefHub.com</span><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/contact">Help</a></div>
+  </main>
+</div>
+
+<noscript><p style="text-align:center;padding:20px">Please turn on JavaScript to log in.</p></noscript>
+
+<script src="/site.js"></script>
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const params=new URLSearchParams(location.search);
+const NEXT=(function(){ const n=params.get('next'); return n&&n.charAt(0)==='/'&&n.charAt(1)!=='/'?n:'/'; })();
+const FBV='10.14.1';
+let mode='login', busy=false, fb=null, auth=null, setupErr=null, justSignedIn=false, view='auth';
+
+/* ---------- helpers ---------- */
+const say=(type,title,message)=>{ try{ if(window.MCH&&MCH.notify) MCH.notify({type:type,title:title,message:message}); }catch(e){} };
+const snd=n=>{ try{ if(window.sfx&&sfx[n]) sfx[n](); }catch(e){} };
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ICON={error:'#i-warn',success:'#i-ok',info:'#i-warn'};
+
+function msg(el,type,text){
+  if(!text){ el.hidden=true; return; }
+  el.className='msg '+type; el.hidden=false;
+  el.innerHTML='<svg><use href="'+ICON[type]+'"/></svg><div>'+esc(text)+'</div>';
+}
+function shake(){ const c=$('#card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); }
+function fieldErr(id,text){
+  const f=$('#'+id); if(!f) return;
+  f.classList.toggle('bad',!!text);
+  const e=f.querySelector('.err'); if(e) e.textContent=text||'';
+}
+function clearErrs(){ $$('.field').forEach(f=>f.classList.remove('bad')); $('#termsLbl').classList.remove('bad'); msg($('#msg'),'error',''); msg($('#fmsg'),'error',''); }
+
+/* ---------- Firebase (loaded only when keys are filled in) ---------- */
+async function initFirebase(){
+  try{
+    if(window.__fbMock){ fb=window.__fbMock.fb; auth=window.__fbMock.auth; return true; }   /* test hook */
+    const mod=await import('/firebase-config.js');
+    const cfg=mod.firebaseConfig;
+    if(!cfg||!cfg.apiKey||/^YOUR_|PASTE/i.test(cfg.apiKey)||/YOUR_/i.test(cfg.projectId||'')){ setupErr='not-configured'; return false; }
+    const A=await import('https://www.gstatic.com/firebasejs/'+FBV+'/firebase-auth.js');
+    const App=await import('https://www.gstatic.com/firebasejs/'+FBV+'/firebase-app.js');
+    const app=App.initializeApp(cfg);
+    auth=A.getAuth(app); fb=A;
+    return true;
+  }catch(e){
+    setupErr=(e&&/firebase-config/i.test(String(e.message||e)))?'not-configured':'load-failed';
+    return false;
+  }
+}
+const ready=initFirebase();
+
+async function needAuth(){
+  const ok=await ready;
+  if(ok&&auth) return true;
+  $('#setup').hidden=setupErr!=='not-configured';
+  const m=setupErr==='load-failed'
+    ?['Could not load sign-in','Check your internet connection and refresh the page.']
+    :['Sign-in is not connected yet','The site owner needs to add the Firebase keys to firebase-config.js.'];
+  say(setupErr==='load-failed'?'error':'warning',m[0],m[1]);
+  msg(mode==='forgot'?$('#fmsg'):$('#msg'),'error',m[0]+'. '+m[1]);
+  shake(); snd('whoops');
+  return false;
+}
+
+/* ---------- friendly errors ---------- */
+const PROV={google:'Google',apple:'Apple',microsoft:'Microsoft'};
+function friendly(err,prov){
+  const c=(err&&err.code)||'';
+  const p=prov?PROV[prov]:'';
+  const M={
+    'auth/invalid-email':['error','Check your email','That email address does not look right.'],
+    'auth/missing-email':['error','Email needed','Please enter your email address.'],
+    'auth/user-not-found':['error','No account found','There is no account with that email. Try creating one.'],
+    'auth/wrong-password':['error','Wrong password','That password is not correct. Try again or reset it.'],
+    'auth/invalid-credential':['error','Email or password is wrong','Check your details and try again, or reset your password.'],
+    'auth/invalid-login-credentials':['error','Email or password is wrong','Check your details and try again, or reset your password.'],
+    'auth/email-already-in-use':['error','Email already in use','An account with this email already exists. Try logging in instead.'],
+    'auth/weak-password':['error','Password is too weak','Use at least 6 characters. 8 or more is better.'],
+    'auth/too-many-requests':['error','Too many attempts','Please wait a few minutes and try again.'],
+    'auth/network-request-failed':['error','No connection','Check your internet connection and try again.'],
+    'auth/popup-closed-by-user':['warning','Sign-in cancelled','The '+(p||'sign-in')+' window was closed before finishing.'],
+    'auth/cancelled-popup-request':['warning','Sign-in cancelled','Another sign-in window was opened.'],
+    'auth/popup-blocked':['warning','Pop-up blocked','Allow pop-ups for this site, then try again.'],
+    'auth/account-exists-with-different-credential':['error','Account already exists','This email is already used with a different sign-in method. Log in with that one.'],
+    'auth/unauthorized-domain':['error','This website is not allowed yet','Add it in Firebase: Authentication, Settings, Authorized domains.'],
+    'auth/operation-not-allowed':['error',(p||'This sign-in method')+' is not turned on','Turn it on in Firebase: Authentication, Sign-in method.'],
+    'auth/user-disabled':['error','Account disabled','This account has been disabled. Please contact support.'],
+    'auth/invalid-api-key':['error','Firebase key is wrong','Check the keys inside firebase-config.js.'],
+    'auth/api-key-not-valid.-please-pass-a-valid-api-key.':['error','Firebase key is wrong','Check the keys inside firebase-config.js.'],
+    'auth/configuration-not-found':['error','Sign-in is not set up','Turn on Authentication in your Firebase project.'],
+    'auth/internal-error':['error','Something went wrong','Please try again in a moment.']
+  };
+  return M[c]||['error','Sign-in failed',(err&&err.message?String(err.message).replace(/^Firebase:\s*/,'').replace(/\s*\(auth\/.*\)\.?$/,''):'Please try again.')];
+}
+function fail(err,prov,target){
+  const m=friendly(err,prov);
+  say(m[0],m[1],m[2]);
+  msg(target||$('#msg'),m[0]==='warning'?'info':'error',m[1]+'. '+m[2]);
+  if(m[0]==='error'){ shake(); snd('whoops'); }
+  if(window.console) console.warn('[login]',err&&err.code,err&&err.message);
+}
+
+/* ---------- user cache + signed-in view ---------- */
+function cacheUser(u){
+  try{
+    const pid=u.providerData&&u.providerData[0]?u.providerData[0].providerId:'password';
+    localStorage.setItem('mch_user',JSON.stringify({uid:u.uid,name:u.displayName||'',email:u.email||'',photo:u.photoURL||'',provider:pid}));
+  }catch(e){}
+}
+function paintSigned(u){
+  const name=u.displayName||(u.email?u.email.split('@')[0]:'friend');
+  $('#sAv').innerHTML=u.photoURL?'<img src="'+esc(u.photoURL)+'" alt="" referrerpolicy="no-referrer">':esc(name.charAt(0).toUpperCase());
+  $('#sName').textContent=(justSignedIn?'Welcome, ':'Hi, ')+name.split(' ')[0];
+  $('#sEmail').textContent=u.email||'';
+  const pwUser=u.providerData&&u.providerData.some(p=>p.providerId==='password');
+  $('#verify').hidden=!(pwUser&&!u.emailVerified);
+  $('#cont').setAttribute('href',NEXT);
+}
+function startRedirect(){
+  const r=$('#redir'); r.hidden=false;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ r.firstElementChild.style.width='100%'; }));
+  setTimeout(()=>{ if(view==='signed') location.assign(NEXT); },1700);
+}
+function success(user,title,message){
+  justSignedIn=true; cacheUser(user); paintSigned(user); showView('signed'); startRedirect();
+  say('success',title,message); snd('success');
+}
+
+/* ---------- views / modes ---------- */
+function showView(v){
+  view=v;
+  $('#v-auth').hidden=v!=='auth'; $('#v-forgot').hidden=v!=='forgot'; $('#v-signed').hidden=v!=='signed';
+  if(v==='forgot'){ $('#femail').value=$('#email').value; setTimeout(()=>$('#femail').focus(),50); }
+}
+function setMode(m){
+  mode=m; clearErrs();
+  const su=m==='signup';
+  $('#tabs').dataset.mode=m;
+  $('#tab-login').setAttribute('aria-selected',String(!su)); $('#tab-signup').setAttribute('aria-selected',String(su));
+  $$('[data-only]').forEach(el=>{ el.hidden=el.dataset.only!==m; });
+  $('#title').textContent=su?'Create your account':'Welcome back';
+  $('#subtitle').textContent=su?'Join MasterChefHub. It only takes a minute.':'Log in to your MasterChefHub account.';
+  $('#submit .lbl').textContent=su?'Create account':'Log in';
+  $('#pw').setAttribute('autocomplete',su?'new-password':'current-password');
+  $('#pw').setAttribute('placeholder',su?'At least 6 characters':'Enter your password');
+  $('#fine').innerHTML=su?'Already have an account? <button type="button" class="lnk" id="switchBtn">Log in</button>':'New here? <button type="button" class="lnk" id="switchBtn">Create an account</button>';
+  $('#switchBtn').addEventListener('click',()=>setMode(su?'login':'signup'));
+  history.replaceState(null,'',location.pathname+(su?'?mode=signup':'')+(NEXT!=='/'?(su?'&':'?')+'next='+encodeURIComponent(NEXT):''));
+}
+$('#tab-login').addEventListener('click',()=>setMode('login'));
+$('#tab-signup').addEventListener('click',()=>setMode('signup'));
+$('#forgotBtn').addEventListener('click',()=>{ clearErrs(); showView('forgot'); });
+$('#backBtn').addEventListener('click',()=>{ clearErrs(); showView('auth'); });
+
+/* show / hide password */
+$$('.eye').forEach(b=>b.addEventListener('click',()=>{
+  const i=$('#'+b.dataset.eye), show=i.type==='password';
+  i.type=show?'text':'password';
+  b.innerHTML='<svg class="ico"><use href="#'+(show?'i-eyeoff':'i-eye')+'"/></svg>';
+  b.setAttribute('aria-label',show?'Hide password':'Show password');
+}));
+
+/* password strength */
+function score(p){
+  let s=0; if(p.length>=6) s++; if(p.length>=10) s++;
+  if(/[a-z]/.test(p)&&/[A-Z]/.test(p)) s++;
+  if(/\d/.test(p)&&/[^A-Za-z0-9]/.test(p)) s++;
+  return p?Math.max(1,Math.min(4,s)):0;
+}
+$('#pw').addEventListener('input',()=>{
+  const s=score($('#pw').value), st=$('#strength');
+  st.dataset.s=s; $('#strengthLbl').textContent=['','Weak','Fair','Good','Strong'][s];
+  fieldErr('f-pw','');
+});
+['name','email','pw2','femail'].forEach(id=>$('#'+id).addEventListener('input',()=>{ const f=$('#'+id).closest('.field'); if(f) f.classList.remove('bad'); }));
+$('#terms').addEventListener('change',()=>$('#termsLbl').classList.remove('bad'));
+
+function busyOn(btn,on){
+  busy=on;
+  $$('.soc').forEach(b=>b.disabled=on);
+  $$('.submit').forEach(b=>{ if(b.tagName==='BUTTON') b.disabled=on; });
+  if(btn) btn.classList.toggle('loading',on);
+}
+
+/* ---------- validation ---------- */
+const EMAIL=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function validate(){
+  clearErrs();
+  let bad=0;
+  const email=$('#email').value.trim(), pw=$('#pw').value;
+  if(mode==='signup'&&!$('#name').value.trim()){ fieldErr('f-name','Please enter your name.'); bad++; }
+  if(!email){ fieldErr('f-email','Please enter your email.'); bad++; }
+  else if(!EMAIL.test(email)){ fieldErr('f-email','That email address does not look right.'); bad++; }
+  if(!pw){ fieldErr('f-pw','Please enter your password.'); bad++; }
+  else if(mode==='signup'&&pw.length<6){ fieldErr('f-pw','Use at least 6 characters.'); bad++; }
+  if(mode==='signup'){
+    if($('#pw2').value!==pw){ fieldErr('f-pw2','The passwords do not match.'); bad++; }
+    if(!$('#terms').checked){ $('#termsLbl').classList.add('bad'); bad++; }
+  }
+  if(bad){
+    const first=$('.field.bad input')||$('#terms');
+    shake(); snd('whoops');
+    say('warning','Please check your details',bad===1?'One field needs your attention.':bad+' fields need your attention.');
+    msg($('#msg'),'error',mode==='signup'&&!$('#terms').checked&&bad===1?'Please agree to the Terms and Privacy Policy to continue.':'Please fix the highlighted fields.');
+    if(first&&first.focus) first.focus();
+    return false;
+  }
+  return true;
+}
+
+/* ---------- email + password ---------- */
+$('#form').addEventListener('submit',async e=>{
+  e.preventDefault(); if(busy) return;
+  if(!validate()) return;
+  if(!(await needAuth())) return;
+  const email=$('#email').value.trim(), pw=$('#pw').value, btn=$('#submit');
+  busyOn(btn,true);
+  try{
+    await fb.setPersistence(auth,($('#remember').checked||mode==='signup')?fb.browserLocalPersistence:fb.browserSessionPersistence);
+    if(mode==='signup'){
+      const cred=await fb.createUserWithEmailAndPassword(auth,email,pw);
+      const nm=$('#name').value.trim();
+      try{ await fb.updateProfile(cred.user,{displayName:nm}); }catch(e2){}
+      let sent=true; try{ await fb.sendEmailVerification(cred.user); }catch(e3){ sent=false; }
+      success(cred.user,'Account created',sent?'We sent a verification link to '+email+'.':'Welcome to MasterChefHub!');
+    }else{
+      const cred=await fb.signInWithEmailAndPassword(auth,email,pw);
+      success(cred.user,'Welcome back','You are signed in.');
+    }
+  }catch(err){ fail(err); }
+  finally{ busyOn(btn,false); }
+});
+
+/* ---------- Google / Apple / Microsoft ---------- */
+$$('.soc').forEach(b=>b.addEventListener('click',async()=>{
+  if(busy) return;
+  const name=b.dataset.p;
+  clearErrs();
+  if(!(await needAuth())) return;
+  busyOn(b,true);
+  let provider;
+  try{
+    await fb.setPersistence(auth,fb.browserLocalPersistence);
+    if(name==='google'){ provider=new fb.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'}); }
+    else if(name==='apple'){ provider=new fb.OAuthProvider('apple.com'); provider.addScope('email'); provider.addScope('name'); }
+    else{ provider=new fb.OAuthProvider('microsoft.com'); provider.setCustomParameters({prompt:'select_account'}); }
+    const res=await fb.signInWithPopup(auth,provider);
+    const isNew=res.additionalUserInfo&&res.additionalUserInfo.isNewUser;
+    success(res.user,isNew?'Account created':'Welcome back','Signed in with '+PROV[name]+'.');
+  }catch(err){
+    if(provider&&(err.code==='auth/popup-blocked'||err.code==='auth/operation-not-supported-in-this-environment')){
+      try{ say('info','Redirecting...','Taking you to '+PROV[name]+' to sign in.'); await fb.signInWithRedirect(auth,provider); return; }
+      catch(e2){ err=e2; }
+    }
+    fail(err,name);
+  }finally{ busyOn(b,false); }
+}));
+
+/* ---------- forgot password ---------- */
+$('#fform').addEventListener('submit',async e=>{
+  e.preventDefault(); if(busy) return;
+  clearErrs();
+  const email=$('#femail').value.trim();
+  if(!email||!EMAIL.test(email)){
+    fieldErr('ff-email',!email?'Please enter your email.':'That email address does not look right.');
+    shake(); snd('whoops'); say('warning','Check your email','Enter the email you signed up with.'); return;
+  }
+  if(!(await needAuth())) return;
+  const btn=$('#fsubmit'); busyOn(btn,true);
+  try{
+    await fb.sendPasswordResetEmail(auth,email);
+    msg($('#fmsg'),'success','If an account exists for '+email+', a reset link is on its way. Check your spam folder too.');
+    say('success','Reset link sent','Check your inbox for '+email+'.'); snd('success');
+  }catch(err){ fail(err,null,$('#fmsg')); }
+  finally{ busyOn(btn,false); }
+});
+
+/* ---------- signed-in actions ---------- */
+async function doSignOut(silent){
+  try{ if(auth&&fb) await fb.signOut(auth); }catch(e){}
+  try{ localStorage.removeItem('mch_user'); }catch(e){}
+  justSignedIn=false; showView('auth');
+  if(!silent) say('info','Signed out','See you next time.');
+}
+$('#signOut').addEventListener('click',()=>doSignOut(false));
+$('#resend').addEventListener('click',async()=>{
+  try{ await fb.sendEmailVerification(auth.currentUser); say('success','Verification email sent','Check your inbox.'); }
+  catch(err){ fail(err); }
+});
+
+/* ---------- start up ---------- */
+(async function boot(){
+  if(params.get('mode')==='signup') setMode('signup'); else setMode('login');
+  const ok=await ready;
+  if(!ok){
+    if(setupErr==='not-configured') $('#setup').hidden=false;
+    if(params.get('signout')){ try{ localStorage.removeItem('mch_user'); }catch(e){} say('info','Signed out','See you next time.'); history.replaceState(null,'',location.pathname); }
+    return;
+  }
+  if(params.get('signout')){
+    await doSignOut(false); history.replaceState(null,'',location.pathname);
+  }
+  try{
+    const r=await fb.getRedirectResult(auth);     /* finishes a redirect-style sign-in */
+    if(r&&r.user) success(r.user,'Welcome back','You are signed in.');
+  }catch(err){ fail(err); }
+  fb.onAuthStateChanged(auth,u=>{
+    if(u){ cacheUser(u); if(view!=='signed'){ paintSigned(u); showView('signed'); } }
+    else if(view==='signed'){ showView('auth'); }
+  });
+})();
+
+/* ---------- rotating headline on the brand side ---------- */
+(function(){
+  const lines=['Save every recipe <em>you love.</em>','Plan your week in <em>minutes.</em>','Cook with <em>confidence.</em>','Your kitchen, <em>everywhere.</em>'];
+  const h=$('#phrase'); let i=0;
+  setInterval(()=>{ h.classList.add('sw'); setTimeout(()=>{ i=(i+1)%lines.length; h.innerHTML=lines[i]; h.classList.remove('sw'); },450); },3600);
+})();
+})();
+</script>
+</body>
+</html>
