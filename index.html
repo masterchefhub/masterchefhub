@@ -274,6 +274,7 @@ footer ul a:hover{text-decoration:underline}
 
 <!-- ============ ICON SPRITE ============ -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h10M19 18h2"/><circle cx="15" cy="6" r="2.5"/><circle cx="9" cy="12" r="2.5"/><circle cx="16" cy="18" r="2.5"/></symbol>
   <symbol id="i-hat" viewBox="0 0 24 24"><path d="M6.5 14.5A4 4 0 1 1 8 6.8a4.6 4.6 0 0 1 8 0 4 4 0 1 1 1.5 7.7V20h-11z"/><path d="M6.5 17.5h11"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
   <symbol id="i-food" viewBox="0 0 24 24"><path d="M6 3v7a2 2 0 0 0 2 2v9M10 3v7a2 2 0 0 1-2 2M8 3v9M18 21V3c-2.6 1.4-4 4.4-4 8.2V14h4"/></symbol>
@@ -327,15 +328,10 @@ footer ul a:hover{text-decoration:underline}
     <li><a href="/blog"><svg class="ico"><use href="#i-pen"/></svg>Blog</a></li>
     <li><a href="/about"><svg class="ico"><use href="#i-info"/></svg>About</a></li>
     <li><a href="/contact"><svg class="ico"><use href="#i-mail"/></svg>Contact</a></li>
+    <li><a href="/settings"><svg class="ico"><use href="#i-sliders"/></svg>Settings</a></li>
   </ul>
 
   <div class="side-bottom">
-    <button class="sound-btn sound-on" id="soundBtn" aria-label="Toggle sound">
-      <svg class="ico on"><use href="#i-vol"/></svg>
-      <svg class="ico off"><use href="#i-volx"/></svg>
-      <span id="soundLabel">Sound on</span>
-      <div class="eq"><i></i><i></i><i></i><i></i></div>
-    </button>
     <a href="/login" class="btn btn-white"><svg class="ico"><use href="#i-user"/></svg>Log in</a>
     <a href="/login" class="btn btn-line">Create account</a>
   </div>
@@ -520,53 +516,9 @@ footer ul a:hover{text-decoration:underline}
   </footer>
 </div>
 
+<script src="/site.js"></script>
+<script>window.sfx=window.sfx||{hover(){},click(){},on(){},off(){},open(){},heart(){},success(){},whoops(){},boing(){}};</script>
 <script>
-/* ---------- SOUND (generated with Web Audio, no files needed) ---------- */
-let ctx=null, soundOn=true;
-try{ if(localStorage.getItem('mch_sound')==='off') soundOn=false; }catch(e){}
-function audio(){
-  if(!ctx){ try{ ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
-  if(ctx && ctx.state==='suspended') ctx.resume();
-  return ctx;
-}
-function tone(freq,dur=.08,type='sine',vol=.05,slideTo=null,delay=0){
-  if(!soundOn) return; const c=audio(); if(!c) return;
-  const t=c.currentTime+delay, o=c.createOscillator(), g=c.createGain();
-  o.type=type; o.frequency.setValueAtTime(freq,t);
-  if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo,t+dur);
-  g.gain.setValueAtTime(0.0001,t);
-  g.gain.exponentialRampToValueAtTime(vol,t+.01);
-  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-  o.connect(g).connect(c.destination); o.start(t); o.stop(t+dur+.02);
-}
-const sfx={
-  hover(){ tone(880,.05,'sine',.018) },
-  click(){ tone(520,.07,'triangle',.06,780); tone(780,.09,'triangle',.05,1040,.05) },
-  on(){ tone(440,.1,'sine',.06); tone(660,.1,'sine',.06,null,.09); tone(880,.16,'sine',.06,null,.18) },
-  heart(){ tone(600,.12,'sine',.07,1200); tone(1200,.14,'sine',.05,1600,.08) },
-  open(){ tone(300,.16,'triangle',.05,600) },
-  success(){ [523,659,784,1047].forEach((f,i)=>tone(f,.22,'sine',.06,null,i*.09)) }
-};
-let lastHover=0;
-document.querySelectorAll('a,.btn,.cat,.card,.row,.sound-btn').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{const n=Date.now(); if(n-lastHover>90){lastHover=n;sfx.hover()}});
-});
-document.addEventListener('click',e=>{ if(e.target.closest('a,.btn,button')) sfx.click() });
-
-const soundBtn=document.getElementById('soundBtn'), soundLabel=document.getElementById('soundLabel');
-function paintSound(){
-  soundBtn.classList.toggle('sound-on',soundOn);
-  document.body.classList.toggle('muted',!soundOn);
-  soundLabel.textContent=soundOn?'Sound on':'Sound off';
-}
-soundBtn.addEventListener('click',e=>{
-  e.stopPropagation();
-  soundOn=!soundOn; paintSound();
-  try{localStorage.setItem('mch_sound',soundOn?'on':'off')}catch(err){}
-  if(soundOn) sfx.on();
-});
-paintSound();
-
 /* ---------- MOBILE SIDEBAR ---------- */
 const sidebar=document.getElementById('sidebar'), scrim=document.getElementById('scrim');
 function toggleSide(open){ sidebar.classList.toggle('open',open); scrim.classList.toggle('show',open); if(open) sfx.open(); }
