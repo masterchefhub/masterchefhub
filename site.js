@@ -697,12 +697,12 @@ var CSS =
 '.mchn-success .mchn-bar{background:#16a34a}.mchn-error .mchn-bar{background:#e5484d}.mchn-warning .mchn-bar{background:#f5a524}' +
 '.mchn.hold .mchn-bar{animation-play-state:paused}' +
 '@keyframes mchnBar{from{transform:scaleX(1)}to{transform:scaleX(0)}}' +
-'.mchu{display:flex;align-items:center;gap:12px;background:#151515;border:1px solid #262626;border-radius:16px;padding:10px 10px 10px 12px;color:#fff;font-family:Inter,system-ui,sans-serif}' +
+'.mchu{text-decoration:none;display:flex;align-items:center;gap:12px;background:#151515;border:1px solid #262626;border-radius:16px;padding:10px 10px 10px 12px;color:#fff;font-family:Inter,system-ui,sans-serif}' +
 '.mchu-av{width:38px;height:38px;border-radius:50%;background:#fff;color:#0a0a0a;display:grid;place-items:center;font-weight:800;flex-shrink:0;overflow:hidden}' +
 '.mchu-av img{width:100%;height:100%;object-fit:cover;display:block}' +
 '.mchu-tx{flex:1;min-width:0;line-height:1.25}.mchu-tx b{display:block;font-size:.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
 '.mchu-tx small{display:block;font-size:.72rem;color:#8f8f8f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
-'.mchu-out{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#bbb;flex-shrink:0;transition:.2s}.mchu-out:hover{background:#2a2a2a;color:#fff}.mchu-out svg{width:17px;height:17px}' +
+'.mchu:hover{background:#1d1d1d;border-color:#3a3a3a}.mchu-out{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#bbb;flex-shrink:0;transition:.2s}.mchu-out:hover{background:#2a2a2a;color:#fff}.mchu-out svg{width:17px;height:17px}' +
 '.mch-reduce *,.mch-reduce *::before,.mch-reduce *::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}' +
 '@media(max-width:600px){.mchn-wrap[data-pos="top-right"],.mchn-wrap[data-pos="top-center"]{top:12px;left:14px;right:14px;width:auto;transform:none}.mchn-wrap[data-pos="bottom-right"]{right:14px;left:14px;width:auto}}' +
 '@media(max-width:960px){.mchp{right:14px;left:14px;bottom:14px;width:auto;max-width:none}}' +
@@ -734,11 +734,30 @@ function notifySound(type) {
   else if (type === 'warning') { tone(520, 0.1, 'triangle', 0.06); tone(520, 0.12, 'triangle', 0.06, null, 0.14); }
   else tone(720, 0.1, 'sine', 0.05, 940);
 }
-function notify(o) {
+var NCOOL = 1000, lastN = 0, nQueue = [], nTimer = null;
+function notify(o) {                       /* one notification per second, extras wait in line */
   if (typeof o === 'string') o = { message: o };
   o = o || {};
   if (!S.notifications) return null;
   if (!document.body) { pendingN.push(o); return null; }
+  var wait = lastN + NCOOL - Date.now();
+  if (!nQueue.length && wait <= 0) { lastN = Date.now(); return showNotify(o); }
+  var key = (o.type || '') + '|' + (o.title || '') + '|' + (o.message || '');
+  for (var i = 0; i < nQueue.length; i++) if (nQueue[i].key === key) return null;   /* already waiting */
+  var item = { o: o, key: key };
+  nQueue.push(item);
+  if (!nTimer) nTimer = setTimeout(drainN, Math.max(0, wait));
+  return { close: function () { var j = nQueue.indexOf(item); if (j >= 0) nQueue.splice(j, 1); } };
+}
+function drainN() {
+  nTimer = null;
+  var it = nQueue.shift();
+  if (!it) return;
+  lastN = Date.now();
+  showNotify(it.o);
+  if (nQueue.length) nTimer = setTimeout(drainN, NCOOL);
+}
+function showNotify(o) {
   injectStyle();
   var type = NI[o.type] ? o.type : 'info';
   if (!nWrap) {
@@ -794,8 +813,9 @@ function paintUser() {
   }
   var name = u.name || (u.email ? u.email.split('@')[0] : 'Account');
   var av = u.photo ? '<img src="' + esc(u.photo) + '" alt="" referrerpolicy="no-referrer">' : esc(name.charAt(0).toUpperCase());
-  var html = '<div class="mchu"><div class="mchu-av">' + av + '</div><div class="mchu-tx"><b>' + esc(name) + '</b><small>' + esc(u.email || 'Signed in') + '</small></div>' +
-             '<a class="mchu-out" href="/login?signout=1" aria-label="Sign out" title="Sign out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></a></div>';
+  var sub = u.owner ? 'Owner' : (u.email || 'Signed in');
+  var html = '<a class="mchu" href="/profile" title="Your profile"><div class="mchu-av">' + av + '</div><div class="mchu-tx"><b>' + esc(name) + '</b><small>' + esc(sub) + '</small></div>' +
+             '<span class="mchu-out" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span></a>';
   if (old) { old.outerHTML = html; return; }
   var links = sb.querySelectorAll('a[href="/login"]');
   if (!links.length) return;
@@ -901,6 +921,12 @@ ready(function () {
   document.body.appendChild(fileInput);
   buildUI();
   paintUser();
+  (function gate() {                       /* signed in with Google/Microsoft but no password yet: finish setup */
+    var u = getUser(), path = location.pathname.replace(/\.html$/, '');
+    if (u && u.hasPw === false && path !== '/login' && !/^\/(404|privacy|terms)$/.test(path)) {
+      location.replace('/login?setpw=1&next=' + encodeURIComponent(location.pathname + location.search));
+    }
+  })();
   pendingN.splice(0).forEach(notify);
   if (window.__mchSlow) window.dispatchEvent(new CustomEvent('mch:slowload'));
   if (S.music) startPlayback();
