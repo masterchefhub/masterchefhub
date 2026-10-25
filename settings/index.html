@@ -195,6 +195,7 @@ footer ul a:hover{text-decoration:underline}
 @media(max-width:600px){.srow{flex-wrap:wrap}.range{min-width:100%}.scard,.np{padding:22px}.np h3{font-size:1.9rem}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<link rel="stylesheet" href="/site.css">
 </head>
 <body data-mch-player="off">
 
@@ -255,7 +256,6 @@ footer ul a:hover{text-decoration:underline}
     <li><a href="/recipes"><svg class="ico"><use href="#i-book"/></svg>Recipes</a></li>
     <li><a href="/categories"><svg class="ico"><use href="#i-grid"/></svg>Categories</a></li>
     <li><a href="/videos"><svg class="ico"><use href="#i-video"/></svg>Videos</a></li>
-    <li><a href="/meal-plans"><svg class="ico"><use href="#i-cal"/></svg>Meal Plans</a></li>
   </ul>
   <div class="nav-label">Company</div>
   <ul class="menu">
@@ -315,10 +315,10 @@ footer ul a:hover{text-decoration:underline}
     <div class="fgrid">
       <div>
         <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a>
-        <p>Chef-tested recipes, video lessons and meal plans for everyday cooks.</p>
+        <p>Chef-tested recipes and video lessons for everyday cooks.</p>
       </div>
-      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/videos">Videos</a></li><li><a href="/meal-plans">Meal plans</a></li></ul></div>
-      <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li><li><a href="/faq">FAQ</a></li></ul></div>
+      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/videos">Videos</a></li></ul></div>
+      <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
       <div><h5>Account</h5><ul><li><a href="/login">Log in</a></li><li><a href="/login">Create account</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
     </div>
     <div class="copy"><span>&copy; 2026 MasterChefHub.com</span><span>All rights reserved.</span></div>
@@ -362,7 +362,7 @@ function renderLib(curId){
 }
 function renderAccount(){
   const u=M.user(), box=$('#acct');
-  if(!u){ box.innerHTML='<div class="av">'+ICO('person')+'</div><div class="tx"><b>Not signed in</b><small>Log in to save recipes and meal plans</small></div><a class="tbtn" href="/login">Log in</a>'; return; }
+  if(!u){ box.innerHTML='<div class="av">'+ICO('person')+'</div><div class="tx"><b>Not signed in</b><small>Log in to save your settings and manage your profile</small></div><a class="tbtn" href="/login">Log in</a>'; return; }
   const name=u.name||(u.email?u.email.split('@')[0]:'Account');
   box.innerHTML='<div class="av">'+(u.photo?'<img src="'+esc(u.photo)+'" alt="" referrerpolicy="no-referrer">':esc(name.charAt(0).toUpperCase()))+'</div>'+
     '<div class="tx"><b>'+esc(name)+'</b><small>'+esc(u.email||'Signed in')+'</small></div><a class="tbtn" href="/login?signout=1">Sign out</a>';
