@@ -42,7 +42,14 @@ export function init() {
       ]);
       const app = App.initializeApp(cfg);
       const auth = A.getAuth(app);
-      let db = null; try { db = cfg.databaseId ? F.getFirestore(app, cfg.databaseId) : F.getFirestore(app); } catch (e) { db = null; }
+      /* auto-detect long polling: some browsers/networks block Firestore's default stream, which makes saving take 10+ seconds */
+      let db = null;
+      try {
+        const opts = { experimentalAutoDetectLongPolling: true };
+        db = cfg.databaseId ? F.initializeFirestore(app, opts, cfg.databaseId) : F.initializeFirestore(app, opts);
+      } catch (e) {
+        try { db = cfg.databaseId ? F.getFirestore(app, cfg.databaseId) : F.getFirestore(app); } catch (e2) { db = null; }
+      }
       return { app, auth, db, A, F };
     } catch (e) {
       state.error = 'load-failed';

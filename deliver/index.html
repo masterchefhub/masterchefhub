@@ -164,7 +164,7 @@ footer ul a:hover{text-decoration:underline}
 .cl{display:flex;flex-direction:column;gap:2px;margin-bottom:12px}
 .ci{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .ci b{font-size:.92rem}.ci .ip{font-weight:700;font-size:.92rem;text-align:right}
-.qty{display:inline-flex;align-items:center;gap:2px;border:1.5px solid var(--line);border-radius:99px}
+.qty{justify-self:start;display:inline-flex;align-items:center;gap:2px;border:1.5px solid var(--line);border-radius:99px}
 .qty button{width:30px;height:30px;border:0;background:transparent;font-size:1.1rem;font-weight:700;cursor:pointer;border-radius:50%;font-family:inherit;color:var(--ink)}
 .qty button:hover{background:#f0f0ed}
 .qty span{min-width:22px;text-align:center;font-weight:700;font-size:.9rem}
@@ -203,6 +203,31 @@ footer ul a:hover{text-decoration:underline}
 @media(max-width:1100px){.dl{grid-template-columns:minmax(0,1fr)}.cartbox{position:static}#cbar.on{display:flex}}
 @media(max-width:700px){.facts{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.oc dl{grid-template-columns:1fr;gap:0}.oc dt{margin-top:8px}.mgrid{grid-template-columns:1fr 1fr;gap:10px}.mi{padding:14px}}
 @media(max-width:420px){.mgrid{grid-template-columns:1fr}}
+
+.stp{display:flex;gap:6px;list-style:none;margin:0 0 16px;padding:0}
+.stp li{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.7rem;color:var(--muted);text-align:center;position:relative}
+.stp li span{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);background:#fff;display:grid;place-items:center;font-weight:800;font-size:.8rem}
+.stp li.on{color:var(--ink);font-weight:700}.stp li.on span{background:var(--ink);color:#fff;border-color:var(--ink)}
+.stp li.done span{background:#14532d;color:#fff;border-color:#14532d}
+.stp em{font-style:normal}
+.two{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:6px}
+.two .sbtn{width:100%;height:50px}
+.sbtn.back{border-color:var(--line);color:var(--ink)}
+.sbtn.wide.back{margin-top:10px}
+.rv{display:flex;justify-content:space-between;gap:12px;background:#f6f6f4;border-radius:14px;padding:12px 14px;font-size:.88rem;margin-bottom:12px;line-height:1.5}
+.rv span{display:block;color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.06em}
+.lnk{border:0;background:transparent;font-family:inherit;font-weight:700;text-decoration:underline;cursor:pointer;color:var(--ink);align-self:flex-start}
+.mi{padding:0;overflow:hidden;gap:0}
+.mimg{background:#f0f0ed}.mimg img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+.mbody{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.trk{display:flex;list-style:none;margin:14px 0 6px;padding:0}
+.trk li{flex:1;text-align:center;position:relative;font-size:.72rem;color:var(--muted)}
+.trk li span{display:block;width:14px;height:14px;border-radius:50%;background:#dcdcd7;margin:0 auto 6px;position:relative;z-index:1}
+.trk li::before{content:"";position:absolute;top:6px;left:-50%;width:100%;height:3px;background:#dcdcd7}
+.trk li:first-child::before{display:none}
+.trk li.on{color:var(--ink);font-weight:700}.trk li.on span,.trk li.on::before{background:#0a0a0a}
+.trk em{font-style:normal}
+@media(max-width:380px){.stp em{font-size:.62rem}}
 
 </style>
 </head>
@@ -403,80 +428,105 @@ function drawChips() {
 }
 function drawMenu() {
   const list = MENU.filter(m => cat === 'all' || m.cat === cat);
-  $('#mgrid').innerHTML = list.map(m => '<div class="mi"><div class="mt"><svg class="ico"><use href="#' + (ICON[m.cat] || 'i-plate') + '"/></svg></div><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p><div class="mb"><span class="pr">' + money(items.get(m.id).c) + '</span><button class="addb" data-add="' + esc(m.id) + '" type="button"><svg class="ico"><use href="#i-plus"/></svg>Add</button></div></div>').join('');
+  $('#mgrid').innerHTML = list.map(m => '<div class="mi"><div class="mimg"><img src="' + esc(m.img) + '" alt="' + esc(m.name) + '" width="640" height="480" loading="lazy"></div><div class="mbody"><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p><div class="mb"><span class="pr">' + money(items.get(m.id).c) + '</span><button class="addb" data-add="' + esc(m.id) + '" type="button"><svg class="ico"><use href="#i-plus"/></svg>Add</button></div></div></div>').join('');
 }
 $('#dchips').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return; cat = b.dataset.c; drawChips(); drawMenu(); });
 $('#mgrid').addEventListener('click', e => { const b = e.target.closest('[data-add]'); if (!b) return; const id = b.dataset.add; cart[id] = Math.min(20, (cart[id] || 0) + 1); saveCart(); drawCart(); D.say('success', 'Added', items.get(id).name + ' is in your order.'); });
 
-/* ---------- cart + checkout ---------- */
+/* ---------- cart + checkout (3 stages) ---------- */
+let step = 1, det = {};
+const STEPS = ['Your order', 'Delivery details', 'Confirm and pay'];
+function stepper() {
+  return '<ol class="stp">' + STEPS.map((t, i) => '<li class="' + (i + 1 === step ? 'on' : (i + 1 < step ? 'done' : '')) + '"><span>' + (i + 1 < step ? '&#10003;' : (i + 1)) + '</span><em>' + esc(t) + '</em></li>').join('') + '</ol>';
+}
+function lines(editable) {
+  return '<div class="cl">' + Object.keys(cart).map(id => { const m = items.get(id), q = cart[id];
+    return '<div class="ci"><b>' + esc(m.name) + (editable ? '' : ' x ' + q) + '</b><span class="ip">' + money(m.c * q) + '</span>' +
+      (editable ? '<div class="qty"><button data-q="-1" data-id="' + esc(id) + '" type="button" aria-label="Less">&minus;</button><span>' + q + '</span><button data-q="1" data-id="' + esc(id) + '" type="button" aria-label="More">+</button></div><span></span>' : '') + '</div>'; }).join('') + '</div>';
+}
+function totals(s) {
+  return '<div class="tot"><div><span>Food</span><span>' + money(s) + '</span></div><div><span>Delivery</span><span>' + (FEEC ? money(FEEC) : 'Free') + '</span></div><div class="g"><span>Total, pay in cash</span><span>' + money(s + FEEC) + '</span></div></div>';
+}
+function fld(k, label, req, attrs, hint) {
+  return '<div class="fld" data-k="' + k + '"><label for="' + k + '">' + label + (req ? ' <i class="rq">*</i>' : '') + '</label><input id="' + k + '" value="' + esc(det[k] || '') + '" ' + attrs + '><small class="ferr"></small></div>';
+}
 function drawCart() {
   const n = count(), s = sub(), box = $('#cartBody');
-  const bar = $('#cbar'); bar.classList.toggle('on', n > 0); $('#cbarN').textContent = 'View order (' + n + ')'; $('#cbarT').textContent = money(s + FEEC);
-  if (!n) { box.innerHTML = '<p class="sub">Your order is empty. Pick something from the menu.</p>'; return; }
-  const lines = Object.keys(cart).map(id => { const m = items.get(id), q = cart[id]; return '<div class="ci"><b>' + esc(m.name) + '</b><span class="ip">' + money(m.c * q) + '</span><div class="qty"><button data-q="-1" data-id="' + esc(id) + '" type="button" aria-label="Less">&minus;</button><span>' + q + '</span><button data-q="1" data-id="' + esc(id) + '" type="button" aria-label="More">+</button></div><span></span></div>'; }).join('');
-  const tot = '<div class="tot"><div><span>Food</span><span>' + money(s) + '</span></div><div><span>Delivery</span><span>' + (FEEC ? money(FEEC) : 'Free') + '</span></div><div class="g"><span>Total, pay in cash</span><span>' + money(s + FEEC) + '</span></div></div>';
-  let form;
-  if (!user) form = '<div class="cashnote"><svg class="ico"><use href="#i-ok2"/></svg><span>Log in to place your order. Your cart will wait for you.</span></div><a class="sbtn fill wide" href="/login?next=/deliver">Log in to order</a>';
-  else form = checkoutForm(s);
-  box.innerHTML = '<div class="cl">' + lines + '</div>' + tot + form;
-  const f = $('#of'); if (f) bindForm(f);
-}
-$('#cartBody').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; const id = b.dataset.id; cart[id] = (cart[id] || 0) + Number(b.dataset.q); if (cart[id] <= 0) delete cart[id]; if (cart[id] > 20) cart[id] = 20; saveCart(); keep(); drawCart(); restore(); });
-$('#cbar').addEventListener('click', () => $('#cart').scrollIntoView({ behavior: 'smooth', block: 'start' }));
-
-/* keep what the person typed while the cart redraws */
-let typed = {};
-const FIELDS = ['oname', 'ophone', 'oaddr', 'oapt', 'ocity', 'ozip', 'onotes'];
-function keep() { FIELDS.forEach(k => { const e = document.getElementById(k); if (e) typed[k] = e.value; }); const c = document.getElementById('ocash'); if (c) typed.ocash = c.checked; }
-function restore() { FIELDS.forEach(k => { const e = document.getElementById(k); if (e && typed[k] != null) e.value = typed[k]; }); const c = document.getElementById('ocash'); if (c && typed.ocash) c.checked = true; }
-function checkoutForm(s) {
-  const low = MINC && s < MINC ? '<p class="minwarn">The minimum order is ' + money(MINC) + ' of food. Add ' + money(MINC - s) + ' more.</p>' : '';
-  return low + '<form id="of" novalidate><div class="cashnote"><svg class="ico"><use href="#i-plate"/></svg><span><b>Cash on delivery.</b> Please have the exact cash ready when your order arrives.</span></div>' +
-    '<div class="fld" data-k="oname"><label for="oname">Full name <i class="rq">*</i></label><input id="oname" maxlength="80" autocomplete="name"><small class="ferr"></small></div>' +
-    '<div class="fld" data-k="ophone"><label for="ophone">Phone number <i class="rq">*</i></label><input id="ophone" type="tel" maxlength="30" autocomplete="tel" inputmode="tel"><small class="ferr"></small></div>' +
-    '<div class="fld" data-k="oaddr"><label for="oaddr">House address <i class="rq">*</i></label><input id="oaddr" maxlength="120" autocomplete="street-address" placeholder="Street and number"><small class="ferr"></small></div>' +
-    '<div class="fld" data-k="oapt"><label for="oapt">Apartment or door code</label><input id="oapt" maxlength="60"></div>' +
-    '<div class="row2"><div class="fld" data-k="ocity"><label for="ocity">City <i class="rq">*</i></label><input id="ocity" maxlength="60" autocomplete="address-level2"><small class="ferr"></small></div><div class="fld" data-k="ozip"><label for="ozip">ZIP code <i class="rq">*</i></label><input id="ozip" maxlength="12" autocomplete="postal-code"><small class="ferr"></small></div></div>' +
-    '<div class="fld"><label for="onotes">Notes for the cook (allergies, no onions, drop at the door)</label><textarea id="onotes" maxlength="400" rows="3"></textarea></div>' +
-    '<label class="chk2"><input type="checkbox" id="ocash"><span>I will pay the total in cash when the order arrives.</span></label>' +
-    '<div class="cmsg" id="oerr" role="alert" hidden></div>' +
-    '<button class="sbtn fill wide" type="submit" id="osend"><i class="spin"></i><span class="lbl">Place order, pay cash on delivery</span></button></form>';
-}
-function bindForm(f) {
-  if (!typed.oname && user) typed.oname = user.displayName || '';
-  restore();
-  f.addEventListener('submit', async e => {
-    e.preventDefault(); keep();
-    f.querySelectorAll('.fld').forEach(x => { x.classList.remove('bad'); const r = x.querySelector('.ferr'); if (r) r.textContent = ''; });
-    const err = $('#oerr'); err.hidden = true;
-    const v = o => (document.getElementById(o).value || '').trim();
-    const d = { name: v('oname'), phone: v('ophone'), address: v('oaddr'), apt: v('oapt'), city: v('ocity'), zip: v('ozip'), notes: v('onotes') };
-    let bad = 0;
-    const fail = (k, t) => { const x = f.querySelector('.fld[data-k="' + k + '"]'); if (x) { x.classList.add('bad'); x.querySelector('.ferr').textContent = t; } bad++; };
-    if (d.name.split(/\s+/).filter(Boolean).length < 2) fail('oname', 'Please enter your first and last name.');
-    if (d.phone.replace(/\D/g, '').length < 7) fail('ophone', 'Please enter a phone number we can call.');
-    if (d.address.length < 5) fail('oaddr', 'Please enter your house address.');
-    if (d.city.length < 2) fail('ocity', 'Required.');
-    if (d.zip.length < 3) fail('ozip', 'Required.');
-    const s = sub();
-    if (MINC && s < MINC) { err.hidden = false; err.textContent = 'Add ' + money(MINC - s) + ' more food to reach the minimum order.'; return; }
-    if (!document.getElementById('ocash').checked) { err.hidden = false; err.textContent = 'Please confirm that you will pay in cash on arrival.'; return; }
-    if (bad) { err.hidden = false; err.textContent = 'Please fix the highlighted fields.'; return; }
-    try { if (Date.now() - Number(localStorage.getItem('mch_lastorder') || 0) < 20000) { err.hidden = false; err.textContent = 'Please wait a few seconds before placing another order.'; return; } } catch (x) {}
-    const btn = $('#osend'); btn.classList.add('loading'); btn.disabled = true;
-    const list = Object.keys(cart).map(id => ({ id, name: items.get(id).name, qty: cart[id], price: items.get(id).c / 100 }));
-    const order = Object.assign({ uid: user.uid, email: (user.email || '').toLowerCase() }, d, { items: list, subtotal: s / 100, fee: FEEC / 100, total: (s + FEEC) / 100, payment: 'cash_on_delivery', status: 'new' });
-    try {
-      const id = await D.add('orders', order);
-      try { localStorage.setItem('mch_lastorder', String(Date.now())); } catch (x) {}
-      cart = {}; saveCart(); lastOrderId = id; typed = {};
-      showOk(order, id);
-      D.say('success', 'Order placed', 'Pay ' + money(Math.round(order.total * 100)) + ' in cash on arrival.');
-    } catch (er) {
-      err.hidden = false; err.textContent = D.explain(er); D.say('error', 'Could not place order', D.explain(er));
-      btn.classList.remove('loading'); btn.disabled = false;
+  const bar = $('#cbar'); bar.classList.toggle('on', n > 0 && tab === 'order'); $('#cbarN').textContent = 'View order (' + n + ')'; $('#cbarT').textContent = money(s + FEEC);
+  if (!n) { step = 1; box.innerHTML = '<p class="sub">Your order is empty. Pick something from the menu.</p>'; return; }
+  let h = stepper();
+  if (step === 1) {
+    h += lines(true) + totals(s);
+    if (MINC && s < MINC) h += '<p class="minwarn">The minimum order is ' + money(MINC) + ' of food. Add ' + money(MINC - s) + ' more.</p>';
+    h += '<button class="sbtn fill wide" type="button" id="go2"' + (MINC && s < MINC ? ' disabled' : '') + '>Continue to delivery details</button>';
+  } else if (step === 2) {
+    if (!user) h += '<div class="cashnote"><svg class="ico"><use href="#i-ok2"/></svg><span>Log in to place your order. Your cart will wait for you.</span></div><a class="sbtn fill wide" href="/login?next=/deliver">Log in to order</a><button class="sbtn wide back" type="button" id="back1">Back</button>';
+    else {
+      if (det.oname == null) det.oname = (user.displayName || '');
+      h += '<p class="sub">Where should we bring your food?</p><form id="df" novalidate>' +
+        fld('oname', 'Full name', true, 'maxlength="80" autocomplete="name"') +
+        fld('ophone', 'Phone number', true, 'type="tel" maxlength="30" autocomplete="tel" inputmode="tel"') +
+        fld('oaddr', 'House address', true, 'maxlength="120" autocomplete="street-address" placeholder="Street and number"') +
+        fld('oapt', 'Apartment or door code', false, 'maxlength="60"') +
+        '<div class="row2">' + fld('ocity', 'City', true, 'maxlength="60" autocomplete="address-level2"') + fld('ozip', 'ZIP code', true, 'maxlength="12" autocomplete="postal-code"') + '</div>' +
+        '<div class="fld"><label for="onotes">Notes for the cook (allergies, no onions, leave at the door)</label><textarea id="onotes" maxlength="400" rows="3">' + esc(det.onotes || '') + '</textarea></div>' +
+        '<div class="cmsg" id="derr" role="alert" hidden></div>' +
+        '<div class="two"><button class="sbtn back" type="button" id="back1">Back</button><button class="sbtn fill" type="submit">Continue</button></div></form>';
     }
-  });
+  } else {
+    const addr = [det.oaddr, det.oapt, det.ocity, det.ozip].filter(Boolean).join(', ');
+    h += '<p class="sub">Check everything, then place your order.</p>' + lines(false) + totals(s) +
+      '<div class="rv"><div><span>Deliver to</span><b>' + esc(det.oname) + '</b><br>' + esc(addr) + '<br>' + esc(det.ophone) + (det.onotes ? '<br><i>' + esc(det.onotes) + '</i>' : '') + '</div><button class="lnk" type="button" id="edit2">Change</button></div>' +
+      '<div class="cashnote"><svg class="ico"><use href="#i-plate"/></svg><span><b>Pay when your food arrives.</b> Cash on delivery only. Please have <b>' + money(s + FEEC) + '</b> ready for the driver.</span></div>' +
+      '<label class="chk2"><input type="checkbox" id="ocash"><span>I will pay the total in cash when the order arrives.</span></label>' +
+      '<div class="cmsg" id="oerr" role="alert" hidden></div>' +
+      '<div class="two"><button class="sbtn back" type="button" id="back2">Back</button><button class="sbtn fill" type="button" id="osend"><i class="spin"></i><span class="lbl">Place order</span></button></div>';
+  }
+  box.innerHTML = h;
+  const on = (id, fn) => { const e = document.getElementById(id); if (e) e.addEventListener('click', fn); };
+  on('go2', () => { step = 2; drawCart(); $('#cart').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  on('back1', () => { saveDet(); step = 1; drawCart(); });
+  on('back2', () => { step = 2; drawCart(); });
+  on('edit2', () => { step = 2; drawCart(); });
+  on('osend', place);
+  const df = document.getElementById('df'); if (df) df.addEventListener('submit', toStep3);
+}
+function saveDet() { ['oname', 'ophone', 'oaddr', 'oapt', 'ocity', 'ozip', 'onotes'].forEach(k => { const e = document.getElementById(k); if (e) det[k] = e.value.trim(); }); }
+function toStep3(e) {
+  e.preventDefault(); saveDet();
+  const f = $('#df'); f.querySelectorAll('.fld').forEach(x => { x.classList.remove('bad'); const r = x.querySelector('.ferr'); if (r) r.textContent = ''; });
+  let bad = 0; const fail = (k, t) => { const x = f.querySelector('.fld[data-k="' + k + '"]'); if (x) { x.classList.add('bad'); x.querySelector('.ferr').textContent = t; } bad++; };
+  if (det.oname.split(/\s+/).filter(Boolean).length < 2) fail('oname', 'Please enter your first and last name.');
+  if (det.ophone.replace(/\D/g, '').length < 7) fail('ophone', 'Please enter a phone number we can call.');
+  if (det.oaddr.length < 5) fail('oaddr', 'Please enter your house address.');
+  if (det.ocity.length < 2) fail('ocity', 'Required.');
+  if (det.ozip.length < 3) fail('ozip', 'Required.');
+  if (bad) { const m = $('#derr'); m.hidden = false; m.textContent = 'Please fix the highlighted fields.'; return; }
+  step = 3; drawCart(); $('#cart').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+$('#cartBody').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; const id = b.dataset.id; cart[id] = (cart[id] || 0) + Number(b.dataset.q); if (cart[id] <= 0) delete cart[id]; if (cart[id] > 20) cart[id] = 20; saveCart(); drawCart(); });
+$('#cbar').addEventListener('click', () => $('#cart').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+async function place() {
+  const err = $('#oerr'); err.hidden = true; const s = sub();
+  if (MINC && s < MINC) { err.hidden = false; err.textContent = 'Add ' + money(MINC - s) + ' more food to reach the minimum order.'; return; }
+  if (!$('#ocash').checked) { err.hidden = false; err.textContent = 'Please confirm that you will pay in cash on arrival.'; return; }
+  try { if (Date.now() - Number(localStorage.getItem('mch_lastorder') || 0) < 20000) { err.hidden = false; err.textContent = 'Please wait a few seconds before placing another order.'; return; } } catch (x) {}
+  const btn = $('#osend'); btn.classList.add('loading'); btn.disabled = true; $('#cartBody').querySelectorAll('.back').forEach(b => b.disabled = true);
+  const slow = setTimeout(() => D.say('info', 'Still sending', 'Your connection is slow. Please keep this page open.'), 6000);
+  const list = Object.keys(cart).map(id => ({ id, name: items.get(id).name, qty: cart[id], price: items.get(id).c / 100 }));
+  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: det.onotes || '', items: list, subtotal: s / 100, fee: FEEC / 100, total: (s + FEEC) / 100, payment: 'cash_on_delivery', status: 'new' };
+  try {
+    const id = await Promise.race([D.add('orders', order), new Promise((_, rej) => setTimeout(() => rej(Object.assign(new Error('timeout'), { code: 'unavailable' })), 25000))]);
+    clearTimeout(slow);
+    try { localStorage.setItem('mch_lastorder', String(Date.now())); } catch (x) {}
+    cart = {}; saveCart(); step = 1; det = {};
+    showOk(order, id);
+    D.say('success', 'Order placed', 'Pay ' + money(Math.round(order.total * 100)) + ' in cash on arrival.');
+  } catch (er) {
+    clearTimeout(slow);
+    err.hidden = false; err.textContent = D.explain(er); D.say('error', 'Could not place order', D.explain(er));
+    btn.classList.remove('loading'); btn.disabled = false; $('#cartBody').querySelectorAll('.back').forEach(b => b.disabled = false);
+  }
 }
 function showOk(o, id) {
   ['#pOrder', '#pMine', '#pAll'].forEach(s => $(s).hidden = true); $('#dtabs').hidden = true;
@@ -499,6 +549,7 @@ function orderCard(o, isOwner) {
     const addr = [o.address, o.apt, o.city, o.zip].filter(Boolean).join(', ');
     h += '<dt>Customer</dt><dd>' + esc(o.name) + '</dd><dt>Phone</dt><dd><a class="ln" href="tel:' + esc(String(o.phone || '').replace(/[^\d+]/g, '')) + '">' + esc(o.phone) + '</a></dd><dt>Address</dt><dd><a class="ln" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(addr) + '">' + esc(addr) + '</a></dd><dt>Email</dt><dd>' + esc(o.email) + '</dd>';
   }
+  if (!isOwner && o.status !== 'cancelled') { const idx = Math.max(0, ST.findIndex(x => x[0] === (o.status || 'new'))); h = h.replace('</dl>', '</dl>') ; h += '</dl><ol class="trk">' + ST.slice(0, 4).map((x, i) => '<li class="' + (i <= idx ? 'on' : '') + '"><span></span><em>' + x[1] + '</em></li>').join('') + '</ol><dl>'; }
   h += '<dt>Items</dt><dd>' + itemsHtml(o) + '</dd>';
   if (o.notes) h += '<dt>Notes</dt><dd>' + esc(o.notes) + '</dd>';
   h += '<dt>Cash to collect</dt><dd><b>' + total + '</b> (food $' + Number(o.subtotal || 0).toFixed(2) + ' + delivery $' + Number(o.fee || 0).toFixed(2) + ')</dd></dl>';

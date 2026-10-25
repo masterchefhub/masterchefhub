@@ -304,7 +304,7 @@ footer ul a:hover{text-decoration:underline}
           <h2>Sign-in &amp; security</h2><p class="sub">How you can log in to this account.</p>
           <div id="provs"></div>
           <div class="krow"><span>Email</span><b id="vState"></b></div>
-          <div id="vAct" style="margin-top:6px" hidden><button type="button" class="sbtn" id="resend">Send verification email</button></div>
+          <div id="vAct" style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap" hidden><button type="button" class="sbtn" id="resend">Send verification email</button><button type="button" class="sbtn" id="recheck">I clicked the link, check again</button></div>
         </section>
 
         <section class="pcard">
@@ -455,9 +455,29 @@ function start(u) {
   });
 
   $('#resend').addEventListener('click', async () => {
-    try { await c.A.sendEmailVerification(u); D.say('success', 'Email sent', 'Check your inbox (and spam) for the verification link.'); }
-    catch (er) { D.say('error', 'Could not send', friendly(er)); }
+    try {
+      try { await c.A.sendEmailVerification(u, { url: location.origin + '/profile?verified=1' }); }
+      catch (e0) { if (e0 && /continue-uri/.test(e0.code || '')) await c.A.sendEmailVerification(u); else throw e0; }
+      D.say('success', 'Email sent', 'Check your inbox (and spam) for the verification link. Open it in this same browser.');
+    } catch (er) { D.say('error', 'Could not send', friendly(er)); }
   });
+
+  /* the email link verifies the account on Google's side; reload here so the site notices */
+  let checking = false;
+  async function recheck(manual) {
+    if (checking || u.emailVerified) { if (manual && u.emailVerified) D.say('success', 'Already verified', 'Your email is verified.'); return; }
+    checking = true;
+    try {
+      await u.reload();
+      if (u.emailVerified) { await u.getIdToken(true); D.cacheUser(u); paint(u); D.say('success', 'Email verified', 'Thank you. Your email is now verified.'); if (D.isOwner(u)) setTimeout(() => location.reload(), 900); }
+      else if (manual) D.say('warning', 'Not verified yet', 'Open the link in the email first, then press this again.');
+    } catch (er) { if (manual) D.say('error', 'Could not check', friendly(er)); }
+    checking = false;
+  }
+  $('#recheck').addEventListener('click', () => recheck(true));
+  window.addEventListener('focus', () => recheck(false));
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) recheck(false); });
+  recheck(location.search.indexOf('verified=1') >= 0);
 
   $('#pwForm').addEventListener('submit', async e => {
     e.preventDefault(); ['fcur', 'fnew', 'fnew2'].forEach(i => setBad(i, '')); const m = $('#pwMsg'); msg(m, 'err', '');

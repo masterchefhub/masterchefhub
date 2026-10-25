@@ -44,3 +44,7 @@ export const MENU = [
   { id: 'iced-tea', cat: 'drinks', name: 'Iced tea', price: 2.50, desc: 'Sweet or unsweet. Tell us in the notes.' },
   { id: 'water', cat: 'drinks', name: 'Bottled water', price: 1.50, desc: 'Cold bottled water.' }
 ];
+
+/* Every dish gets a picture from /img/menu/<id>.svg by default.
+ * To use your own photo, upload it to the img/menu folder and add  img: '/img/menu/yourfile.jpg'  to the dish above. */
+MENU.forEach(m => { if (!m.img) m.img = '/img/menu/' + m.id + '.svg'; });
