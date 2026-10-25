@@ -96,6 +96,13 @@ export async function get(coll, id) {
   const s = await c.F.getDoc(c.F.doc(c.db, coll, id));
   return s.exists() ? Object.assign({ id: s.id }, s.data()) : null;
 }
+/* rows where one field equals a value (no sorting here, so no index is needed) */
+export async function listWhere(coll, field, value, max) {
+  const c = await need();
+  const q = c.F.query(c.F.collection(c.db, coll), c.F.where(field, '==', value), c.F.limit(max || 100));
+  const s = await c.F.getDocs(q);
+  return s.docs.map(d => Object.assign({ id: d.id }, d.data()));
+}
 export async function count(coll) {
   const c = await need();
   if (c.F.getCountFromServer) {

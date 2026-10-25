@@ -13,6 +13,19 @@ service cloud.firestore {
       allow read: if coll in ['videos','recipes','foods','posts'];
       allow write: if coll in ['videos','recipes','foods','posts'] && isOwner();
     }
+    match /orders/{id} {
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'new'
+        && request.resource.data.payment == 'cash_on_delivery'
+        && request.resource.data.keys().hasOnly(['uid','email','name','phone','address','apt','city','zip','notes','items','subtotal','fee','total','payment','status','createdAt','by'])
+        && request.resource.data.items is list && request.resource.data.items.size() > 0 && request.resource.data.items.size() <= 30
+        && request.resource.data.total is number && request.resource.data.total > 0 && request.resource.data.total < 1000
+        && request.resource.data.address is string && request.resource.data.address.size() < 200
+        && request.resource.data.name is string && request.resource.data.name.size() < 120;
+      allow read: if request.auth != null && (resource.data.uid == request.auth.uid || isOwner());
+      allow update, delete: if isOwner();
+    }
     match /messages/{id} {
       allow create: if request.resource.data.keys().hasOnly(['name','email','subject','message','createdAt','by'])
         && request.resource.data.message is string && request.resource.data.message.size() < 4000
