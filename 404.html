@@ -3,8 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/loader.js"></script>
 <title>404 | Page Not Found | MasterChefHub</title>
 <meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:site_name" content="MasterChefHub">
+<meta property="og:image" content="https://masterchefhub.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -35,8 +44,8 @@ header{position:relative;z-index:2;display:flex;align-items:center;justify-conte
 .logo:hover .logo-mark{transform:rotate(-8deg) scale(1.08)}
 .logo:hover .hat{animation:hat .7s ease}
 @keyframes hat{0%,100%{transform:translateY(0)}30%{transform:translateY(-4px) rotate(-6deg)}60%{transform:translateY(0) rotate(4deg)}}
-.logo-text{font-weight:800;font-size:1.18rem;letter-spacing:-.03em;line-height:1.05}
-.logo-text small{display:block;font-weight:500;font-size:.64rem;letter-spacing:.22em;color:#8a8a8a;text-transform:uppercase;margin-top:3px}
+.logo-text{font-weight:800;font-size:1.55rem;letter-spacing:.03em;line-height:1}
+.logo-text small{display:block;font-weight:600;font-size:.56rem;letter-spacing:.2em;color:#8a8a8a;text-transform:uppercase;margin-top:4px;white-space:nowrap}
 .sound-btn{display:flex;align-items:center;gap:10px;background:#151515;border:1px solid #262626;color:#cfcfcf;padding:10px 16px;border-radius:99px;cursor:pointer;font-weight:500;font-size:.85rem;transition:.25s}
 .sound-btn:hover{background:#1f1f1f;color:#fff}
 .eq{display:flex;align-items:flex-end;gap:2px;height:14px}
@@ -97,7 +106,8 @@ footer{position:relative;z-index:2;text-align:center;color:#5c5c5c;font-size:.82
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-hat" viewBox="0 0 24 24"><path d="M6.5 14.5A4 4 0 1 1 8 6.8a4.6 4.6 0 0 1 8 0 4 4 0 1 1 1.5 7.7V20h-11z"/><path d="M6.5 17.5h11"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h10M19 18h2"/><circle cx="15" cy="6" r="2.5"/><circle cx="9" cy="12" r="2.5"/><circle cx="16" cy="18" r="2.5"/></symbol>
+  <symbol id="i-hat" viewBox="9 8 47 47"><g fill="currentColor" stroke="none"><circle cx="20.5" cy="25" r="9.5"/><circle cx="32" cy="20" r="11.5"/><circle cx="43.5" cy="25" r="9.5"/><rect x="17" y="25" width="30" height="19"/><rect x="17" y="47" width="30" height="8" rx="2.5"/></g><path d="M26 33.5v9M38 33.5v9" fill="none" stroke-width="1.7" stroke-linecap="round" style="stroke:var(--mark-bg,#fff)"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
   <symbol id="i-food" viewBox="0 0 24 24"><path d="M6 3v7a2 2 0 0 0 2 2v9M10 3v7a2 2 0 0 1-2 2M8 3v9M18 21V3c-2.6 1.4-4 4.4-4 8.2V14h4"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M6.5 17H20v4H6.5a2 2 0 0 1 0-4z"/></symbol>
@@ -113,14 +123,9 @@ footer{position:relative;z-index:2;text-align:center;color:#5c5c5c;font-size:.82
 <header>
   <a href="/" class="logo">
     <div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div>
-    <div class="logo-text">MasterChef<small>H U B</small></div>
+    <div class="logo-text">MCH<small>Master Chef Hub</small></div>
   </a>
-  <button class="sound-btn sound-on" id="soundBtn" aria-label="Toggle sound">
-    <svg class="ico on"><use href="#i-vol"/></svg>
-    <svg class="ico off"><use href="#i-volx"/></svg>
-    <span class="lbl" id="soundLabel">Sound on</span>
-    <div class="eq"><i></i><i></i><i></i><i></i></div>
-  </button>
+  <a href="/settings" class="btn btn-line" style="padding:10px 18px;font-size:.85rem"><svg class="ico"><use href="#i-sliders"/></svg>Settings</a>
 </header>
 
 <main>
@@ -151,51 +156,9 @@ footer{position:relative;z-index:2;text-align:center;color:#5c5c5c;font-size:.82
 
 <footer>&copy; 2026 MasterChefHub.com</footer>
 
+<script src="/site.js"></script>
+<script>window.sfx=window.sfx||{hover(){},click(){},on(){},off(){},open(){},heart(){},success(){},whoops(){},boing(){}};</script>
 <script>
-/* SOUND (generated, no files) */
-let ctx=null, soundOn=true;
-try{ if(localStorage.getItem('mch_sound')==='off') soundOn=false; }catch(e){}
-function audio(){
-  if(!ctx){ try{ ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
-  if(ctx && ctx.state==='suspended') ctx.resume();
-  return ctx;
-}
-function tone(freq,dur=.08,type='sine',vol=.05,slideTo=null,delay=0){
-  if(!soundOn) return; const c=audio(); if(!c) return;
-  const t=c.currentTime+delay, o=c.createOscillator(), g=c.createGain();
-  o.type=type; o.frequency.setValueAtTime(freq,t);
-  if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo,t+dur);
-  g.gain.setValueAtTime(0.0001,t);
-  g.gain.exponentialRampToValueAtTime(vol,t+.01);
-  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-  o.connect(g).connect(c.destination); o.start(t); o.stop(t+dur+.02);
-}
-const sfx={
-  hover(){ tone(880,.05,'sine',.018) },
-  click(){ tone(520,.07,'triangle',.06,780); tone(780,.09,'triangle',.05,1040,.05) },
-  on(){ tone(440,.1,'sine',.06); tone(660,.1,'sine',.06,null,.09); tone(880,.16,'sine',.06,null,.18) },
-  whoops(){ tone(520,.18,'triangle',.07,300); tone(380,.22,'triangle',.07,190,.16) },
-  boing(){ tone(240,.25,'sine',.08,620); tone(620,.18,'sine',.05,320,.2) }
-};
-let lastHover=0;
-document.querySelectorAll('a,.btn,.sound-btn,.plate').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{const n=Date.now(); if(n-lastHover>90){lastHover=n;sfx.hover()}});
-});
-document.addEventListener('click',e=>{ if(e.target.closest('a,.btn')) sfx.click() });
-
-const soundBtn=document.getElementById('soundBtn'), soundLabel=document.getElementById('soundLabel');
-function paintSound(){
-  soundBtn.classList.toggle('sound-on',soundOn);
-  document.body.classList.toggle('muted',!soundOn);
-  soundLabel.textContent=soundOn?'Sound on':'Sound off';
-}
-soundBtn.addEventListener('click',e=>{
-  e.stopPropagation(); soundOn=!soundOn; paintSound();
-  try{localStorage.setItem('mch_sound',soundOn?'on':'off')}catch(err){}
-  if(soundOn) sfx.on();
-});
-paintSound();
-
 /* Browsers only allow sound after a first interaction: play the whoops once then */
 let played=false;
 function firstSound(){ if(played) return; played=true; sfx.whoops(); }
