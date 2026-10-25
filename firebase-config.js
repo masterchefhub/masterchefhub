@@ -11,5 +11,6 @@ export const firebaseConfig = {
   storageBucket: "masterchefhub.firebasestorage.app",
   messagingSenderId: "690905098626",
   appId: "1:690905098626:web:2abbccb3b4e4c65490879b",
-  measurementId: "G-3E062F1N3Y"
+  measurementId: "G-3E062F1N3Y",
+  databaseId: "firedata"
 };

@@ -42,7 +42,7 @@ export function init() {
       ]);
       const app = App.initializeApp(cfg);
       const auth = A.getAuth(app);
-      let db = null; try { db = F.getFirestore(app); } catch (e) { db = null; }
+      let db = null; try { db = cfg.databaseId ? F.getFirestore(app, cfg.databaseId) : F.getFirestore(app); } catch (e) { db = null; }
       return { app, auth, db, A, F };
     } catch (e) {
       state.error = 'load-failed';
