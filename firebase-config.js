@@ -1,24 +1,15 @@
-/* MasterChefHub: Firebase web app configuration
+/* MasterChefHub: FULL Firebase web app configuration
  *
- * Fill this in ONCE and sign-in on /login starts working.
- *
- *  1. Go to https://console.firebase.google.com and click "Add project".
- *  2. In the project, open Build > Authentication > Get started.
- *     - Sign-in method tab > turn ON "Google" (set a support email) > Save.
- *     - Also turn ON "Email/Password".
- *     (Apple and Microsoft can be turned on later in the same tab.)
- *  3. Authentication > Settings > Authorized domains > Add domain:
- *        masterchefhub.com        (and www.masterchefhub.com if you use it)
- *     "localhost" is already allowed for testing.
- *  4. Project settings (gear icon) > General > Your apps > click the web icon </>
- *     > register the app > copy the values it shows into the object below.
- *
- * These values are safe to be public. Firebase protects your data with its own
- * rules and with the Authorized domains list above, not by hiding this file.
+ * Replace every PASTE_... value with the matching value from your Firebase
+ * console (Project settings > General > Your apps > MasterChefHub).
+ * Keep the quotes. Upload this file next to login.html.
  */
 export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAA5i8Uzt_WVAZD8gspeZ6Mh1O6Gb1GLsc",
+  authDomain: "masterchefhub.firebaseapp.com",
+  projectId: "masterchefhub",
+  storageBucket: "masterchefhub.firebasestorage.app",
+  messagingSenderId: "690905098626",
+  appId: "1:690905098626:web:2abbccb3b4e4c65490879b",
+  measurementId: "G-3E062F1N3Y"
 };
