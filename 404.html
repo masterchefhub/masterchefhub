@@ -1,1 +1,212 @@
-404
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 | Page Not Found | MasterChefHub</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--ink:#fff;--muted:#8f8f8f;--line:#262626;--accent:#ff5a1f}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;display:flex;flex-direction:column;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+.serif{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.02em}
+.ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* background rings */
+.rings{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.rings i{position:absolute;left:50%;top:50%;border:1px solid var(--line);border-radius:50%;transform:translate(-50%,-50%);animation:breathe 7s ease-in-out infinite}
+.rings i:nth-child(1){width:380px;height:380px}
+.rings i:nth-child(2){width:640px;height:640px;animation-delay:-1.4s}
+.rings i:nth-child(3){width:900px;height:900px;animation-delay:-2.8s}
+.rings i:nth-child(4){width:1180px;height:1180px;animation-delay:-4.2s}
+@keyframes breathe{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}}
+
+/* header */
+header{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:26px 40px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{width:44px;height:44px;border-radius:14px;background:#fff;color:#0a0a0a;display:grid;place-items:center;transition:.4s}
+.logo-mark .ico{width:26px;height:26px;stroke-width:1.7}
+.logo:hover .logo-mark{transform:rotate(-8deg) scale(1.08)}
+.logo:hover .hat{animation:hat .7s ease}
+@keyframes hat{0%,100%{transform:translateY(0)}30%{transform:translateY(-4px) rotate(-6deg)}60%{transform:translateY(0) rotate(4deg)}}
+.logo-text{font-weight:800;font-size:1.18rem;letter-spacing:-.03em;line-height:1.05}
+.logo-text small{display:block;font-weight:500;font-size:.64rem;letter-spacing:.22em;color:#8a8a8a;text-transform:uppercase;margin-top:3px}
+.sound-btn{display:flex;align-items:center;gap:10px;background:#151515;border:1px solid #262626;color:#cfcfcf;padding:10px 16px;border-radius:99px;cursor:pointer;font-weight:500;font-size:.85rem;transition:.25s}
+.sound-btn:hover{background:#1f1f1f;color:#fff}
+.eq{display:flex;align-items:flex-end;gap:2px;height:14px}
+.eq i{width:3px;background:#fff;border-radius:2px;height:4px}
+.sound-on .eq i{animation:eq .9s ease-in-out infinite}
+.sound-on .eq i:nth-child(2){animation-delay:-.3s}
+.sound-on .eq i:nth-child(3){animation-delay:-.6s}
+.sound-on .eq i:nth-child(4){animation-delay:-.15s}
+@keyframes eq{0%,100%{height:3px}50%{height:14px}}
+.sound-btn .off{display:none}
+.muted .sound-btn .on{display:none}
+.muted .sound-btn .off{display:block}
+
+/* main */
+main{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 24px 50px}
+.pill{display:inline-flex;align-items:center;gap:10px;border:1px solid #333;padding:7px 16px;border-radius:99px;font-size:.8rem;font-weight:600;color:#d4d4d4;margin-bottom:10px}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,90,31,.7)}100%{box-shadow:0 0 0 12px rgba(255,90,31,0)}}
+.big404{display:flex;align-items:center;justify-content:center;gap:clamp(6px,2vw,22px);font-family:'Instrument Serif',serif;font-size:clamp(7rem,24vw,17rem);line-height:1;letter-spacing:-.04em;user-select:none}
+.big404 span.n{display:inline-block;animation:drop 1s cubic-bezier(.2,.9,.3,1.3) both}
+.big404 span.n:last-child{animation-delay:.15s}
+@keyframes drop{from{opacity:0;transform:translateY(-60px) rotate(-6deg)}to{opacity:1;transform:none}}
+.plate{position:relative;width:.72em;height:.72em;border-radius:50%;background:#fff;color:#0a0a0a;display:grid;place-items:center;animation:wobble 4s ease-in-out infinite;cursor:pointer;flex-shrink:0;transition:transform .3s}
+.plate:hover{animation-play-state:paused;transform:scale(1.08) rotate(14deg)}
+.plate .ico{width:56%;height:56%;stroke-width:1.3}
+.plate::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px dashed #3a3a3a;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes wobble{0%,100%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(8deg) translateY(-12px)}}
+h1{font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.02;margin:22px 0 16px;animation:fade .8s .3s both}
+h1 em{font-style:italic;color:#b5b5b5}
+p.sub{color:var(--muted);font-size:1.08rem;max-width:480px;margin:0 auto 34px;animation:fade .8s .45s both}
+@keyframes fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fade .8s .6s both}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 30px;border-radius:99px;font-weight:700;font-size:.98rem;border:1.5px solid transparent;cursor:pointer;transition:.25s}
+.btn .ico{transition:transform .3s}
+.btn-white{background:#fff;color:#0a0a0a}
+.btn-white:hover{background:#e9e9e9;transform:translateY(-3px);box-shadow:0 14px 34px rgba(255,255,255,.12)}
+.btn-white:hover .ico{animation:hat .6s ease}
+.btn-line{border-color:#3a3a3a;color:#fff;background:transparent}
+.btn-line:hover{background:#fff;color:#0a0a0a;border-color:#fff;transform:translateY(-3px)}
+.btn:hover .arrow{transform:translateX(5px)}
+.quick{margin-top:38px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:.88rem;align-items:center;animation:fade .8s .75s both}
+.quick a{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid #2a2a2a;border-radius:99px;font-weight:600;color:#d4d4d4;transition:.25s}
+.quick a:hover{background:#fff;color:#0a0a0a;border-color:#fff}
+.quick a:hover .ico{animation:wiggle .6s ease}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg) scale(1.1)}60%{transform:rotate(10deg) scale(1.1)}}
+.quick .ico{width:16px;height:16px}
+footer{position:relative;z-index:2;text-align:center;color:#5c5c5c;font-size:.82rem;padding:0 20px 26px}
+
+@media(max-width:600px){
+  header{padding:20px}
+  .sound-btn span.lbl{display:none}
+  .rings i:nth-child(4){display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-hat" viewBox="0 0 24 24"><path d="M6.5 14.5A4 4 0 1 1 8 6.8a4.6 4.6 0 0 1 8 0 4 4 0 1 1 1.5 7.7V20h-11z"/><path d="M6.5 17.5h11"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-food" viewBox="0 0 24 24"><path d="M6 3v7a2 2 0 0 0 2 2v9M10 3v7a2 2 0 0 1-2 2M8 3v9M18 21V3c-2.6 1.4-4 4.4-4 8.2V14h4"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M6.5 17H20v4H6.5a2 2 0 0 1 0-4z"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10.5 9.5 4 2.5-4 2.5z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3.5 7.5 8.5 6 8.5-6"/></symbol>
+  <symbol id="i-vol" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></symbol>
+  <symbol id="i-volx" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4zM16 9.5l5 5M21 9.5l-5 5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+
+<div class="rings"><i></i><i></i><i></i><i></i></div>
+
+<header>
+  <a href="/" class="logo">
+    <div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div>
+    <div class="logo-text">MasterChef<small>H U B</small></div>
+  </a>
+  <button class="sound-btn sound-on" id="soundBtn" aria-label="Toggle sound">
+    <svg class="ico on"><use href="#i-vol"/></svg>
+    <svg class="ico off"><use href="#i-volx"/></svg>
+    <span class="lbl" id="soundLabel">Sound on</span>
+    <div class="eq"><i></i><i></i><i></i><i></i></div>
+  </button>
+</header>
+
+<main>
+  <div class="pill"><i></i>Error 404</div>
+
+  <div class="big404" aria-label="404">
+    <span class="n">4</span>
+    <div class="plate" id="plate" title="Click me"><svg class="ico"><use href="#i-hat"/></svg></div>
+    <span class="n">4</span>
+  </div>
+
+  <h1 class="serif">Whoops! <em>Wrong tab.</em></h1>
+  <p class="sub">The page you are looking for does not exist, was moved, or is still in the oven. Let's get you back to the kitchen.</p>
+
+  <div class="btns">
+    <a href="/" class="btn btn-white"><svg class="ico"><use href="#i-home"/></svg>Go to home<svg class="ico arrow"><use href="#i-arrow"/></svg></a>
+    <a href="/recipes" class="btn btn-line">Browse recipes</a>
+  </div>
+
+  <div class="quick">
+    <span>Or try:</span>
+    <a href="/food"><svg class="ico"><use href="#i-food"/></svg>Food</a>
+    <a href="/videos"><svg class="ico"><use href="#i-video"/></svg>Videos</a>
+    <a href="/about"><svg class="ico"><use href="#i-book"/></svg>About</a>
+    <a href="/contact"><svg class="ico"><use href="#i-mail"/></svg>Contact</a>
+  </div>
+</main>
+
+<footer>&copy; 2026 MasterChefHub.com</footer>
+
+<script>
+/* SOUND (generated, no files) */
+let ctx=null, soundOn=true;
+try{ if(localStorage.getItem('mch_sound')==='off') soundOn=false; }catch(e){}
+function audio(){
+  if(!ctx){ try{ ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+  if(ctx && ctx.state==='suspended') ctx.resume();
+  return ctx;
+}
+function tone(freq,dur=.08,type='sine',vol=.05,slideTo=null,delay=0){
+  if(!soundOn) return; const c=audio(); if(!c) return;
+  const t=c.currentTime+delay, o=c.createOscillator(), g=c.createGain();
+  o.type=type; o.frequency.setValueAtTime(freq,t);
+  if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo,t+dur);
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(vol,t+.01);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g).connect(c.destination); o.start(t); o.stop(t+dur+.02);
+}
+const sfx={
+  hover(){ tone(880,.05,'sine',.018) },
+  click(){ tone(520,.07,'triangle',.06,780); tone(780,.09,'triangle',.05,1040,.05) },
+  on(){ tone(440,.1,'sine',.06); tone(660,.1,'sine',.06,null,.09); tone(880,.16,'sine',.06,null,.18) },
+  whoops(){ tone(520,.18,'triangle',.07,300); tone(380,.22,'triangle',.07,190,.16) },
+  boing(){ tone(240,.25,'sine',.08,620); tone(620,.18,'sine',.05,320,.2) }
+};
+let lastHover=0;
+document.querySelectorAll('a,.btn,.sound-btn,.plate').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{const n=Date.now(); if(n-lastHover>90){lastHover=n;sfx.hover()}});
+});
+document.addEventListener('click',e=>{ if(e.target.closest('a,.btn')) sfx.click() });
+
+const soundBtn=document.getElementById('soundBtn'), soundLabel=document.getElementById('soundLabel');
+function paintSound(){
+  soundBtn.classList.toggle('sound-on',soundOn);
+  document.body.classList.toggle('muted',!soundOn);
+  soundLabel.textContent=soundOn?'Sound on':'Sound off';
+}
+soundBtn.addEventListener('click',e=>{
+  e.stopPropagation(); soundOn=!soundOn; paintSound();
+  try{localStorage.setItem('mch_sound',soundOn?'on':'off')}catch(err){}
+  if(soundOn) sfx.on();
+});
+paintSound();
+
+/* Browsers only allow sound after a first interaction: play the whoops once then */
+let played=false;
+function firstSound(){ if(played) return; played=true; sfx.whoops(); }
+['pointerdown','keydown','touchstart'].forEach(ev=>window.addEventListener(ev,firstSound,{once:true}));
+
+/* click the plate for a fun boing */
+document.getElementById('plate').addEventListener('click',e=>{
+  e.stopPropagation(); sfx.boing();
+  const p=e.currentTarget;
+  p.animate([{transform:'scale(1) rotate(0)'},{transform:'scale(1.25) rotate(180deg)'},{transform:'scale(1) rotate(360deg)'}],{duration:700,easing:'cubic-bezier(.2,.9,.3,1.3)'});
+});
+</script>
+</body>
+</html>
