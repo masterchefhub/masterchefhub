@@ -3,8 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/loader.js"></script>
 <title>About | MasterChefHub</title>
 <meta name="description" content="Learn the story, mission and values behind MasterChefHub.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:site_name" content="MasterChefHub">
+<meta property="og:image" content="https://masterchefhub.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,8 +39,8 @@ button{font-family:inherit}
 .logo:hover .logo-mark{transform:rotate(-8deg) scale(1.08)}
 .logo:hover .hat{animation:hat .7s ease}
 @keyframes hat{0%,100%{transform:translateY(0)}30%{transform:translateY(-4px) rotate(-6deg)}60%{transform:translateY(0) rotate(4deg)}}
-.logo-text{font-weight:800;font-size:1.18rem;letter-spacing:-.03em;line-height:1.05}
-.logo-text small{display:block;font-weight:500;font-size:.64rem;letter-spacing:.22em;color:#8a8a8a;text-transform:uppercase;margin-top:3px}
+.logo-text{font-weight:800;font-size:1.55rem;letter-spacing:.03em;line-height:1}
+.logo-text small{display:block;font-weight:600;font-size:.56rem;letter-spacing:.2em;color:#8a8a8a;text-transform:uppercase;margin-top:4px;white-space:nowrap}
 .nav-label{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:#6b6b6b;padding:18px 14px 8px;font-weight:600}
 .menu{list-style:none;display:grid;gap:3px}
 .menu a{display:flex;align-items:center;gap:14px;padding:11px 14px;border-radius:14px;color:#b9b9b9;font-weight:500;font-size:.95rem;transition:.25s}
@@ -175,7 +184,7 @@ section{padding:84px 0 0}
 footer{margin-top:84px;border-top:1px solid var(--line);padding:46px 40px 34px;max-width:1400px}
 .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:36px}
 footer .logo{padding:0 0 14px}
-footer .logo-mark{background:var(--ink);color:#fff}
+footer .logo-mark{background:var(--ink);color:#fff;--mark-bg:#0a0a0a}
 footer .logo-text small{color:var(--muted)}
 footer p{color:var(--muted);font-size:.9rem;max-width:300px}
 footer h5{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;color:var(--muted)}
@@ -219,7 +228,7 @@ footer ul a:hover{text-decoration:underline}
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h10M19 18h2"/><circle cx="15" cy="6" r="2.5"/><circle cx="9" cy="12" r="2.5"/><circle cx="16" cy="18" r="2.5"/></symbol>
-  <symbol id="i-hat" viewBox="0 0 24 24"><path d="M6.5 14.5A4 4 0 1 1 8 6.8a4.6 4.6 0 0 1 8 0 4 4 0 1 1 1.5 7.7V20h-11z"/><path d="M6.5 17.5h11"/></symbol>
+  <symbol id="i-hat" viewBox="9 8 47 47"><g fill="currentColor" stroke="none"><circle cx="20.5" cy="25" r="9.5"/><circle cx="32" cy="20" r="11.5"/><circle cx="43.5" cy="25" r="9.5"/><rect x="17" y="25" width="30" height="19"/><rect x="17" y="47" width="30" height="8" rx="2.5"/></g><path d="M26 33.5v9M38 33.5v9" fill="none" stroke-width="1.7" stroke-linecap="round" style="stroke:var(--mark-bg,#fff)"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
   <symbol id="i-food" viewBox="0 0 24 24"><path d="M6 3v7a2 2 0 0 0 2 2v9M10 3v7a2 2 0 0 1-2 2M8 3v9M18 21V3c-2.6 1.4-4 4.4-4 8.2V14h4"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M6.5 17H20v4H6.5a2 2 0 0 1 0-4z"/></symbol>
@@ -252,7 +261,7 @@ footer ul a:hover{text-decoration:underline}
 <aside class="sidebar" id="sidebar">
   <a href="/" class="logo">
     <div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div>
-    <div class="logo-text">MasterChef<small>H U B</small></div>
+    <div class="logo-text">MCH<small>Master Chef Hub</small></div>
   </a>
   <div class="nav-label">Menu</div>
   <ul class="menu">
@@ -381,7 +390,7 @@ footer ul a:hover{text-decoration:underline}
   <footer>
     <div class="fgrid">
       <div>
-        <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MasterChef<small>H U B</small></div></a>
+        <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a>
         <p>Chef-tested recipes, video lessons and meal plans for everyday cooks.</p>
       </div>
       <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/videos">Videos</a></li><li><a href="/meal-plans">Meal plans</a></li></ul></div>
