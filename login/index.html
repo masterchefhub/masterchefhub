@@ -86,6 +86,10 @@ button,input{font-family:inherit}
 .soc:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.08)}
 .soc:active{transform:none}
 .soc svg{width:20px;height:20px;flex-shrink:0}
+.soc.soon{cursor:not-allowed;color:#8a8a8a;background:#fafaf8;position:relative}
+.soc.soon svg{opacity:.45}
+.soc.soon:hover{border-color:var(--line);transform:none;box-shadow:none}
+.soonTag{font-style:normal;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:#fff;border-radius:99px;padding:3px 8px}
 .soc[disabled]{opacity:.55;pointer-events:none}
 .soc .sp{display:none}
 .soc.loading .sp{display:block}.soc.loading .lb,.soc.loading svg:not(.sp){display:none}
@@ -235,9 +239,9 @@ button,input{font-family:inherit}
               <i class="sp"></i><span class="lb">Continue with Google</span>
             </button>
             <div class="two">
-              <button type="button" class="soc" data-p="apple">
+              <button type="button" class="soc soon" id="appleSoon" aria-disabled="true" title="Apple sign-in is coming soon">
                 <svg viewBox="0 0 24 24" fill="#0a0a0a"><path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.613 0 2.886.06 4.374 2.19-.13.09-2.383 1.37-2.383 4.19 0 3.26 2.854 4.42 2.955 4.45z"/></svg>
-                <i class="sp"></i><span class="lb">Apple</span>
+                <span class="lb">Apple</span><em class="soonTag">Soon</em>
               </button>
               <button type="button" class="soc" data-p="microsoft">
                 <svg viewBox="0 0 24 24"><rect x="1.5" y="1.5" width="10" height="10" fill="#F25022"/><rect x="12.5" y="1.5" width="10" height="10" fill="#7FBA00"/><rect x="1.5" y="12.5" width="10" height="10" fill="#00A4EF"/><rect x="12.5" y="12.5" width="10" height="10" fill="#FFB900"/></svg>
@@ -633,6 +637,12 @@ $$('.soc[data-p]').forEach(b=>b.addEventListener('click',async()=>{
   }finally{ busyOn(b,false); }
 }));
 
+/* ---------- Apple (coming soon) ---------- */
+$('#appleSoon').addEventListener('click',()=>{
+  say('info','Apple sign-in is coming soon','For now, use Google, Microsoft, email or phone.');
+  snd('click');
+});
+
 /* ---------- forgot password ---------- */
 $('#fform').addEventListener('submit',async e=>{
   e.preventDefault(); if(busy) return;
@@ -654,13 +664,21 @@ $('#fform').addEventListener('submit',async e=>{
 
 /* ---------- phone sign-in ---------- */
 function normPhone(v){ v=v.trim().replace(/[\s().-]/g,''); if(/^00/.test(v)) v='+'+v.slice(2); return v; }
+function dropVerifier(){
+  try{ if(verifier&&verifier.clear) verifier.clear(); }catch(e){}
+  verifier=null; const box=$('#recaptcha'); if(box) box.innerHTML='';
+}
+function freshVerifier(){                 /* a new reCAPTCHA box for every attempt */
+  dropVerifier();
+  const el=document.createElement('div'); el.id='rc'+Date.now(); $('#recaptcha').appendChild(el);
+  verifier=new fb.RecaptchaVerifier(auth,el,{size:'invisible'});
+}
 function phoneReset(){
   confirmation=null; $('#pf-code').hidden=true; $('#pcode').value='';
   $('#psubmit .lbl').textContent='Send code'; $('#pResend').hidden=true; $('#pnum').disabled=false;
   $('#phSub').textContent='Enter your number and we will text you a 6-digit code.';
   msg($('#pmsg'),'error','');
-  try{ if(verifier&&verifier.clear) verifier.clear(); }catch(e){}
-  verifier=null; $('#recaptcha').innerHTML='';
+  dropVerifier();
 }
 $('#phoneBtn').addEventListener('click',()=>{ clearErrs(); phoneReset(); showView('phone'); setTimeout(()=>$('#pnum').focus(),50); });
 $('#pBack').addEventListener('click',()=>{ phoneReset(); showView('auth'); });
@@ -680,13 +698,13 @@ $('#pform').addEventListener('submit',async e=>{
     if(!(await needAuth($('#pmsg')))) return;
     busyOn(btn,true);
     try{
-      if(!verifier) verifier=new fb.RecaptchaVerifier(auth,'recaptcha',{size:'invisible'});
+      freshVerifier();
       confirmation=await fb.signInWithPhoneNumber(auth,num,verifier);
       $('#pf-code').hidden=false; $('#pnum').disabled=true; $('#pcode').focus();
       $('#psubmit .lbl').textContent='Verify and continue'; $('#pResend').hidden=false;
       $('#phSub').textContent='We sent a code to '+num+'. Enter it below.';
       say('info','Code sent','Check your text messages.');
-    }catch(err){ fail(err,null,$('#pmsg')); try{ if(verifier&&verifier.clear) verifier.clear(); }catch(e2){} verifier=null; $('#recaptcha').innerHTML=''; }
+    }catch(err){ fail(err,null,$('#pmsg')); dropVerifier(); }
     finally{ busyOn(btn,false); }
   }else{
     const code=$('#pcode').value.replace(/\D/g,'');
