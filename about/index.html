@@ -223,6 +223,7 @@ footer ul a:hover{text-decoration:underline}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<link rel="stylesheet" href="/site.css">
 </head>
 <body>
 
@@ -270,7 +271,6 @@ footer ul a:hover{text-decoration:underline}
     <li><a href="/recipes"><svg class="ico"><use href="#i-book"/></svg>Recipes</a></li>
     <li><a href="/categories"><svg class="ico"><use href="#i-grid"/></svg>Categories</a></li>
     <li><a href="/videos"><svg class="ico"><use href="#i-video"/></svg>Videos</a></li>
-    <li><a href="/meal-plans"><svg class="ico"><use href="#i-cal"/></svg>Meal Plans</a></li>
   </ul>
   <div class="nav-label">Company</div>
   <ul class="menu">
@@ -314,10 +314,10 @@ footer ul a:hover{text-decoration:underline}
 
     <!-- STATS -->
     <div class="stats reveal">
-      <div class="stat"><b data-count="8500">0</b><span>Tested recipes</span></div>
-      <div class="stat"><b data-count="250">0</b><span>Thousand monthly cooks</span></div>
-      <div class="stat"><b data-count="1500">0</b><span>Video lessons</span></div>
-      <div class="stat"><b data-count="49">0</b><span>Average rating (out of 5)</span></div>
+      <div class="stat"><b>400+</b><span>Tested recipes</span></div>
+      <div class="stat"><b id="vidCount">0</b><span>Video lessons</span></div>
+      <div class="stat"><b>8</b><span>Food categories</span></div>
+      <div class="stat"><b>Free</b><span>To join</span></div>
     </div>
 
     <!-- STORY -->
@@ -329,7 +329,7 @@ footer ul a:hover{text-decoration:underline}
         </div>
         <div class="story-txt">
           <div class="eyebrow">Our story</div>
-          <h2 class="serif">It started in a small kitchen.</h2>
+          <h2 class="serif">Why MasterChefHub exists.</h2>
           <p>MasterChefHub began with a simple frustration: too many recipes online that look great but fail at home. Vague steps, missing details and results that never match the photo.</p>
           <p>So we set a rule. Every recipe is cooked, tested and improved before it is published. If it does not work in a regular kitchen, it does not make it onto the site.</p>
           <ul class="checks">
@@ -353,23 +353,12 @@ footer ul a:hover{text-decoration:underline}
       </div>
     </section>
 
-    <!-- TIMELINE -->
-    <section class="reveal">
-      <div class="head"><div class="eyebrow">Our journey</div><h2 class="serif">How we got here</h2></div>
-      <div class="timeline">
-        <div class="tl"><div class="dot"><svg class="ico"><use href="#i-bulb"/></svg></div><div class="box"><div class="yr">2021</div><h3>The idea</h3><p>MasterChefHub starts as a small collection of 50 family-tested recipes.</p></div></div>
-        <div class="tl"><div class="dot"><svg class="ico"><use href="#i-rocket"/></svg></div><div class="box"><div class="yr">2023</div><h3>The launch</h3><p>The website opens to the public, and the first thousand recipes go live.</p></div></div>
-        <div class="tl"><div class="dot"><svg class="ico"><use href="#i-video"/></svg></div><div class="box"><div class="yr">2025</div><h3>Video lessons</h3><p>Step-by-step video lessons arrive, along with weekly meal plans.</p></div></div>
-        <div class="tl"><div class="dot"><svg class="ico"><use href="#i-star"/></svg></div><div class="box"><div class="yr">2026</div><h3>A new look</h3><p>A fresh, modern design built to make finding and cooking great food even easier.</p></div></div>
-      </div>
-    </section>
-
     <!-- HOW IT WORKS -->
     <section class="reveal">
       <div class="head"><div class="eyebrow">Getting started</div><h2 class="serif">How it works</h2></div>
       <div class="how">
         <div class="step"><div class="n">01</div><div class="si"><svg class="ico"><use href="#i-search2"/></svg></div><h3>Find</h3><p>Search or browse by category, ingredient, time or difficulty.</p></div>
-        <div class="step"><div class="n">02</div><div class="si"><svg class="ico"><use href="#i-bookmark"/></svg></div><h3>Save</h3><p>Keep your favorites in one place and build your weekly meal plan.</p></div>
+        <div class="step"><div class="n">02</div><div class="si"><svg class="ico"><use href="#i-video"/></svg></div><h3>Watch</h3><p>Follow step-by-step video lessons from our video library.</p></div>
         <div class="step"><div class="n">03</div><div class="si"><svg class="ico"><use href="#i-flame"/></svg></div><h3>Cook</h3><p>Follow the clear steps or watch the video, then enjoy the result.</p></div>
       </div>
     </section>
@@ -378,7 +367,7 @@ footer ul a:hover{text-decoration:underline}
     <section class="reveal">
       <div class="cta">
         <h2 class="serif">Ready to start cooking?</h2>
-        <p>Create a free account to save recipes, build meal plans and cook with confidence.</p>
+        <p>Create a free account and start cooking with confidence.</p>
         <div class="row">
           <a href="/login" class="btn btn-white">Create free account <svg class="ico arrow"><use href="#i-arrow"/></svg></a>
           <a href="/contact" class="btn btn-line">Contact us</a>
@@ -391,10 +380,10 @@ footer ul a:hover{text-decoration:underline}
     <div class="fgrid">
       <div>
         <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a>
-        <p>Chef-tested recipes, video lessons and meal plans for everyday cooks.</p>
+        <p>Chef-tested recipes and video lessons for everyday cooks.</p>
       </div>
-      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/videos">Videos</a></li><li><a href="/meal-plans">Meal plans</a></li></ul></div>
-      <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li><li><a href="/faq">FAQ</a></li></ul></div>
+      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/videos">Videos</a></li></ul></div>
+      <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
       <div><h5>Account</h5><ul><li><a href="/login">Log in</a></li><li><a href="/login">Create account</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
     </div>
     <div class="copy"><span>&copy; 2026 MasterChefHub.com</span><span>All rights reserved.</span></div>
@@ -434,6 +423,9 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{
   }
 }),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+<script type="module">
+try{ const D=await import('/data.js'); const n=await D.count('videos'); const el=document.getElementById('vidCount'); if(el) el.textContent=String(n); }catch(e){}
 </script>
 </body>
 </html>
