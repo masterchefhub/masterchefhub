@@ -1,6 +1,7 @@
 /* MasterChefHub shared styles: responsive fixes for every screen + content pages.
  * Linked LAST in every page so it can override page styles. */
 
+[hidden]{display:none!important}
 /* ============ RESPONSIVE BASE (phones, tablets, laptops, big screens) ============ */
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 img,video,canvas{max-width:100%}

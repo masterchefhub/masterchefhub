@@ -1,0 +1,12 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{folder}/{file} {
+      allow read: if folder in ['videos','images'];
+      allow write: if folder in ['videos','images']
+        && request.auth != null
+        && request.auth.token.email.lower() == 'chrisw81114@gmail.com'
+        && request.auth.token.email_verified == true;
+    }
+  }
+}
