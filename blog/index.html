@@ -134,6 +134,21 @@ footer ul a:hover{text-decoration:underline}
 @media(max-width:600px){.doc section{padding:20px 18px}}
 </style>
 <link rel="stylesheet" href="/site.css">
+<style>
+.basics{margin-top:48px}.bhead h2{font-size:clamp(1.8rem,3.6vw,2.6rem);margin:6px 0 18px}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;align-items:start}
+.bart{background:#fff;border:1px solid var(--line);border-radius:20px;padding:0;transition:box-shadow .28s,border-color .28s}
+.bart[open]{box-shadow:0 14px 34px rgba(0,0,0,.08);border-color:#d6d6d1}
+.bart summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:18px 20px;align-items:center}
+.bart summary::-webkit-details-marker{display:none}
+.bart .btag{grid-column:1/-1;font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.bart b{font-size:1.04rem;line-height:1.3}
+.bart summary i{width:28px;height:28px;border-radius:50%;background:#f0f0ed;position:relative;transition:transform .3s,background .3s}
+.bart summary i::before,.bart summary i::after{content:"";position:absolute;left:8px;top:13px;width:12px;height:2px;background:#0a0a0a;border-radius:2px}
+.bart summary i::after{transform:rotate(90deg);transition:transform .3s}
+.bart[open] summary i{background:#0a0a0a}.bart[open] summary i::before,.bart[open] summary i::after{background:#fff}.bart[open] summary i::after{transform:rotate(0)}
+.bart p{padding:0 20px 20px;color:#444;font-size:.95rem;line-height:1.7}
+</style>
 </head>
 <body>
 
@@ -180,7 +195,7 @@ footer ul a:hover{text-decoration:underline}
   <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
   <symbol id="i-shield2" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6z"/></symbol>
   <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
-<symbol id="i-coffee" viewBox="0 0 24 24"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10.5h1.5a2.5 2.5 0 0 1 0 5H17M7 3v2.5M10.5 3v2.5M14 3v2.5"/></symbol><symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0zM8 8.5c0-2 2-2 2-4.5M13 8.5c0-2 2-2 2-4.5"/></symbol><symbol id="i-plate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 21h16v-8H4zM4 17c2.3 1.6 4.3 1.6 6 0s4-1.6 6 0 3 1.2 4 0M12 13V9.5M12 9.5a1.6 1.6 0 0 0 0-3.2c-1.2 1.2-1.2 2.2 0 3.2z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 20C5 10 10 4 20 4c0 10-5 16-14 16M5 20c2-5 5-8 9-10"/></symbol><symbol id="i-snack" viewBox="0 0 24 24"><path d="M12 8c-3-2-7 0-7 5 0 4 3 8 5 8 1 0 1-.5 2-.5s1 .5 2 .5c2 0 5-4 5-8 0-5-4-7-7-5zM12 8c0-2 1-4 3-5"/></symbol><symbol id="i-drink" viewBox="0 0 24 24"><path d="M6 3h12l-1.5 17a2 2 0 0 1-2 1.8h-5a2 2 0 0 1-2-1.8zM7 9h10"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol><symbol id="i-ok2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.5"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol><symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M6 19.5a1.5 1.5 0 1 0 0-.01M17 19.5a1.5 1.5 0 1 0 0-.01"/></symbol><symbol id="i-sand" viewBox="0 0 24 24"><path d="M4 10a8 5 0 0 1 16 0zM3 13.5h18M5 17h14l-1 3H6z"/></symbol></svg>
+<symbol id="i-coffee" viewBox="0 0 24 24"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10.5h1.5a2.5 2.5 0 0 1 0 5H17M7 3v2.5M10.5 3v2.5M14 3v2.5"/></symbol><symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0zM8 8.5c0-2 2-2 2-4.5M13 8.5c0-2 2-2 2-4.5"/></symbol><symbol id="i-plate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 21h16v-8H4zM4 17c2.3 1.6 4.3 1.6 6 0s4-1.6 6 0 3 1.2 4 0M12 13V9.5M12 9.5a1.6 1.6 0 0 0 0-3.2c-1.2 1.2-1.2 2.2 0 3.2z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 20C5 10 10 4 20 4c0 10-5 16-14 16M5 20c2-5 5-8 9-10"/></symbol><symbol id="i-snack" viewBox="0 0 24 24"><path d="M12 8c-3-2-7 0-7 5 0 4 3 8 5 8 1 0 1-.5 2-.5s1 .5 2 .5c2 0 5-4 5-8 0-5-4-7-7-5zM12 8c0-2 1-4 3-5"/></symbol><symbol id="i-drink" viewBox="0 0 24 24"><path d="M6 3h12l-1.5 17a2 2 0 0 1-2 1.8h-5a2 2 0 0 1-2-1.8zM7 9h10"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol><symbol id="i-ok2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.5"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol><symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M6 19.5a1.5 1.5 0 1 0 0-.01M17 19.5a1.5 1.5 0 1 0 0-.01"/></symbol><symbol id="i-cart" viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7zM9 7V6a3 3 0 0 1 6 0v1"/></symbol><symbol id="i-sand" viewBox="0 0 24 24"><path d="M4 10a8 5 0 0 1 16 0zM3 13.5h18M5 17h14l-1 3H6z"/></symbol></svg>
 
 <aside class="sidebar" id="sidebar">
   <a href="/" class="logo">
@@ -190,11 +205,9 @@ footer ul a:hover{text-decoration:underline}
   <div class="nav-label">Menu</div>
   <ul class="menu">
     <li><a href="/"><svg class="ico"><use href="#i-home"/></svg>Home</a></li>
-    <li><a href="/food"><svg class="ico"><use href="#i-food"/></svg>Food<span class="badge">NEW</span></a></li>
-    <li><a href="/recipes"><svg class="ico"><use href="#i-book"/></svg>Recipes</a></li>
-    <li><a href="/categories"><svg class="ico"><use href="#i-grid"/></svg>Categories</a></li>
+    <li><a href="/food"><svg class="ico"><use href="#i-food"/></svg>Food</a></li>
+    <li><a href="/cart"><svg class="ico"><use href="#i-cart"/></svg>Cart</a></li>
     <li><a href="/videos"><svg class="ico"><use href="#i-video"/></svg>Videos</a></li>
-    <li><a href="/deliver"><svg class="ico"><use href="#i-truck"/></svg>Deliver food</a></li>
   </ul>
   <div class="nav-label">Company</div>
   <ul class="menu">
@@ -215,11 +228,11 @@ footer ul a:hover{text-decoration:underline}
     <button class="burger" id="burger" aria-label="Open menu"><svg class="ico"><use href="#i-menu"/></svg></button>
     <form class="search" id="searchForm">
       <svg class="ico" style="color:var(--muted)"><use href="#i-search"/></svg>
-      <input id="q" type="text" placeholder="Search recipes, ingredients..." aria-label="Search">
+      <input id="q" type="text" placeholder="Search the menu..." aria-label="Search">
       <button type="submit" aria-label="Search"><svg class="ico sm"><use href="#i-arrow"/></svg></button>
     </form>
     <nav class="top-links">
-      <a href="/recipes" class="chip">Recipes</a>
+      <a href="/cart" class="chip">Cart</a>
       <a href="/videos" class="chip">Videos</a>
       <a href="/food" class="chip food"><svg class="ico sm"><use href="#i-food"/></svg>Food</a>
     </nav>
@@ -238,6 +251,10 @@ footer ul a:hover{text-decoration:underline}
       <div class="chips" id="chips"></div>
       <div id="status" class="cstat" hidden></div>
       <div class="cgrid" id="list"></div>
+<section class="basics">
+        <div class="bhead"><div class="eyebrow">Kitchen basics</div><h2 class="serif">Simple cooking tips</h2></div>
+        <div class="bgrid"><details class="bart"><summary><span class="btag">Cooking tips</span><b>How to cook pasta so it is never mushy</b><i></i></summary><p>Use a big pot with plenty of water and add a good pinch of salt once it boils, enough that the water tastes lightly salty. Add the pasta, stir in the first minute so it does not stick, and start tasting two minutes before the time on the box. You want it tender with a little bite in the middle. Before draining, scoop out a cup of the cooking water. A splash of it helps sauce cling to the noodles. Do not rinse the pasta, because the starch on the outside is what holds the sauce.</p></details><details class="bart"><summary><span class="btag">Cooking tips</span><b>A better grilled cheese in five minutes</b><i></i></summary><p>Butter the outside of the bread, not the pan, so the toast turns evenly golden. Cook on medium-low heat. High heat burns the bread before the cheese melts. Use a cheese that melts well, such as cheddar or mozzarella, and grate it so it melts faster. Put a lid on the pan for the last minute to melt the middle. Let the sandwich rest for 30 seconds before cutting so the cheese does not run out everywhere.</p></details><details class="bart"><summary><span class="btag">Cooking tips</span><b>Soft, creamy scrambled eggs</b><i></i></summary><p>Crack the eggs into a bowl and whisk with a pinch of salt until you cannot see any white. Melt a little butter in a pan over low heat. Pour in the eggs and stir slowly with a spatula, pushing them from the edges to the middle. Take the pan off the heat while the eggs still look slightly wet, because they keep cooking in the hot pan. Low heat and patience are the whole secret.</p></details><details class="bart"><summary><span class="btag">Kitchen safety</span><b>Five kitchen safety basics</b><i></i></summary><p>Wash your hands before you cook and after you touch raw meat. Keep raw meat away from foods that are eaten raw, and use a separate cutting board for it. Cook chicken until there is no pink inside and the juices run clear. Put leftovers in the fridge within two hours. Keep pot handles turned inward and never leave hot oil alone on the stove.</p></details></div>
+      </section>
     </div>
   </div>
 
@@ -245,9 +262,9 @@ footer ul a:hover{text-decoration:underline}
     <div class="fgrid">
       <div>
         <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a>
-        <p>Chef-tested recipes and video lessons for everyday cooks.</p>
+        <p>Simple home-cooked food, delivered to your door.</p>
       </div>
-      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/videos">Videos</a></li><li><a href="/deliver">Deliver food</a></li></ul></div>
+      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/cart">Cart</a></li><li><a href="/videos">Videos</a></li></ul></div>
       <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
       <div><h5>Account</h5><ul><li><a href="/login">Log in</a></li><li><a href="/login">Create account</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
     </div>
@@ -269,7 +286,7 @@ scrim.addEventListener('click',()=>toggleSide(false));
 document.getElementById('searchForm').addEventListener('submit',e=>{
   e.preventDefault();
   const v=document.getElementById('q').value.trim();
-  location.href='/recipes'+(v?'?search='+encodeURIComponent(v):'');
+  location.href='/food'+(v?'?search='+encodeURIComponent(v):'');
 });
 
 /* REVEAL + COUNT-UP */

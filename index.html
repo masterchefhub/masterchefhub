@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/loader.js"></script>
-<title>MasterChefHub | Cook with Precision</title>
-<meta name="description" content="MasterChefHub - chef-tested recipes and video lessons.">
+<title>MasterChefHub | Home-cooked food, delivered</title>
+<meta name="description" content="Order simple home-cooked meals and get them delivered to your door. Pay cash when your food arrives.">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -314,7 +314,7 @@ footer ul a:hover{text-decoration:underline}
   <symbol id="i-whisk" viewBox="0 0 24 24"><path d="M12 14v8M8 14c-2-4-1-9 4-12 5 3 6 8 4 12zM12 2v12M9.5 4.5c-.7 3.2-.5 6 .5 9.5M14.5 4.5c.7 3.2.5 6-.5 9.5"/></symbol>
   <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
-<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M6 19.5a1.5 1.5 0 1 0 0-.01M17 19.5a1.5 1.5 0 1 0 0-.01"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M6 19.5a1.5 1.5 0 1 0 0-.01M17 19.5a1.5 1.5 0 1 0 0-.01"/></symbol><symbol id="i-snack" viewBox="0 0 24 24"><path d="M12 8c-3-2-7 0-7 5 0 4 3 8 5 8 1 0 1-.5 2-.5s1 .5 2 .5c2 0 5-4 5-8 0-5-4-7-7-5zM12 8c0-2 1-4 3-5"/></symbol><symbol id="i-drink" viewBox="0 0 24 24"><path d="M6 3h12l-1.5 17a2 2 0 0 1-2 1.8h-5a2 2 0 0 1-2-1.8zM7 9h10"/></symbol><symbol id="i-cart" viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7zM9 7V6a3 3 0 0 1 6 0v1"/></symbol>
 </svg>
 
 <!-- ============ SIDEBAR ============ -->
@@ -327,11 +327,9 @@ footer ul a:hover{text-decoration:underline}
   <div class="nav-label">Menu</div>
   <ul class="menu">
     <li><a href="/" class="active"><svg class="ico"><use href="#i-home"/></svg>Home</a></li>
-    <li><a href="/food"><svg class="ico"><use href="#i-food"/></svg>Food<span class="badge">NEW</span></a></li>
-    <li><a href="/recipes"><svg class="ico"><use href="#i-book"/></svg>Recipes</a></li>
-    <li><a href="/categories"><svg class="ico"><use href="#i-grid"/></svg>Categories</a></li>
+    <li><a href="/food"><svg class="ico"><use href="#i-food"/></svg>Food</a></li>
+    <li><a href="/cart"><svg class="ico"><use href="#i-cart"/></svg>Cart</a></li>
     <li><a href="/videos"><svg class="ico"><use href="#i-video"/></svg>Videos</a></li>
-    <li><a href="/deliver"><svg class="ico"><use href="#i-truck"/></svg>Deliver food</a></li>
   </ul>
 
   <div class="nav-label">Company</div>
@@ -355,11 +353,11 @@ footer ul a:hover{text-decoration:underline}
     <button class="burger" id="burger" aria-label="Open menu"><svg class="ico"><use href="#i-menu"/></svg></button>
     <form class="search" id="searchForm">
       <svg class="ico" style="color:var(--muted)"><use href="#i-search"/></svg>
-      <input id="q" type="text" placeholder="Search recipes, ingredients..." aria-label="Search">
+      <input id="q" type="text" placeholder="Search the menu..." aria-label="Search">
       <button type="submit" aria-label="Search"><svg class="ico sm"><use href="#i-arrow"/></svg></button>
     </form>
     <nav class="top-links">
-      <a href="/recipes" class="chip">Recipes</a>
+      <a href="/cart" class="chip">Cart</a>
       <a href="/videos" class="chip">Videos</a>
       <a href="/food" class="chip food"><svg class="ico sm"><use href="#i-food"/></svg>Food</a>
     </nav>
@@ -370,52 +368,52 @@ footer ul a:hover{text-decoration:underline}
     <!-- HERO -->
     <div class="hero">
       <div class="hero-txt">
-        <div class="live"><i></i>Chef-tested recipes</div>
+        <div class="live"><i></i>Home-cooked, delivered</div>
         <h1 class="serif">Cook with <em>precision.</em><br>Eat with joy.</h1>
-        <p>Chef-tested recipes and clear video lessons, built to make every meal easier and better.</p>
+        <p>Order simple home-cooked meals and we bring them to your door. Pay cash when your food arrives.</p>
         <div class="hero-btns">
-          <a href="/food" class="btn btn-white">Explore food <svg class="ico arrow"><use href="#i-arrow"/></svg></a>
-          <a href="/recipes" class="btn btn-line">Browse recipes</a>
+          <a href="/food" class="btn btn-white">Order food <svg class="ico arrow"><use href="#i-arrow"/></svg></a>
+          <a href="/videos" class="btn btn-line">Watch videos</a>
         </div>
       </div>
       <div class="hero-img">
         <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80')"></div>
-        <div class="float f1"><div class="fi"><svg class="ico"><use href="#i-clock"/></svg></div><div><b>Clear timings</b><small>No guesswork</small></div></div>
-        <div class="float f2"><div class="fi"><svg class="ico"><use href="#i-book"/></svg></div><div><b>400+ tested</b><small>Recipes and dishes</small></div></div>
+        <div class="float f1"><div class="fi"><svg class="ico"><use href="#i-truck"/></svg></div><div><b>Home delivery</b><small>Pay cash on arrival</small></div></div>
+        <div class="float f2"><div class="fi"><svg class="ico"><use href="#i-food"/></svg></div><div><b id="fMenu">50+ dishes</b><small>Made at home</small></div></div>
       </div>
     </div>
 
     <!-- STATS -->
     <div class="stats reveal">
-      <div class="stat"><div class="si"><svg class="ico"><use href="#i-book"/></svg></div><div><b>400+</b><span>Tested recipes</span></div></div>
+      <div class="stat"><div class="si"><svg class="ico"><use href="#i-food"/></svg></div><div><b id="statDishes">50+</b><span>Dishes on the menu</span></div></div>
+      <div class="stat"><div class="si"><svg class="ico"><use href="#i-truck"/></svg></div><div><b>Home</b><span>Delivery to your door</span></div></div>
+      <div class="stat"><div class="si"><svg class="ico"><use href="#i-plate"/></svg></div><div><b>Cash</b><span>Pay when it arrives</span></div></div>
       <div class="stat"><div class="si"><svg class="ico"><use href="#i-video"/></svg></div><div><b id="statVideos">0</b><span>Video lessons</span></div></div>
-      <div class="stat"><div class="si"><svg class="ico"><use href="#i-grid"/></svg></div><div><b>8</b><span>Food categories</span></div></div>
-      <div class="stat"><div class="si"><svg class="ico"><use href="#i-user"/></svg></div><div><b>Free</b><span>To join</span></div></div>
     </div>
 
     <!-- CATEGORIES -->
     <section class="reveal">
       <div class="head">
-        <div><div class="eyebrow">Browse</div><h2 class="serif">What are you craving?</h2></div>
-        <a href="/categories" class="link">All categories <svg class="ico sm"><use href="#i-arrow"/></svg></a>
+        <div><div class="eyebrow">Menu</div><h2 class="serif">What are you craving?</h2></div>
+        <a href="/food" class="link">Full menu <svg class="ico sm"><use href="#i-arrow"/></svg></a>
       </div>
       <div class="cats">
-        <a href="/recipes?category=breakfast" class="cat"><div class="ci"><svg class="ico"><use href="#i-coffee"/></svg></div><b>Breakfast</b><small>Browse</small></a>
-        <a href="/recipes?category=lunch" class="cat"><div class="ci"><svg class="ico"><use href="#i-bowl"/></svg></div><b>Lunch</b><small>Browse</small></a>
-        <a href="/recipes?category=dinner" class="cat"><div class="ci"><svg class="ico"><use href="#i-plate"/></svg></div><b>Dinner</b><small>Browse</small></a>
-        <a href="/recipes?category=desserts" class="cat"><div class="ci"><svg class="ico"><use href="#i-cake"/></svg></div><b>Desserts</b><small>Browse</small></a>
-        <a href="/recipes?category=vegan" class="cat"><div class="ci"><svg class="ico"><use href="#i-leaf"/></svg></div><b>Vegan</b><small>Browse</small></a>
-        <a href="/recipes?category=grill" class="cat"><div class="ci"><svg class="ico"><use href="#i-flame"/></svg></div><b>Grill</b><small>Browse</small></a>
+        <a href="/food?category=sandwiches" class="cat"><div class="ci"><svg class="ico"><use href="#i-snack"/></svg></div><b>Sandwiches</b><small>Order</small></a>
+        <a href="/food?category=mains" class="cat"><div class="ci"><svg class="ico"><use href="#i-plate"/></svg></div><b>Burgers and mains</b><small>Order</small></a>
+        <a href="/food?category=pasta" class="cat"><div class="ci"><svg class="ico"><use href="#i-bowl"/></svg></div><b>Pasta</b><small>Order</small></a>
+        <a href="/food?category=breakfast" class="cat"><div class="ci"><svg class="ico"><use href="#i-coffee"/></svg></div><b>Breakfast</b><small>Order</small></a>
+        <a href="/food?category=sweets" class="cat"><div class="ci"><svg class="ico"><use href="#i-cake"/></svg></div><b>Cakes and sweets</b><small>Order</small></a>
+        <a href="/food?category=drinks" class="cat"><div class="ci"><svg class="ico"><use href="#i-drink"/></svg></div><b>Drinks</b><small>Order</small></a>
       </div>
     </section>
 
-    <!-- LATEST RECIPES -->
+    <!-- POPULAR -->
     <section class="reveal">
       <div class="head">
-        <div><div class="eyebrow">Fresh</div><h2 class="serif">Latest recipes</h2></div>
-        <a href="/recipes" class="link">All recipes <svg class="ico sm"><use href="#i-arrow"/></svg></a>
+        <div><div class="eyebrow">Popular</div><h2 class="serif">Pick something tasty</h2></div>
+        <a href="/food" class="link">Full menu <svg class="ico sm"><use href="#i-arrow"/></svg></a>
       </div>
-      <div class="cgrid" id="homeRecipes"></div>
+      <div class="cgrid dgrid" id="homeDishes"></div>
     </section>
 
     <!-- LATEST VIDEOS -->
@@ -458,9 +456,9 @@ footer ul a:hover{text-decoration:underline}
     <div class="fgrid">
       <div>
         <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a>
-        <p>Chef-tested recipes and video lessons for everyday cooks.</p>
+        <p>Simple home-cooked food, delivered to your door.</p>
       </div>
-      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/videos">Videos</a></li><li><a href="/deliver">Deliver food</a></li></ul></div>
+      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/cart">Cart</a></li><li><a href="/videos">Videos</a></li></ul></div>
       <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
       <div><h5>Account</h5><ul><li><a href="/login">Log in</a></li><li><a href="/login">Create account</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
     </div>
@@ -481,7 +479,7 @@ scrim.addEventListener('click',()=>toggleSide(false));
 document.getElementById('searchForm').addEventListener('submit',e=>{
   e.preventDefault();
   const v=document.getElementById('q').value.trim();
-  location.href='/recipes'+(v?'?search='+encodeURIComponent(v):'');
+  location.href='/food'+(v?'?search='+encodeURIComponent(v):'');
 });
 
 /* ---------- SCROLL REVEAL ---------- */
@@ -492,16 +490,18 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 <script type="module">
 import * as D from '/data.js';
 import { TYPES, h, IC } from '/cms.js';
+import { MENU } from '/menu.js';
 const $ = s => document.querySelector(s);
 const sk = n => Array(n).fill('<div class="ccard sk"><div class="cthumb"></div><div class="cbody"><i></i><i></i></div></div>').join('');
 const empty = (t, p) => '<div class="empty"><div class="eic">' + IC.hat + '</div><h3>' + t + '</h3><p>' + p + '</p></div>';
-$('#homeRecipes').innerHTML = sk(4); $('#homeVideos').innerHTML = sk(3);
+const money = v => '$' + Number(v).toFixed(2);
+$('#statDishes').textContent = MENU.length + '+'; $('#fMenu').textContent = MENU.length + '+ dishes';
+const PICK = ['cheeseburger', 'pizza-slice', 'spaghetti-meat', 'pancakes', 'choc-cake', 'milkshake'];
+$('#homeDishes').innerHTML = PICK.map(id => MENU.find(m => m.id === id)).filter(Boolean).map(m =>
+  '<a class="ccard dish" href="/food?search=' + encodeURIComponent(m.name) + '"><div class="cthumb"><img src="' + m.img + '" alt="' + D.esc(m.name) + '" loading="lazy" width="640" height="480"></div><div class="cbody"><h3>' + D.esc(m.name) + '</h3><div class="cmeta"><span>' + money(m.price) + '</span></div></div></a>').join('');
+$('#homeVideos').innerHTML = sk(3);
 (async () => {
   try { const u = await D.whenUser(); if (u) { D.cacheUser(u); const j = $('#joinSec'); if (j) j.hidden = true; } } catch (e) {}
-  try {
-    const r = await D.list('recipes', { max: 4 });
-    $('#homeRecipes').innerHTML = r.length ? r.map(it => '<a class="ccard" href="/recipes?id=' + encodeURIComponent(it.id) + '">' + TYPES.recipes.card(it, h) + '</a>').join('') : empty('Recipes are coming soon', 'New recipes are on the way. Check back soon.');
-  } catch (e) { $('#homeRecipes').innerHTML = empty('Recipes are coming soon', 'New recipes are on the way. Check back soon.'); }
   try {
     const [v, n] = await Promise.all([D.list('videos', { max: 3 }), D.count('videos')]);
     $('#statVideos').textContent = String(n);

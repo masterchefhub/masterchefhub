@@ -257,7 +257,7 @@ footer ul a:hover{text-decoration:underline}
   <symbol id="i-search2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
   <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z"/></symbol>
   <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M5 19c-1 0-2-1-2-2 1-3 3-4 3-4M12 15l-3-3c1-4 4-8 11-8 0 7-4 10-8 11zM9 12 5 11l2-3 4 .5M12 15l1 4 3-2-.5-4"/><circle cx="15.5" cy="8.5" r="1.3"/></symbol>
-<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M6 19.5a1.5 1.5 0 1 0 0-.01M17 19.5a1.5 1.5 0 1 0 0-.01"/></symbol><symbol id="i-sand" viewBox="0 0 24 24"><path d="M4 10a8 5 0 0 1 16 0zM3 13.5h18M5 17h14l-1 3H6z"/></symbol></svg>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M6 19.5a1.5 1.5 0 1 0 0-.01M17 19.5a1.5 1.5 0 1 0 0-.01"/></symbol><symbol id="i-cart" viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7zM9 7V6a3 3 0 0 1 6 0v1"/></symbol><symbol id="i-sand" viewBox="0 0 24 24"><path d="M4 10a8 5 0 0 1 16 0zM3 13.5h18M5 17h14l-1 3H6z"/></symbol></svg>
 
 <aside class="sidebar" id="sidebar">
   <a href="/" class="logo">
@@ -267,11 +267,9 @@ footer ul a:hover{text-decoration:underline}
   <div class="nav-label">Menu</div>
   <ul class="menu">
     <li><a href="/"><svg class="ico"><use href="#i-home"/></svg>Home</a></li>
-    <li><a href="/food"><svg class="ico"><use href="#i-food"/></svg>Food<span class="badge">NEW</span></a></li>
-    <li><a href="/recipes"><svg class="ico"><use href="#i-book"/></svg>Recipes</a></li>
-    <li><a href="/categories"><svg class="ico"><use href="#i-grid"/></svg>Categories</a></li>
+    <li><a href="/food"><svg class="ico"><use href="#i-food"/></svg>Food</a></li>
+    <li><a href="/cart"><svg class="ico"><use href="#i-cart"/></svg>Cart</a></li>
     <li><a href="/videos"><svg class="ico"><use href="#i-video"/></svg>Videos</a></li>
-    <li><a href="/deliver"><svg class="ico"><use href="#i-truck"/></svg>Deliver food</a></li>
   </ul>
   <div class="nav-label">Company</div>
   <ul class="menu">
@@ -292,11 +290,11 @@ footer ul a:hover{text-decoration:underline}
     <button class="burger" id="burger" aria-label="Open menu"><svg class="ico"><use href="#i-menu"/></svg></button>
     <form class="search" id="searchForm">
       <svg class="ico" style="color:var(--muted)"><use href="#i-search"/></svg>
-      <input id="q" type="text" placeholder="Search recipes, ingredients..." aria-label="Search">
+      <input id="q" type="text" placeholder="Search the menu..." aria-label="Search">
       <button type="submit" aria-label="Search"><svg class="ico sm"><use href="#i-arrow"/></svg></button>
     </form>
     <nav class="top-links">
-      <a href="/recipes" class="chip">Recipes</a>
+      <a href="/cart" class="chip">Cart</a>
       <a href="/videos" class="chip">Videos</a>
       <a href="/food" class="chip food"><svg class="ico sm"><use href="#i-food"/></svg>Food</a>
     </nav>
@@ -309,16 +307,16 @@ footer ul a:hover{text-decoration:underline}
     <div class="phero">
       <div class="pill"><i></i>About MasterChefHub</div>
       <h1 class="serif">Good food<br>should be <em>simple.</em></h1>
-      <p>We built MasterChefHub so anyone, from first-time cooks to seasoned home chefs, can make food they are proud of, without the guesswork.</p>
+      <p>MasterChefHub is a home kitchen. We cook simple, honest food and bring it to your door, and you pay cash when it arrives.</p>
       <div class="spin"><svg class="ico"><use href="#i-hat"/></svg></div>
     </div>
 
     <!-- STATS -->
     <div class="stats reveal">
-      <div class="stat"><b>400+</b><span>Tested recipes</span></div>
+      <div class="stat"><b>50+</b><span>Dishes on the menu</span></div>
       <div class="stat"><b id="vidCount">0</b><span>Video lessons</span></div>
-      <div class="stat"><b>8</b><span>Food categories</span></div>
-      <div class="stat"><b>Free</b><span>To join</span></div>
+      <div class="stat"><b>Home</b><span>Delivery to your door</span></div>
+      <div class="stat"><b>Cash</b><span>Pay on arrival</span></div>
     </div>
 
     <!-- STORY -->
@@ -326,19 +324,19 @@ footer ul a:hover{text-decoration:underline}
       <div class="story">
         <div class="story-img">
           <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1000&q=80')"></div>
-          <div class="float"><div class="fi"><svg class="ico"><use href="#i-heart"/></svg></div><div><b>Made with care</b><small>Every recipe tested</small></div></div>
+          <div class="float"><div class="fi"><svg class="ico"><use href="#i-heart"/></svg></div><div><b>Made with care</b><small>Cooked at home</small></div></div>
         </div>
         <div class="story-txt">
           <div class="eyebrow">Our story</div>
           <h2 class="serif">Why MasterChefHub exists.</h2>
-          <p>MasterChefHub began with a simple frustration: too many recipes online that look great but fail at home. Vague steps, missing details and results that never match the photo.</p>
-          <p>So we set a rule. Every recipe is cooked, tested and improved before it is published. If it does not work in a regular kitchen, it does not make it onto the site.</p>
+          <p>MasterChefHub started in a home kitchen with a simple idea: everyday food, cooked fresh, without the fuss. No fancy restaurant menu, just the meals people actually want, like a hot sandwich, a bowl of pasta or a slice of cake.</p>
+          <p>You choose your food on the site, enter your address, and we bring it to you. You do not pay online. You pay in cash when your order arrives.</p>
           <ul class="checks">
-            <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Every recipe cooked and tested first</li>
-            <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Clear steps, honest timings</li>
-            <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Ingredients you can actually find</li>
+            <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Cooked at home, made to order</li>
+            <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Delivered to your front door</li>
+            <li><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span>Pay cash when it arrives</li>
           </ul>
-          <a href="/food" class="btn btn-black">Explore our food <svg class="ico arrow"><use href="#i-arrow"/></svg></a>
+          <a href="/food" class="btn btn-black">See the menu <svg class="ico arrow"><use href="#i-arrow"/></svg></a>
         </div>
       </div>
     </section>
@@ -347,10 +345,10 @@ footer ul a:hover{text-decoration:underline}
     <section class="reveal">
       <div class="head"><div class="eyebrow">What we believe</div><h2 class="serif">Our values</h2></div>
       <div class="values">
-        <div class="val"><div class="vi"><svg class="ico"><use href="#i-shield"/></svg></div><h3>Tested, always</h3><p>Nothing goes live until it has been cooked and approved. Reliable results, every time.</p></div>
-        <div class="val"><div class="vi"><svg class="ico"><use href="#i-bulb"/></svg></div><h3>Clear and simple</h3><p>Plain language, short steps and no confusing jargon. Cooking should feel easy.</p></div>
-        <div class="val"><div class="vi"><svg class="ico"><use href="#i-users"/></svg></div><h3>For everyone</h3><p>Beginners, busy parents, students and food lovers all have a place at our table.</p></div>
-        <div class="val"><div class="vi"><svg class="ico"><use href="#i-target"/></svg></div><h3>Always improving</h3><p>We listen to your feedback and keep refining recipes, lessons and the site itself.</p></div>
+        <div class="val"><div class="vi"><svg class="ico"><use href="#i-shield"/></svg></div><h3>Fresh, always</h3><p>Your food is cooked when you order it, not sitting around. Simple dishes done well.</p></div>
+        <div class="val"><div class="vi"><svg class="ico"><use href="#i-bulb"/></svg></div><h3>Clear and simple</h3><p>Plain language, clear prices and no hidden extras. Ordering should feel easy.</p></div>
+        <div class="val"><div class="vi"><svg class="ico"><use href="#i-users"/></svg></div><h3>For everyone</h3><p>Busy parents, students, neighbors and food lovers all have a place at our table.</p></div>
+        <div class="val"><div class="vi"><svg class="ico"><use href="#i-target"/></svg></div><h3>Always improving</h3><p>We listen to your feedback and keep improving the menu and the site.</p></div>
       </div>
     </section>
 
@@ -358,19 +356,19 @@ footer ul a:hover{text-decoration:underline}
     <section class="reveal">
       <div class="head"><div class="eyebrow">Getting started</div><h2 class="serif">How it works</h2></div>
       <div class="how">
-        <div class="step"><div class="n">01</div><div class="si"><svg class="ico"><use href="#i-search2"/></svg></div><h3>Find</h3><p>Search or browse by category, ingredient, time or difficulty.</p></div>
-        <div class="step"><div class="n">02</div><div class="si"><svg class="ico"><use href="#i-video"/></svg></div><h3>Watch</h3><p>Follow step-by-step video lessons from our video library.</p></div>
-        <div class="step"><div class="n">03</div><div class="si"><svg class="ico"><use href="#i-flame"/></svg></div><h3>Cook</h3><p>Follow the clear steps or watch the video, then enjoy the result.</p></div>
+        <div class="step"><div class="n">01</div><div class="si"><svg class="ico"><use href="#i-search2"/></svg></div><h3>Choose</h3><p>Browse the menu by category and add what you want to your cart.</p></div>
+        <div class="step"><div class="n">02</div><div class="si"><svg class="ico"><use href="#i-truck"/></svg></div><h3>Order</h3><p>Enter your name and address, check the map, and place your order.</p></div>
+        <div class="step"><div class="n">03</div><div class="si"><svg class="ico"><use href="#i-plate"/></svg></div><h3>Enjoy</h3><p>We deliver to your door. Pay in cash when your food arrives.</p></div>
       </div>
     </section>
 
     <!-- CTA -->
     <section class="reveal">
       <div class="cta">
-        <h2 class="serif">Ready to start cooking?</h2>
-        <p>Create a free account and start cooking with confidence.</p>
+        <h2 class="serif">Hungry? Order now.</h2>
+        <p>Pick your food and we will bring it to your door.</p>
         <div class="row">
-          <a href="/login" class="btn btn-white">Create free account <svg class="ico arrow"><use href="#i-arrow"/></svg></a>
+          <a href="/food" class="btn btn-white">Order food <svg class="ico arrow"><use href="#i-arrow"/></svg></a>
           <a href="/contact" class="btn btn-line">Contact us</a>
         </div>
       </div>
@@ -381,9 +379,9 @@ footer ul a:hover{text-decoration:underline}
     <div class="fgrid">
       <div>
         <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a>
-        <p>Chef-tested recipes and video lessons for everyday cooks.</p>
+        <p>Simple home-cooked food, delivered to your door.</p>
       </div>
-      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/videos">Videos</a></li><li><a href="/deliver">Deliver food</a></li></ul></div>
+      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/cart">Cart</a></li><li><a href="/videos">Videos</a></li></ul></div>
       <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
       <div><h5>Account</h5><ul><li><a href="/login">Log in</a></li><li><a href="/login">Create account</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
     </div>
@@ -404,7 +402,7 @@ scrim.addEventListener('click',()=>toggleSide(false));
 document.getElementById('searchForm').addEventListener('submit',e=>{
   e.preventDefault();
   const v=document.getElementById('q').value.trim();
-  location.href='/recipes'+(v?'?search='+encodeURIComponent(v):'');
+  location.href='/food'+(v?'?search='+encodeURIComponent(v):'');
 });
 
 /* REVEAL + COUNT-UP */

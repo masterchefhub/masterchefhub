@@ -15,7 +15,6 @@ try { S = JSON.parse(localStorage.getItem('mch_settings') || '{}') || {}; } catc
 var root = document.documentElement;
 
 /* apply display preferences before the first paint */
-if (S.reduceMotion) root.classList.add('mch-reduce');
 if (S.textSize === 'small') root.style.fontSize = '15px';
 else if (S.textSize === 'large') root.style.fontSize = '17.5px';
 
@@ -183,6 +182,36 @@ function Loader(minMs, loadedAlready) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Simple loader used when moving between pages: just a progress bar and the word "Loading" */
+var MCSS = '.mld2{position:fixed;inset:0;z-index:2147483000;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;opacity:0;transition:opacity .22s ease;-webkit-font-smoothing:antialiased}' +
+'.mld2.on{opacity:1}' +
+'.mld2 b{color:#fff;font-weight:600;font-size:.82rem;letter-spacing:.22em;text-transform:uppercase}' +
+'.mld2 s{display:block;width:min(220px,60vw);height:3px;border-radius:3px;background:#262626;overflow:hidden}' +
+'.mld2 s i{display:block;height:100%;width:0;background:#fff;border-radius:3px;transition:width .3s ease}' +
+'html.mld2-lock,html.mld2-lock body{overflow:hidden!important}';
+var mini = null;
+function showMini() {
+  if (mini) return mini;
+  var st = document.createElement('style'); st.id = 'mld2css'; st.textContent = MCSS; (document.head || root).appendChild(st);
+  var el = document.createElement('div'); el.className = 'mld2'; el.id = 'mchld2'; el.setAttribute('role', 'status');
+  el.innerHTML = '<b>Loading</b><s><i></i></s>';
+  root.appendChild(el); root.classList.add('mld2-lock');
+  var bar = el.querySelector('i'), p = 8, t0 = Date.now(), timer = 0, fin = false;
+  requestAnimationFrame(function () { el.classList.add('on'); bar.style.width = p + '%'; });
+  timer = setInterval(function () { if (fin) return; p += (90 - p) * 0.12; bar.style.width = p.toFixed(1) + '%'; }, 120);
+  mini = {
+    finish: function () {
+      if (fin) return; fin = true; clearInterval(timer);
+      var wait = Math.max(0, 420 - (Date.now() - t0));
+      setTimeout(function () {
+        bar.style.width = '100%';
+        setTimeout(function () { el.classList.remove('on'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); root.classList.remove('mld2-lock'); mini = null; }, 260); }, 180);
+      }, wait);
+    }
+  };
+  return mini;
+}
+
 var pageLoaded = document.readyState === 'complete';
 var run = null;
 var MAX_WAIT = 9000;
@@ -190,27 +219,30 @@ var MAX_WAIT = 9000;
 if (S.loader !== false) {
   if (fresh) {
     if (!pageLoaded) run = Loader(S.loaderFast ? 1300 : 3000, false);
-  } else {
-    /* moving between pages: only show if the next page is slow */
-    setTimeout(function () { if (!pageLoaded && !run) run = Loader(900, false); }, 450);
+  } else if (!pageLoaded) {
+    run = showMini();            /* arriving from another page of the site */
   }
   if (!pageLoaded) {
-    window.addEventListener('load', function () { pageLoaded = true; if (run) run.markLoaded(); });
+    window.addEventListener('load', function () { pageLoaded = true; if (run) run.markLoaded ? run.markLoaded() : run.finish(); });
     setTimeout(function () {
       if (pageLoaded) return;
       window.__mchSlow = true;
       try { window.dispatchEvent(new CustomEvent('mch:slowload')); } catch (e) {}
-      pageLoaded = true; if (run) run.markLoaded();   /* never trap the visitor */
+      pageLoaded = true; if (run) run.markLoaded ? run.markLoaded() : run.finish();   /* never trap the visitor */
     }, MAX_WAIT);
   }
+  /* leaving: show the same simple loader as soon as a link to another page of the site is clicked */
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
+    var u; try { u = new URL(a.href, location.href); } catch (x) { return; }
+    if (u.origin !== location.origin || /^(mailto|tel|javascript):/i.test(a.getAttribute('href'))) return;
+    if (u.pathname === location.pathname && u.search === location.search) return;
+    setTimeout(function () { if (!e.defaultPrevented || true) showMini(); }, 60);
+  }, false);
+  window.addEventListener('pageshow', function (e) { if (e.persisted && mini) mini.finish(); });
 }
 
-window.MCHLoader = {
-  /* used by Settings > Loading screen > Preview */
-  preview: function () {
-    if (document.getElementById('mchld')) return;
-    var r = Loader(3200, false);
-    setTimeout(function () { r.markLoaded(); }, 2600);
-  }
-};
+window.MCHLoader = {};
 })();

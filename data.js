@@ -11,14 +11,11 @@ export const OWNER = 'chrisw81114@gmail.com';
 
 /* Shared food categories: [id, label] */
 export const CATS = [
-  ['breakfast', 'Breakfast'],
-  ['lunch', 'Lunch'],
-  ['dinner', 'Dinner'],
-  ['desserts', 'Desserts'],
-  ['vegan', 'Vegan'],
-  ['grill', 'Grill'],
-  ['snacks', 'Snacks'],
-  ['drinks', 'Drinks']
+  ['tips', 'Cooking tips'],
+  ['guides', 'Guides'],
+  ['menu', 'Menu news'],
+  ['stories', 'Stories'],
+  ['safety', 'Kitchen safety']
 ];
 export const catLabel = id => { const c = CATS.find(x => x[0] === id); return c ? c[1] : ''; };
 

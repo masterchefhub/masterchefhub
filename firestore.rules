@@ -18,7 +18,7 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.status == 'new'
         && request.resource.data.payment == 'cash_on_delivery'
-        && request.resource.data.keys().hasOnly(['uid','email','name','phone','address','apt','city','zip','notes','items','subtotal','fee','total','payment','status','createdAt','by'])
+        && request.resource.data.keys().hasOnly(['uid','email','name','phone','address','apt','city','zip','notes','items','subtotal','fee','total','payment','status','lat','lon','createdAt','by'])
         && request.resource.data.items is list && request.resource.data.items.size() > 0 && request.resource.data.items.size() <= 30
         && request.resource.data.total is number && request.resource.data.total > 0 && request.resource.data.total < 1000
         && request.resource.data.address is string && request.resource.data.address.size() < 200

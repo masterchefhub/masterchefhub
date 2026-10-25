@@ -145,6 +145,23 @@ footer ul a:hover{text-decoration:underline}
 .sent p{color:var(--muted);margin:6px 0 20px}
 @media(max-width:600px){.cform2{padding:22px 18px}.cform2 .row2{grid-template-columns:1fr}}
 </style>
+<style>
+.ctabs{display:flex;gap:8px;margin:0 0 20px;flex-wrap:wrap}
+.ctabs button{font-family:inherit;font-weight:700;font-size:.9rem;padding:10px 20px;border-radius:99px;border:1.5px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
+.ctabs button:hover{border-color:var(--ink)}.ctabs button.act{background:var(--ink);border-color:var(--ink);color:#fff}
+.ctabs .n{background:#ff5a1f;color:#fff;border-radius:99px;font-size:.72rem;padding:1px 8px;min-width:20px;text-align:center}
+.msgs{display:grid;gap:12px;max-width:760px}
+.msg{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px 20px}
+.msg .mh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start}
+.msg .ms{font-weight:800}.msg .mw{color:var(--muted);font-size:.82rem}
+.msg .mt{display:inline-block;background:#f0f0ed;border-radius:99px;padding:3px 12px;font-size:.74rem;font-weight:700;margin:8px 0}
+.msg p{white-space:pre-wrap;word-break:break-word;font-size:.95rem;margin:6px 0 12px}
+.msg .ma{display:flex;gap:8px;flex-wrap:wrap}
+.msg .ma a,.msg .ma button{font-family:inherit;font-weight:700;font-size:.8rem;padding:8px 14px;border-radius:99px;border:1.5px solid var(--line);background:#fff;cursor:pointer;color:var(--ink)}
+.msg .ma a:hover,.msg .ma button:hover{border-color:var(--ink)}
+.msg .ma .arm{background:#e5484d;color:#fff;border-color:#e5484d}
+.msgs .none{text-align:center;color:var(--muted);padding:40px 16px;border:1.5px dashed #d4d4cf;border-radius:22px}
+</style>
 </head>
 <body>
 
@@ -191,7 +208,7 @@ footer ul a:hover{text-decoration:underline}
   <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
   <symbol id="i-shield2" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6z"/></symbol>
   <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
-<symbol id="i-coffee" viewBox="0 0 24 24"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10.5h1.5a2.5 2.5 0 0 1 0 5H17M7 3v2.5M10.5 3v2.5M14 3v2.5"/></symbol><symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0zM8 8.5c0-2 2-2 2-4.5M13 8.5c0-2 2-2 2-4.5"/></symbol><symbol id="i-plate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 21h16v-8H4zM4 17c2.3 1.6 4.3 1.6 6 0s4-1.6 6 0 3 1.2 4 0M12 13V9.5M12 9.5a1.6 1.6 0 0 0 0-3.2c-1.2 1.2-1.2 2.2 0 3.2z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 20C5 10 10 4 20 4c0 10-5 16-14 16M5 20c2-5 5-8 9-10"/></symbol><symbol id="i-snack" viewBox="0 0 24 24"><path d="M12 8c-3-2-7 0-7 5 0 4 3 8 5 8 1 0 1-.5 2-.5s1 .5 2 .5c2 0 5-4 5-8 0-5-4-7-7-5zM12 8c0-2 1-4 3-5"/></symbol><symbol id="i-drink" viewBox="0 0 24 24"><path d="M6 3h12l-1.5 17a2 2 0 0 1-2 1.8h-5a2 2 0 0 1-2-1.8zM7 9h10"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol><symbol id="i-ok2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.5"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol><symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M6 19.5a1.5 1.5 0 1 0 0-.01M17 19.5a1.5 1.5 0 1 0 0-.01"/></symbol><symbol id="i-sand" viewBox="0 0 24 24"><path d="M4 10a8 5 0 0 1 16 0zM3 13.5h18M5 17h14l-1 3H6z"/></symbol></svg>
+<symbol id="i-coffee" viewBox="0 0 24 24"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10.5h1.5a2.5 2.5 0 0 1 0 5H17M7 3v2.5M10.5 3v2.5M14 3v2.5"/></symbol><symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0zM8 8.5c0-2 2-2 2-4.5M13 8.5c0-2 2-2 2-4.5"/></symbol><symbol id="i-plate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 21h16v-8H4zM4 17c2.3 1.6 4.3 1.6 6 0s4-1.6 6 0 3 1.2 4 0M12 13V9.5M12 9.5a1.6 1.6 0 0 0 0-3.2c-1.2 1.2-1.2 2.2 0 3.2z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 20C5 10 10 4 20 4c0 10-5 16-14 16M5 20c2-5 5-8 9-10"/></symbol><symbol id="i-snack" viewBox="0 0 24 24"><path d="M12 8c-3-2-7 0-7 5 0 4 3 8 5 8 1 0 1-.5 2-.5s1 .5 2 .5c2 0 5-4 5-8 0-5-4-7-7-5zM12 8c0-2 1-4 3-5"/></symbol><symbol id="i-drink" viewBox="0 0 24 24"><path d="M6 3h12l-1.5 17a2 2 0 0 1-2 1.8h-5a2 2 0 0 1-2-1.8zM7 9h10"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol><symbol id="i-ok2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.5"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol><symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M6 19.5a1.5 1.5 0 1 0 0-.01M17 19.5a1.5 1.5 0 1 0 0-.01"/></symbol><symbol id="i-cart" viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7zM9 7V6a3 3 0 0 1 6 0v1"/></symbol><symbol id="i-sand" viewBox="0 0 24 24"><path d="M4 10a8 5 0 0 1 16 0zM3 13.5h18M5 17h14l-1 3H6z"/></symbol></svg>
 
 <aside class="sidebar" id="sidebar">
   <a href="/" class="logo">
@@ -201,11 +218,9 @@ footer ul a:hover{text-decoration:underline}
   <div class="nav-label">Menu</div>
   <ul class="menu">
     <li><a href="/"><svg class="ico"><use href="#i-home"/></svg>Home</a></li>
-    <li><a href="/food"><svg class="ico"><use href="#i-food"/></svg>Food<span class="badge">NEW</span></a></li>
-    <li><a href="/recipes"><svg class="ico"><use href="#i-book"/></svg>Recipes</a></li>
-    <li><a href="/categories"><svg class="ico"><use href="#i-grid"/></svg>Categories</a></li>
+    <li><a href="/food"><svg class="ico"><use href="#i-food"/></svg>Food</a></li>
+    <li><a href="/cart"><svg class="ico"><use href="#i-cart"/></svg>Cart</a></li>
     <li><a href="/videos"><svg class="ico"><use href="#i-video"/></svg>Videos</a></li>
-    <li><a href="/deliver"><svg class="ico"><use href="#i-truck"/></svg>Deliver food</a></li>
   </ul>
   <div class="nav-label">Company</div>
   <ul class="menu">
@@ -226,11 +241,11 @@ footer ul a:hover{text-decoration:underline}
     <button class="burger" id="burger" aria-label="Open menu"><svg class="ico"><use href="#i-menu"/></svg></button>
     <form class="search" id="searchForm">
       <svg class="ico" style="color:var(--muted)"><use href="#i-search"/></svg>
-      <input id="q" type="text" placeholder="Search recipes, ingredients..." aria-label="Search">
+      <input id="q" type="text" placeholder="Search the menu..." aria-label="Search">
       <button type="submit" aria-label="Search"><svg class="ico sm"><use href="#i-arrow"/></svg></button>
     </form>
     <nav class="top-links">
-      <a href="/recipes" class="chip">Recipes</a>
+      <a href="/cart" class="chip">Cart</a>
       <a href="/videos" class="chip">Videos</a>
       <a href="/food" class="chip food"><svg class="ico sm"><use href="#i-food"/></svg>Food</a>
     </nav>
@@ -241,18 +256,20 @@ footer ul a:hover{text-decoration:underline}
     <div class="crumbs"><a href="/">Home</a><svg class="ico sm"><use href="#i-chev"/></svg><span style="color:var(--ink)">Contact</span></div>
     <div class="cpage">
       <div class="phead"><h1 class="serif">Contact us</h1><p>Questions, feedback or ideas? Send us a message and we will read it.</p></div>
+      <div class="ctabs" id="ctabs" hidden><button type="button" data-t="send" class="act">Send a message</button><button type="button" data-t="inbox">Inbox <span class="n" id="inN" hidden>0</span></button></div>
       <form class="cform2" id="cf" novalidate>
         <div class="row2">
           <div class="fld" data-k="name"><label for="cname">Your name <i class="rq">*</i></label><input id="cname" type="text" maxlength="80" autocomplete="name"><small class="ferr"></small></div>
           <div class="fld" data-k="email"><label for="cemail">Email <i class="rq">*</i></label><input id="cemail" type="email" maxlength="120" autocomplete="email" inputmode="email"><small class="ferr"></small></div>
         </div>
         <div class="fld" data-k="subject"><label for="csub">Subject</label>
-          <select id="csub"><option>General question</option><option>Recipe feedback</option><option>Video request</option><option>Report a problem</option><option>Business or partnership</option></select></div>
+          <select id="csub"><option>General question</option><option>Order question</option><option>Video request</option><option>Report a problem</option><option>Business or partnership</option></select></div>
         <div class="fld" data-k="message"><label for="cmsg">Message <i class="rq">*</i></label><textarea id="cmsg" rows="7" maxlength="3000"></textarea><small class="hint" id="cc">0 / 3000</small><small class="ferr"></small></div>
         <div class="hp" aria-hidden="true"><label>Website<input id="cweb" type="text" tabindex="-1" autocomplete="off"></label></div>
         <div class="cmsg" id="cerr" role="alert" hidden></div>
         <button class="sbtn fill wide" type="submit" id="csend"><i class="spin"></i><svg class="ico sm"><use href="#i-send"/></svg><span class="lbl">Send message</span></button>
       </form>
+      <section id="inbox" hidden><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap"><p style="color:var(--muted);font-size:.9rem;margin:0">Messages sent through the contact form. Newest first.</p><button class="sbtn" type="button" id="inRefresh">Refresh</button></div><div id="inList" class="msgs"></div></section>
       <div class="sent" id="sent" hidden><div class="eic"><svg class="ico"><use href="#i-ok2"/></svg></div><h2>Message sent</h2><p>Thank you for writing to us. We will read it soon.</p><a class="sbtn" href="/">Back to home</a></div>
     </div>
   </div>
@@ -261,9 +278,9 @@ footer ul a:hover{text-decoration:underline}
     <div class="fgrid">
       <div>
         <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a>
-        <p>Chef-tested recipes and video lessons for everyday cooks.</p>
+        <p>Simple home-cooked food, delivered to your door.</p>
       </div>
-      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/videos">Videos</a></li><li><a href="/deliver">Deliver food</a></li></ul></div>
+      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/cart">Cart</a></li><li><a href="/videos">Videos</a></li></ul></div>
       <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
       <div><h5>Account</h5><ul><li><a href="/login">Log in</a></li><li><a href="/login">Create account</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
     </div>
@@ -285,7 +302,7 @@ scrim.addEventListener('click',()=>toggleSide(false));
 document.getElementById('searchForm').addEventListener('submit',e=>{
   e.preventDefault();
   const v=document.getElementById('q').value.trim();
-  location.href='/recipes'+(v?'?search='+encodeURIComponent(v):'');
+  location.href='/food'+(v?'?search='+encodeURIComponent(v):'');
 });
 
 /* REVEAL + COUNT-UP */
@@ -310,11 +327,11 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 import * as D from '/data.js';
 const $ = s => document.querySelector(s);
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-try { const u = await D.whenUser(); if (u) { $('#cname').value = u.displayName || ''; $('#cemail').value = u.email || ''; } } catch (e) {}
+D.whenUser().then(u => { if (u) { if (!$('#cname').value) $('#cname').value = u.displayName || ''; if (!$('#cemail').value) $('#cemail').value = u.email || ''; } }).catch(() => {});
 $('#cmsg').addEventListener('input', () => { $('#cc').textContent = $('#cmsg').value.length + ' / 3000'; });
 $('#cf').addEventListener('submit', async e => {
   e.preventDefault();
-  const f = $('#cf'); f.querySelectorAll('.fld').forEach(x => { x.classList.remove('bad'); x.querySelector('.ferr').textContent = ''; });
+  const f = $('#cf'); f.querySelectorAll('.fld').forEach(x => { x.classList.remove('bad'); const fe = x.querySelector('.ferr'); if (fe) fe.textContent = ''; });
   const err = $('#cerr'); err.hidden = true;
   const v = { name: $('#cname').value.trim(), email: $('#cemail').value.trim(), subject: $('#csub').value, message: $('#cmsg').value.trim() };
   let bad = 0;
@@ -336,6 +353,37 @@ $('#cf').addEventListener('submit', async e => {
     btn.classList.remove('loading'); btn.disabled = false;
   }
 });
+
+/* ---------- owner inbox ---------- */
+let isOwn = false;
+try { const u = await D.whenUser(); isOwn = D.isOwner(u); } catch (e) {}
+if (isOwn) {
+  const ctabs = $('#ctabs'); ctabs.hidden = false;
+  const ts = x => { try { return x && x.toMillis ? x.toMillis() : (x && x.seconds ? x.seconds * 1000 : (x ? new Date(x).getTime() : 0)) || 0; } catch (e) { return 0; } };
+  const show = t => {
+    ctabs.querySelectorAll('button').forEach(b => b.classList.toggle('act', b.dataset.t === t));
+    if (t === 'send') { $('#cf').hidden = false; } else { $('#cf').hidden = true; $('#sent').hidden = true; }
+    $('#inbox').hidden = t !== 'inbox'; if (t === 'inbox') loadIn();
+  };
+  async function loadIn() {
+    const box = $('#inList'); box.innerHTML = '<div class="none">Loading...</div>';
+    try {
+      const r = await D.list('messages', { max: 100 });
+      $('#inN').textContent = r.length; $('#inN').hidden = !r.length;
+      box.innerHTML = r.length ? r.map(m => '<div class="msg" data-id="' + D.esc(m.id) + '"><div class="mh"><div><div class="ms">' + D.esc(m.name) + '</div><div class="mw">' + D.esc(m.email) + '</div></div><div class="mw">' + D.esc(new Date(ts(m.createdAt) || Date.now()).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })) + '</div></div><span class="mt">' + D.esc(m.subject || 'General question') + '</span><p>' + D.esc(m.message) + '</p><div class="ma"><a href="mailto:' + D.esc(m.email) + '?subject=' + encodeURIComponent('Re: ' + (m.subject || 'Your message')) + '">Reply by email</a><button type="button" data-del="1">Delete</button></div></div>').join('') : '<div class="none">No messages yet. When someone writes to you, it will show here.</div>';
+    } catch (e) { box.innerHTML = '<div class="none">' + D.esc(D.explain(e)) + '</div>'; }
+  }
+  ctabs.addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) show(b.dataset.t); });
+  $('#inRefresh').addEventListener('click', loadIn);
+  let armed = null;
+  $('#inList').addEventListener('click', async e => {
+    const del = e.target.closest('[data-del]'); if (!del) return; const id = del.closest('.msg').dataset.id;
+    if (armed !== del) { if (armed) { armed.classList.remove('arm'); armed.textContent = 'Delete'; } armed = del; del.classList.add('arm'); del.textContent = 'Click again to delete'; setTimeout(() => { if (armed === del) { del.classList.remove('arm'); del.textContent = 'Delete'; armed = null; } }, 3500); return; }
+    try { await D.remove('messages', id); armed = null; D.say('success', 'Deleted', 'Message removed.'); loadIn(); } catch (er) { D.say('error', 'Could not delete', D.explain(er)); }
+  });
+  try { const r = await D.list('messages', { max: 100 }); $('#inN').textContent = r.length; $('#inN').hidden = !r.length; if (r.length && location.hash === '#inbox') show('inbox'); } catch (e) {}
+  if (location.hash === '#inbox') show('inbox');
+}
 </script>
 </body>
 </html>
