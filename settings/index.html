@@ -3,8 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/loader.js"></script>
 <title>Settings | MasterChefHub</title>
-<meta name="description" content="Sound, music and preferences for MasterChefHub.">
+<meta name="description" content="Sound, music, notifications and preferences for MasterChefHub.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:site_name" content="MasterChefHub">
+<meta property="og:image" content="https://masterchefhub.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,8 +39,8 @@ button{font-family:inherit}
 .logo:hover .logo-mark{transform:rotate(-8deg) scale(1.08)}
 .logo:hover .hat{animation:hat .7s ease}
 @keyframes hat{0%,100%{transform:translateY(0)}30%{transform:translateY(-4px) rotate(-6deg)}60%{transform:translateY(0) rotate(4deg)}}
-.logo-text{font-weight:800;font-size:1.18rem;letter-spacing:-.03em;line-height:1.05}
-.logo-text small{display:block;font-weight:500;font-size:.64rem;letter-spacing:.22em;color:#8a8a8a;text-transform:uppercase;margin-top:3px}
+.logo-text{font-weight:800;font-size:1.55rem;letter-spacing:.03em;line-height:1}
+.logo-text small{display:block;font-weight:600;font-size:.56rem;letter-spacing:.2em;color:#8a8a8a;text-transform:uppercase;margin-top:4px;white-space:nowrap}
 .nav-label{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:#6b6b6b;padding:18px 14px 8px;font-weight:600}
 .menu{list-style:none;display:grid;gap:3px}
 .menu a{display:flex;align-items:center;gap:14px;padding:11px 14px;border-radius:14px;color:#b9b9b9;font-weight:500;font-size:.95rem;transition:.25s}
@@ -79,12 +88,11 @@ button{font-family:inherit}
 .chip.food:hover{background:#262626;transform:translateY(-2px)}
 .wrap{padding:36px 40px 0;max-width:1400px}
 
-
 /* footer */
 footer{margin-top:84px;border-top:1px solid var(--line);padding:46px 40px 34px;max-width:1400px}
 .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:36px}
 footer .logo{padding:0 0 14px}
-footer .logo-mark{background:var(--ink);color:#fff}
+footer .logo-mark{background:var(--ink);color:#fff;--mark-bg:#0a0a0a}
 footer .logo-text small{color:var(--muted)}
 footer p{color:var(--muted);font-size:.9rem;max-width:300px}
 footer h5{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;color:var(--muted)}
@@ -111,7 +119,7 @@ footer ul a:hover{text-decoration:underline}
 .crumbs a:hover{color:var(--ink)}
 .phead{margin-bottom:30px}
 .phead h1{font-size:clamp(2.8rem,5.4vw,4.6rem);line-height:1;margin:10px 0 12px}
-.phead p{color:var(--muted);max-width:560px;font-size:1.04rem}
+.phead p{color:var(--muted);max-width:600px;font-size:1.04rem}
 .warn{background:#fff3ee;border:1px solid #ffd2c0;color:#7a2a0e;border-radius:16px;padding:16px 20px;margin-bottom:20px;font-weight:600;font-size:.92rem}
 .sgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start}
 .col{display:grid;gap:20px}
@@ -129,7 +137,7 @@ footer ul a:hover{text-decoration:underline}
 .range{display:flex;align-items:center;gap:14px;min-width:210px}
 .range input{flex:1;accent-color:#0a0a0a;height:4px;cursor:pointer}
 .range span{width:44px;text-align:right;font-weight:700;font-size:.86rem}
-.opts{display:flex;flex-wrap:wrap;gap:8px;padding:18px 0 6px;border-top:1px solid var(--line)}
+.opts{display:flex;flex-wrap:wrap;gap:8px;padding:16px 0 6px}
 .opts-label{padding-top:18px;border-top:1px solid var(--line)}
 .opts-label b{display:block;font-size:.98rem}.opts-label small{color:var(--muted);font-size:.84rem}
 .opt{padding:10px 18px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:.88rem;cursor:pointer;transition:.2s;font-family:inherit;color:var(--ink)}
@@ -138,6 +146,9 @@ footer ul a:hover{text-decoration:underline}
 .tbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:99px;border:1.5px solid var(--ink);background:transparent;font-weight:700;font-size:.85rem;cursor:pointer;font-family:inherit;color:var(--ink);transition:.2s}
 .tbtn:hover{background:var(--ink);color:#fff}
 .tbtn:hover .ico{animation:wiggle .6s ease}
+.tbtn.danger{border-color:#e5484d;color:#e5484d}.tbtn.danger:hover{background:#e5484d;color:#fff}
+.tests{display:flex;flex-wrap:wrap;gap:8px;padding:16px 0 4px;border-top:1px solid var(--line)}
+.hint{color:var(--muted);font-size:.82rem;min-height:20px;margin-top:6px}
 @keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg) scale(1.1)}60%{transform:rotate(10deg) scale(1.1)}}
 
 .np{position:relative;background:var(--ink);color:#fff;border-radius:var(--r);padding:32px;overflow:hidden}
@@ -175,9 +186,11 @@ footer ul a:hover{text-decoration:underline}
 .ib:hover{background:rgba(127,127,127,.2)}
 .ib .ico{width:18px;height:18px}
 .none{color:var(--muted);font-size:.9rem;text-align:center;padding:6px 0 2px}
-.foot-actions{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:6px;padding:22px 28px;background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
-.foot-actions b{display:block}.foot-actions small{color:var(--muted)}
 .note{color:var(--muted);font-size:.8rem;margin-top:14px}
+.acct{display:flex;align-items:center;gap:16px;padding:18px 0 6px;border-top:1px solid var(--line)}
+.acct .av{width:56px;height:56px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.3rem;overflow:hidden;flex-shrink:0}
+.acct .av img{width:100%;height:100%;object-fit:cover}
+.acct .tx{flex:1;min-width:0}.acct b{display:block}.acct small{color:var(--muted);display:block;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:1100px){.sgrid{grid-template-columns:1fr}}
 @media(max-width:600px){.srow{flex-wrap:wrap}.range{min-width:100%}.scard,.np{padding:22px}.np h3{font-size:1.9rem}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -187,7 +200,7 @@ footer ul a:hover{text-decoration:underline}
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h10M19 18h2"/><circle cx="15" cy="6" r="2.5"/><circle cx="9" cy="12" r="2.5"/><circle cx="16" cy="18" r="2.5"/></symbol>
-  <symbol id="i-hat" viewBox="0 0 24 24"><path d="M6.5 14.5A4 4 0 1 1 8 6.8a4.6 4.6 0 0 1 8 0 4 4 0 1 1 1.5 7.7V20h-11z"/><path d="M6.5 17.5h11"/></symbol>
+  <symbol id="i-hat" viewBox="9 8 47 47"><g fill="currentColor" stroke="none"><circle cx="20.5" cy="25" r="9.5"/><circle cx="32" cy="20" r="11.5"/><circle cx="43.5" cy="25" r="9.5"/><rect x="17" y="25" width="30" height="19"/><rect x="17" y="47" width="30" height="8" rx="2.5"/></g><path d="M26 33.5v9M38 33.5v9" fill="none" stroke-width="1.7" stroke-linecap="round" style="stroke:var(--mark-bg,#fff)"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
   <symbol id="i-food" viewBox="0 0 24 24"><path d="M6 3v7a2 2 0 0 0 2 2v9M10 3v7a2 2 0 0 1-2 2M8 3v9M18 21V3c-2.6 1.4-4 4.4-4 8.2V14h4"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M6.5 17H20v4H6.5a2 2 0 0 1 0-4z"/></symbol>
@@ -223,12 +236,17 @@ footer ul a:hover{text-decoration:underline}
   <symbol id="i-note" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
   <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></symbol>
   <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0 1 12 0v6l2 2H4zM10 21a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-loader" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-shield2" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6z"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
 </svg>
 
 <aside class="sidebar" id="sidebar">
   <a href="/" class="logo">
     <div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div>
-    <div class="logo-text">MasterChef<small>H U B</small></div>
+    <div class="logo-text">MCH<small>Master Chef Hub</small></div>
   </a>
   <div class="nav-label">Menu</div>
   <ul class="menu">
@@ -271,101 +289,32 @@ footer ul a:hover{text-decoration:underline}
 
   <div class="wrap">
     <div class="crumbs"><a href="/">Home</a><svg class="ico sm"><use href="#i-chev"/></svg><span style="color:var(--ink)">Settings</span></div>
-
     <div class="phead">
       <div class="eyebrow">Preferences</div>
       <h1 class="serif">Settings</h1>
-      <p>Control the sound effects and music across MasterChefHub. Your choices are saved on this device and apply to every page.</p>
+      <p>Control sound, music, the loading screen, notifications and display. Your choices are saved on this device and apply to every page.</p>
     </div>
-
-    <div class="warn" id="engineWarn" hidden>The sound and music engine (site.js) could not be loaded, so these controls are not active. Upload site.js to the same folder as your pages.</div>
-
+    <div class="warn" id="engineWarn" hidden>The settings engine (site.js) could not be loaded, so these controls are not active. Upload site.js to the same folder as your pages.</div>
     <div class="sgrid">
-      <div class="col">
-
-        <div class="scard">
-          <h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-speaker"/></svg></span>Sound effects</h2>
-          <p class="sub">The small clicks, taps and chimes you hear around the site.</p>
-          <div class="srow">
-            <div><b>Sound effects</b><small>Play sounds when you hover and click</small></div>
-            <button class="switch" role="switch" data-key="sfx" aria-label="Sound effects"></button>
-          </div>
-          <div class="srow">
-            <div><b>Effects volume</b><small>How loud the sounds are</small></div>
-            <div class="range"><input type="range" min="0" max="100" data-key="sfxVolume" data-out="o-sfx" aria-label="Effects volume"><span id="o-sfx"></span></div>
-          </div>
-          <div class="srow">
-            <div><b>Try it out</b><small>Hear a sample effect</small></div>
-            <button class="tbtn" id="testSfx"><svg class="ico"><use href="#i-play2"/></svg>Play sample</button>
-          </div>
-        </div>
-
-        <div class="scard">
-          <h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-note"/></svg></span>Music</h2>
-          <p class="sub">Relaxing music that plays while you browse and cook. A new song is created every time.</p>
-          <div class="srow">
-            <div><b>Music</b><small>Turn background music on or off</small></div>
-            <button class="switch" role="switch" data-key="music" aria-label="Music"></button>
-          </div>
-          <div class="srow">
-            <div><b>Music volume</b><small>How loud the music is</small></div>
-            <div class="range"><input type="range" min="0" max="100" data-key="musicVolume" data-out="o-mus" aria-label="Music volume"><span id="o-mus"></span></div>
-          </div>
-          <div class="opts-label"><b>Station</b><small>Choose the style of music</small></div>
-          <div class="opts" id="stations">
-            <button class="opt" data-st="random">Random mix</button>
-            <button class="opt" data-st="lofi">Lo-fi Kitchen</button>
-            <button class="opt" data-st="jazz">Jazz Cafe</button>
-            <button class="opt" data-st="ambient">Sunday Ambient</button>
-            <button class="opt" data-st="uploads">My music</button>
-          </div>
-          <div class="srow">
-            <div><b>Mix in my uploads</b><small>Include your own songs in the Random mix</small></div>
-            <button class="switch" role="switch" data-key="shuffleUploads" aria-label="Mix in my uploads"></button>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="col">
-
-        <div class="np" id="np">
-          <div class="eyebrow">Now playing</div>
-          <h3 class="serif" id="npTitle">Music is off</h3>
-          <p id="npSub">Press play to listen</p>
-          <div class="eqbig" aria-hidden="true"><i style="animation-delay:-0.00s"></i><i style="animation-delay:-0.17s"></i><i style="animation-delay:-0.34s"></i><i style="animation-delay:-0.51s"></i><i style="animation-delay:-0.68s"></i><i style="animation-delay:-0.85s"></i><i style="animation-delay:-1.02s"></i><i style="animation-delay:-1.19s"></i><i style="animation-delay:-1.36s"></i><i style="animation-delay:-1.53s"></i><i style="animation-delay:-1.70s"></i><i style="animation-delay:-1.87s"></i><i style="animation-delay:-2.04s"></i><i style="animation-delay:-2.21s"></i><i style="animation-delay:-2.38s"></i><i style="animation-delay:-2.55s"></i></div>
-          <div class="ctr">
-            <button class="pbtn" id="npPlay" aria-label="Play or pause"></button>
-            <button class="nbtn" id="npNext"><svg class="ico"><use href="#i-next2"/></svg>Next song</button>
-            <button class="nbtn" id="npUp"><svg class="ico"><use href="#i-upload"/></svg>Upload</button>
-          </div>
-        </div>
-
-        <div class="scard">
-          <h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-upload"/></svg></span>My music</h2>
-          <p class="sub">Upload your own songs and play them on any page.</p>
-          <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload music">
-            <div class="di"><svg class="ico"><use href="#i-upload"/></svg></div>
-            <b>Click to upload, or drop songs here</b>
-            <small>MP3, WAV, M4A, OGG or FLAC</small>
-          </div>
-          <div class="songs" id="songs"></div>
-          <p class="note">Your songs are saved privately in this browser and are never uploaded to our servers.</p>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="foot-actions" style="margin-top:20px">
-      <div><b>Reset settings</b><small>Go back to the default sound and music settings</small></div>
-      <button class="tbtn" id="reset"><svg class="ico"><use href="#i-reset"/></svg>Reset to defaults</button>
+      <div class="col"><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-speaker"/></svg></span>Sound effects</h2><p class="sub">The small clicks, taps and chimes you hear around the site.</p><div class="srow"><div><b>Sound effects</b><small>Play sounds when you click and tap</small></div><button class="switch" role="switch" data-key="sfx" aria-label="Sound effects"></button></div><div class="srow"><div><b>Hover sounds</b><small>A soft tick when your mouse moves over buttons</small></div><button class="switch" role="switch" data-key="hoverSfx" aria-label="Hover sounds"></button></div><div class="srow"><div><b>Effects volume</b><small>How loud the sounds are</small></div><div class="range"><input type="range" data-key="sfxVolume" data-out="o-sfx" min="0" max="100" aria-label="Effects volume"><span id="o-sfx"></span></div></div><div class="srow"><div><b>Try it out</b><small>Hear a sample effect</small></div><button class="tbtn" id="testSfx"><svg class="ico"><use href="#i-play2"/></svg>Play sample</button></div></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-note"/></svg></span>Music</h2><p class="sub">Relaxing music while you browse and cook. A new song is created every time.</p><div class="srow"><div><b>Music</b><small>Turn background music on or off</small></div><button class="switch" role="switch" data-key="music" aria-label="Music"></button></div><div class="srow"><div><b>Autoplay when I visit</b><small>Start a random song when you open the site in a new tab, or refresh</small></div><button class="switch" role="switch" data-key="autoplay" aria-label="Autoplay when I visit"></button></div><div class="srow"><div><b>Show the mini player</b><small>The small player at the bottom of every page</small></div><button class="switch" role="switch" data-key="miniPlayer" aria-label="Show the mini player"></button></div><div class="srow"><div><b>Music volume</b><small>How loud the music is</small></div><div class="range"><input type="range" data-key="musicVolume" data-out="o-mus" min="0" max="100" aria-label="Music volume"><span id="o-mus"></span></div></div><div class="opts-label"><b>Station</b><small>Choose the style of music</small></div><div class="opts" id="stations"><button class="opt" data-st="random">Random mix</button><button class="opt" data-st="lofi">Lo-fi Kitchen</button><button class="opt" data-st="jazz">Jazz Cafe</button><button class="opt" data-st="ambient">Sunday Ambient</button><button class="opt" data-st="uploads">My music</button></div><div class="srow"><div><b>Mix in my uploads</b><small>Include your own songs in the Random mix</small></div><button class="switch" role="switch" data-key="shuffleUploads" aria-label="Mix in my uploads"></button></div><p class="note">Browsers only allow sound after your first tap on a page. If the music does not start by itself, tap anywhere once.</p></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-loader"/></svg></span>Loading screen</h2><p class="sub">Shown when you visit or refresh the site, and when a page is slow to load. It never appears for quick page changes.</p><div class="srow"><div><b>Show the loading screen</b><small>Turn the loading animation on or off</small></div><button class="switch" role="switch" data-key="loader" aria-label="Show the loading screen"></button></div><div class="srow"><div><b>Quick loading screen</b><small>A shorter animation so you get in faster</small></div><button class="switch" role="switch" data-key="loaderFast" aria-label="Quick loading screen"></button></div><div class="srow"><div><b>Preview</b><small>Watch the loading screen now</small></div><button class="tbtn" id="previewLoader"><svg class="ico"><use href="#i-play2"/></svg>Preview</button></div></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-eye"/></svg></span>Display and accessibility</h2><p class="sub">Make the site easier on your eyes.</p><div class="srow"><div><b>Reduce motion</b><small>Turns down animations and movement</small></div><button class="switch" role="switch" data-key="reduceMotion" aria-label="Reduce motion"></button></div><div class="opts-label"><b>Text size</b><small>Scales text across the site</small></div><div class="opts" data-key="textSize"><button class="opt" data-val="small">Small</button><button class="opt" data-val="normal">Default</button><button class="opt" data-val="large">Large</button></div></div></div>
+      <div class="col"><div class="np" id="np">
+  <div class="eyebrow">Now playing</div>
+  <h3 class="serif" id="npTitle">Music is off</h3>
+  <p id="npSub">Press play to listen</p>
+  <div class="eqbig" aria-hidden="true"><i style="animation-delay:-0.00s"></i><i style="animation-delay:-0.17s"></i><i style="animation-delay:-0.34s"></i><i style="animation-delay:-0.51s"></i><i style="animation-delay:-0.68s"></i><i style="animation-delay:-0.85s"></i><i style="animation-delay:-1.02s"></i><i style="animation-delay:-1.19s"></i><i style="animation-delay:-1.36s"></i><i style="animation-delay:-1.53s"></i><i style="animation-delay:-1.70s"></i><i style="animation-delay:-1.87s"></i><i style="animation-delay:-2.04s"></i><i style="animation-delay:-2.21s"></i><i style="animation-delay:-2.38s"></i><i style="animation-delay:-2.55s"></i></div>
+  <div class="ctr">
+    <button class="pbtn" id="npPlay" aria-label="Play or pause"></button>
+    <button class="nbtn" id="npNext"><svg class="ico"><use href="#i-next2"/></svg>Next song</button>
+    <button class="nbtn" id="npUp"><svg class="ico"><use href="#i-upload"/></svg>Upload</button>
+  </div>
+</div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-upload"/></svg></span>My music</h2><p class="sub">Upload your own songs and play them on any page.</p><div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload music"><div class="di"><svg class="ico"><use href="#i-upload"/></svg></div><b>Click to upload, or drop songs here</b><small>MP3, WAV, M4A, OGG or FLAC</small></div><div class="songs" id="songs"></div><p class="note">Your songs are saved privately in this browser and are never uploaded to our servers.</p></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-bell"/></svg></span>Notifications</h2><p class="sub">Pop-up messages for things like uploads, sign-in problems and connection changes.</p><div class="srow"><div><b>Notifications</b><small>Show pop-up notifications</small></div><button class="switch" role="switch" data-key="notifications" aria-label="Notifications"></button></div><div class="srow"><div><b>Notification sound</b><small>Play a short sound with each notification</small></div><button class="switch" role="switch" data-key="notifySound" aria-label="Notification sound"></button></div><div class="srow"><div><b>Show for</b><small>How long a notification stays on screen</small></div><div class="range"><input type="range" data-key="notifyDuration" data-out="o-dur" min="2" max="10" step="1" data-scale="1" data-unit="s" aria-label="Show for"><span id="o-dur"></span></div></div><div class="opts-label"><b>Position</b><small>Where notifications appear</small></div><div class="opts" data-key="notifyPos"><button class="opt" data-val="top-right">Top right</button><button class="opt" data-val="top-center">Top center</button><button class="opt" data-val="bottom-right">Bottom right</button></div><div class="tests"><button class="tbtn" data-test="success">Success</button><button class="tbtn" data-test="error">Error</button><button class="tbtn" data-test="warning">Warning</button><button class="tbtn" data-test="info">Info</button></div><div class="hint" id="notifyHint"></div></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-person"/></svg></span>Account</h2><p class="sub">Your sign-in on this device.</p><div class="acct" id="acct"></div></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-shield2"/></svg></span>Data and reset</h2><p class="sub">Your settings and songs stay on this device.</p><div class="srow"><div><b>Clear my uploaded music</b><small>Remove every song you uploaded from this device</small></div><button class="tbtn danger" id="clearMusic"><svg class="ico"><use href="#i-trash"/></svg>Clear music</button></div><div class="srow"><div><b>Reset all settings</b><small>Go back to the defaults</small></div><button class="tbtn" id="reset"><svg class="ico"><use href="#i-reset"/></svg>Reset</button></div></div></div>
     </div>
   </div>
 
   <footer>
     <div class="fgrid">
       <div>
-        <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MasterChef<small>H U B</small></div></a>
+        <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a>
         <p>Chef-tested recipes, video lessons and meal plans for everyday cooks.</p>
       </div>
       <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/videos">Videos</a></li><li><a href="/meal-plans">Meal plans</a></li></ul></div>
@@ -382,8 +331,9 @@ footer ul a:hover{text-decoration:underline}
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 const ICO=n=>'<svg class="ico"><use href="#i-'+n+'"/></svg>';
 const sfx=window.sfx||{on(){},off(){},click(){},success(){}};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-/* mobile sidebar */
+/* mobile sidebar + search */
 const sidebar=$('#sidebar'), scrim=$('#scrim');
 function toggleSide(o){ sidebar.classList.toggle('open',o); scrim.classList.toggle('show',o); if(o&&sfx.open) sfx.open(); }
 $('#burger').addEventListener('click',()=>toggleSide(true));
@@ -401,29 +351,36 @@ const fmt=b=>b>1048576?(b/1048576).toFixed(1)+' MB':Math.max(1,Math.round(b/1024
 let libKey='';
 
 function renderLib(curId){
-  const lib=M.lib(), key=lib.map(f=>f.id).join(',')+'|'+curId;
+  const lib=M.lib(), key=lib.map(f=>f.id).join(',')+'|'+curId+'|'+S.music;
   if(key===libKey) return; libKey=key;
   const box=$('#songs');
   if(!lib.length){ box.innerHTML='<div class="none">No songs yet. Upload some to get started.</div>'; return; }
   box.innerHTML=lib.map(f=>'<div class="song'+(f.id===curId?' act':'')+'">'+
-    '<button class="ib" data-play="'+f.id+'" aria-label="Play">'+ICO(f.id===curId&&M.settings.music?'pause2':'play2')+'</button>'+
-    '<span class="nm">'+f.name.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))+'</span>'+
-    '<small>'+fmt(f.size)+'</small>'+
+    '<button class="ib" data-play="'+f.id+'" aria-label="Play">'+ICO(f.id===curId&&S.music?'pause2':'play2')+'</button>'+
+    '<span class="nm">'+esc(f.name)+'</span><small>'+fmt(f.size)+'</small>'+
     '<button class="ib" data-del="'+f.id+'" aria-label="Remove">'+ICO('trash')+'</button></div>').join('');
+}
+function renderAccount(){
+  const u=M.user(), box=$('#acct');
+  if(!u){ box.innerHTML='<div class="av">'+ICO('person')+'</div><div class="tx"><b>Not signed in</b><small>Log in to save recipes and meal plans</small></div><a class="tbtn" href="/login">Log in</a>'; return; }
+  const name=u.name||(u.email?u.email.split('@')[0]:'Account');
+  box.innerHTML='<div class="av">'+(u.photo?'<img src="'+esc(u.photo)+'" alt="" referrerpolicy="no-referrer">':esc(name.charAt(0).toUpperCase()))+'</div>'+
+    '<div class="tx"><b>'+esc(name)+'</b><small>'+esc(u.email||'Signed in')+'</small></div><a class="tbtn" href="/login?signout=1">Sign out</a>';
 }
 function render(){
   $$('.switch').forEach(b=>b.setAttribute('aria-checked',String(!!S[b.dataset.key])));
   $$('input[type=range]').forEach(r=>{
-    const v=Math.round(S[r.dataset.key]*100);
+    const sc=+(r.dataset.scale||100), v=Math.round(S[r.dataset.key]*sc);
     if(document.activeElement!==r) r.value=v;
-    $('#'+r.dataset.out).textContent=v+'%';
+    $('#'+r.dataset.out).textContent=v+(r.dataset.unit||'%');
   });
-  $$('.opt').forEach(o=>o.classList.toggle('act',o.dataset.st===S.station));
+  $$('.opts[data-key]').forEach(g=>g.querySelectorAll('.opt').forEach(o=>o.classList.toggle('act',o.dataset.val===String(S[g.dataset.key]))));
+  $$('#stations .opt').forEach(o=>o.classList.toggle('act',o.dataset.st===S.station));
   const n=M.now();
   $('#npTitle').textContent=n.title;
   $('#npSub').textContent=n.sub;
   $('#np').classList.toggle('on',n.playing&&n.running);
-  $('#npPlay').innerHTML=ICO(S.music?'pause2':'play2');
+  $('#npPlay').innerHTML=ICO(S.music&&!n.yielded?'pause2':'play2');
   renderLib(n.id);
 }
 
@@ -434,23 +391,39 @@ $$('.switch').forEach(b=>b.addEventListener('click',()=>{
   M.set(k,next);
   if((k==='sfx'||k==='music')&&next) sfx.on();
   if(k==='music'&&!next) sfx.off();
+  if(k==='notifications'&&next) M.notify({type:'success',title:'Notifications are on',message:'You will see pop-ups like this one.'});
   render();
 }));
 /* sliders */
 $$('input[type=range]').forEach(r=>{
-  r.addEventListener('input',()=>{ M.set(r.dataset.key,r.value/100); render(); });
+  const sc=+(r.dataset.scale||100);
+  r.addEventListener('input',()=>{ M.set(r.dataset.key,r.value/sc); render(); });
   r.addEventListener('change',()=>{ if(r.dataset.key==='sfxVolume') sfx.success(); });
 });
+/* option groups (text size, notification position) */
+$$('.opts[data-key]').forEach(g=>g.addEventListener('click',e=>{
+  const o=e.target.closest('.opt'); if(!o) return;
+  M.set(g.dataset.key,o.dataset.val); render();
+  if(g.dataset.key==='notifyPos') M.notify({type:'info',title:'Notifications will appear here'});
+}));
 /* stations */
-$$('.opt').forEach(o=>o.addEventListener('click',()=>{
-  if(o.dataset.st==='uploads'&&!M.lib().length){ M.toast('Upload a song first'); return; }
+$$('#stations .opt').forEach(o=>o.addEventListener('click',()=>{
+  if(o.dataset.st==='uploads'&&!M.lib().length){ M.notify({type:'warning',title:'No songs yet',message:'Upload a song first, then choose My music.'}); return; }
   M.playStation(o.dataset.st);
 }));
 /* now playing */
 $('#npPlay').addEventListener('click',()=>{ M.toggle(); });
 $('#npNext').addEventListener('click',()=>M.next());
 $('#npUp').addEventListener('click',()=>M.upload());
-$('#testSfx').addEventListener('click',()=>{ if(!S.sfx){ M.toast('Sound effects are off'); return; } sfx.success(); });
+$('#testSfx').addEventListener('click',()=>{ if(!S.sfx){ M.notify({type:'warning',title:'Sound effects are off'}); return; } sfx.success(); });
+/* loading screen preview */
+$('#previewLoader').addEventListener('click',()=>{ if(window.MCHLoader) MCHLoader.preview(); else M.notify({type:'error',title:'Loading screen not found',message:'Upload loader.js next to your pages.'}); });
+/* notification tests */
+const TESTS={success:['Saved','Your changes were saved.'],error:['Something went wrong','This is what a failed action looks like.'],warning:['Heads up','This is what a warning looks like.'],info:['Just so you know','This is what a normal notification looks like.']};
+$$('[data-test]').forEach(b=>b.addEventListener('click',()=>{
+  const t=b.dataset.test, r=M.notify({type:t,title:TESTS[t][0],message:TESTS[t][1]});
+  $('#notifyHint').textContent=(!r&&!S.notifications)?'Notifications are turned off. Switch them on above to see this.':'';
+}));
 /* upload */
 const drop=$('#drop');
 drop.addEventListener('click',()=>M.upload());
@@ -464,12 +437,20 @@ $('#songs').addEventListener('click',e=>{
   if(p){ const n=M.now(); if(n.id===p.dataset.play&&S.music) M.toggle(); else M.playFile(p.dataset.play); }
   if(d) M.remove(d.dataset.del);
 });
-/* reset */
-$('#reset').addEventListener('click',()=>{ M.reset(); M.toast('Settings reset'); render(); });
+/* clear + reset */
+let clearArm=0;
+$('#clearMusic').addEventListener('click',e=>{
+  const b=e.currentTarget;
+  if(!M.lib().length){ M.notify({type:'info',title:'Nothing to clear',message:'You have not uploaded any songs.'}); return; }
+  if(!clearArm){ clearArm=1; b.lastChild.textContent='Click again to confirm'; setTimeout(()=>{ clearArm=0; b.lastChild.textContent='Clear music'; },3000); return; }
+  clearArm=0; b.lastChild.textContent='Clear music'; M.clearUploads();
+});
+$('#reset').addEventListener('click',()=>{ M.reset(); M.notify({type:'info',title:'Settings reset',message:'Everything is back to the defaults.'}); render(); });
 
 M.on('settings',render); M.on('track',render); M.on('lib',()=>{ libKey=''; render(); });
 setInterval(render,1000);
-render();
+renderAccount(); render();
+window.addEventListener('storage',e=>{ if(e.key==='mch_user') renderAccount(); });
 })();
 </script>
 </body>
