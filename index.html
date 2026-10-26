@@ -395,7 +395,7 @@ footer ul a:hover{text-decoration:underline}
         </div>
       </div>
       <div class="hero-img">
-        <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80')"></div>
+        <div class="collage" aria-hidden="true"><img class="clg c1" src="/img/menu/ribeye-dinner.svg" alt="" width="640" height="480"><img class="clg c2" src="/img/menu/cheeseburger.svg" alt="" width="640" height="480"><img class="clg c3" src="/img/menu/choc-cake.svg" alt="" width="640" height="480"><img class="clg c4" src="/img/menu/pancakes.svg" alt="" width="640" height="480"></div>
         <div class="float f1"><div class="fi"><svg class="ico"><use href="#i-truck"/></svg></div><div><b>Home delivery</b><small>Cash or Venmo at the door</small></div></div>
         <div class="float f2"><div class="fi"><svg class="ico"><use href="#i-food"/></svg></div><div><b id="fMenu">50+ dishes</b><small>Made at home</small></div></div>
       </div>
@@ -512,7 +512,7 @@ scrim.addEventListener('click',()=>toggleSide(false));
 document.getElementById('searchForm').addEventListener('submit',e=>{
   e.preventDefault();
   const v=document.getElementById('q').value.trim();
-  location.href='/food'+(v?'?search='+encodeURIComponent(v):'');
+  {const u='/food'+(v?'?search='+encodeURIComponent(v):''); if(window.MCH&&MCH.go) MCH.go(u); else location.href=u;}
 });
 
 /* ---------- SCROLL REVEAL ---------- */

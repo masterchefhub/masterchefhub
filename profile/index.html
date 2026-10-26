@@ -370,7 +370,7 @@ scrim.addEventListener('click',()=>toggleSide(false));
 document.getElementById('searchForm').addEventListener('submit',e=>{
   e.preventDefault();
   const v=document.getElementById('q').value.trim();
-  location.href='/food'+(v?'?search='+encodeURIComponent(v):'');
+  {const u='/food'+(v?'?search='+encodeURIComponent(v):''); if(window.MCH&&MCH.go) MCH.go(u); else location.href=u;}
 });
 
 /* REVEAL + COUNT-UP */

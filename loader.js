@@ -244,5 +244,5 @@ if (S.loader !== false) {
   window.addEventListener('pageshow', function (e) { if (e.persisted && mini) mini.finish(); });
 }
 
-window.MCHLoader = {};
+window.MCHLoader = { mini: showMini };
 })();

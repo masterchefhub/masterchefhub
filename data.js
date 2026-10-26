@@ -24,7 +24,10 @@ let boot = null;
 
 export function init() {
   if (boot) return boot;
-  boot = (async () => {
+  return (boot = start().then(c => { if (!c && state.error === 'load-failed') boot = null; return c; }));
+}
+function start() {
+  return (async () => {
     try {
       let cfg;
       try { cfg = (await import('/firebase-config.js')).firebaseConfig; }
@@ -54,7 +57,6 @@ export function init() {
       return null;
     }
   })();
-  return boot;
 }
 
 async function need() {
@@ -127,6 +129,22 @@ export async function add(coll, data) {
   const u = c.auth.currentUser;
   const ref = await c.F.addDoc(c.F.collection(c.db, coll), Object.assign({}, data, { createdAt: c.F.serverTimestamp(), by: emailOf(u) }));
   return ref.id;
+}
+/* safe saving: the id is made first, so trying again can never create a second copy */
+export async function newId(coll) {
+  const c = await need();
+  return c.F.doc(c.F.collection(c.db, coll)).id;
+}
+export async function put(coll, id, data) {
+  const c = await need();
+  const u = c.auth.currentUser;
+  await c.F.setDoc(c.F.doc(c.db, coll, id), Object.assign({}, data, { createdAt: c.F.serverTimestamp(), by: emailOf(u) }));
+  return id;
+}
+export async function exists(coll, id) {
+  const c = await need();
+  const d = await c.F.getDoc(c.F.doc(c.db, coll, id));
+  return d.exists();
 }
 export async function remove(coll, id) {
   const c = await need();

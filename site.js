@@ -150,13 +150,28 @@ var PROGS = [
   [[0, 'maj9'], [9, 'm9'], [2, 'm9'], [7, 'dom7']],
   [[9, 'min7'], [2, 'min7'], [7, 'dom7'], [0, 'maj7']],
   [[5, 'maj7'], [4, 'min7'], [2, 'min7'], [0, 'maj9']],
-  [[0, 'maj7'], [5, 'maj7'], [4, 'min7'], [9, 'min7']]
+  [[0, 'maj7'], [5, 'maj7'], [4, 'min7'], [9, 'min7']],
+  [[9, 'min7'], [5, 'maj7'], [0, 'maj7'], [7, 'dom7']],
+  [[2, 'm9'], [7, 'dom7'], [0, 'maj9'], [0, 'maj9']],
+  [[0, 'maj7'], [9, 'min7'], [5, 'maj7'], [7, 'dom7']],
+  [[5, 'maj7'], [7, 'dom7'], [4, 'min7'], [9, 'min7']],
+  [[4, 'min7'], [9, 'min7'], [2, 'm9'], [7, 'dom7']],
+  [[0, 'maj9'], [4, 'min7'], [5, 'maj7'], [7, 'dom7']]
 ];
 var STATIONS = {
   lofi:    { name: 'Lo-fi Kitchen',   bpm: [70, 84],  swing: 0.18, bars: 32 },
   jazz:    { name: 'Jazz Cafe',       bpm: [92, 112], swing: 0.30, bars: 32 },
-  ambient: { name: 'Sunday Ambient',  bpm: [56, 66],  swing: 0,    bars: 24 }
+  ambient: { name: 'Sunday Ambient',  bpm: [56, 66],  swing: 0,    bars: 24 },
+  morning: { name: 'Morning Coffee',  bpm: [78, 90],  swing: 0.10, bars: 32, kind: 'lofi' },
+  chill:   { name: 'Chillhop Beats',  bpm: [84, 96],  swing: 0.22, bars: 32, kind: 'lofi' },
+  rainy:   { name: 'Rainy Window',    bpm: [64, 74],  swing: 0.15, bars: 32, kind: 'lofi' },
+  bossa:   { name: 'Bossa Dinner',    bpm: [100, 118], swing: 0.20, bars: 32, kind: 'jazz' },
+  funk:    { name: 'Sunday Funk',     bpm: [104, 118], swing: 0.12, bars: 32, kind: 'jazz' },
+  piano:   { name: 'Evening Keys',    bpm: [60, 72],  swing: 0.05, bars: 28, kind: 'lofi' },
+  dream:   { name: 'Dream Pads',      bpm: [58, 68],  swing: 0,    bars: 24, kind: 'ambient' },
+  stars:   { name: 'Starlight Bells', bpm: [52, 62],  swing: 0,    bars: 24, kind: 'ambient' }
 };
+var STATION_ORDER = ['lofi', 'jazz', 'ambient', 'morning', 'chill', 'rainy', 'bossa', 'funk', 'piano', 'dream', 'stars'];
 function makePlan(station, seed) {
   var r = rng(seed), st = STATIONS[station];
   var keys = [0, 2, 3, 5, 7, 8, 10];
@@ -258,7 +273,7 @@ function pentNote(p) {
 }
 function mel(p, t, sd, out) {
   var c = ctx, m = pentNote(p), f = mtof(m), g = c.createGain(), lp = c.createBiquadFilter();
-  var jazz = p.station === 'jazz', dur = jazz ? 1.1 : 0.7;
+  var jazz = (p.st.kind || p.station) === 'jazz', dur = jazz ? 1.1 : 0.7;
   lp.type = 'lowpass'; lp.frequency.value = 2400;
   g.gain.setValueAtTime(0.0001, t);
   g.gain.linearRampToValueAtTime(0.055, t + 0.01);
@@ -280,7 +295,7 @@ function voicing(root, ivs) {
 
 function playStep(p, step, bar, t, sd) {
   var out = gen.bus, st = p.station;
-  var lofi = st === 'lofi', jazz = st === 'jazz', amb = st === 'ambient';
+  var kd = p.st.kind || st, lofi = kd === 'lofi', jazz = kd === 'jazz', amb = kd === 'ambient';
   var chordLen = amb ? 2 : 1, n = p.prog.length;
   var ci = Math.floor(bar / chordLen) % n, ch = p.prog[ci], nx = p.prog[(ci + 1) % n];
   var root = p.key + ch[0], ivs = QUAL[ch[1]], v = voicing(root, ivs);
@@ -378,7 +393,7 @@ function genStart(plan, startBar) {
   var send = c.createGain(); send.gain.value = 0.18; send.connect(dl);
   var sendMel = c.createGain(); sendMel.gain.value = 0.5; sendMel.connect(dl);
   gen.bus = bus; gen.send = send; gen.sendMel = sendMel;
-  if (plan.station === 'lofi') {
+  if ((plan.st.kind || plan.station) === 'lofi') {
     var s = c.createBufferSource(); s.buffer = noiseBuf; s.loop = true;
     var hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 2500;
     var lp2 = c.createBiquadFilter(); lp2.type = 'lowpass'; lp2.frequency.value = 9000;
@@ -499,7 +514,7 @@ function pickTrack() {
   var pool = others.length ? others : lib;
   if (S.station === 'uploads' && lib.length) return fileTrack(pick(pool));
   if (S.station === 'random' && S.shuffleUploads && lib.length && Math.random() < 0.4) return fileTrack(pick(pool));
-  var st = STATIONS[S.station] ? S.station : (function () { var r = Math.random(); return r < 0.5 ? 'lofi' : r < 0.8 ? 'jazz' : 'ambient'; })();
+  var st = STATIONS[S.station] ? S.station : STATION_ORDER[Math.floor(Math.random() * STATION_ORDER.length)];
   return genTrack(st);
 }
 function stopEngines() { genStop(); try { au.pause(); } catch (e) {} }
@@ -739,7 +754,7 @@ var CSS =
 var ui = null, nWrap = null, styleDone = false, pendingN = [];
 function injectStyle() {
   if (styleDone) return; styleDone = true;
-  var st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st);
+  var st = document.createElement('style'); st.setAttribute('data-sk', '1'); st.textContent = CSS; document.head.appendChild(st);
 }
 function applyDisplay() {
   var r = document.documentElement;
@@ -789,7 +804,7 @@ function showNotify(o) {
   var type = NI[o.type] ? o.type : 'info';
   if (!nWrap) {
     nWrap = document.createElement('div'); nWrap.className = 'mchn-wrap';
-    nWrap.setAttribute('aria-live', 'polite'); nWrap.setAttribute('data-pos', S.notifyPos || 'bottom-left');
+    nWrap.setAttribute('data-keep', '1'); nWrap.setAttribute('aria-live', 'polite'); nWrap.setAttribute('data-pos', S.notifyPos || 'bottom-left');
     document.body.appendChild(nWrap);
   }
   while (nWrap.children.length >= 4) nWrap.removeChild(nWrap.firstChild);
@@ -854,15 +869,13 @@ function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&
 function buildUI() {
   injectStyle();
   if (document.body.getAttribute('data-mch-player') === 'off') return;
-  ui = document.createElement('div'); ui.className = 'mchp'; ui.setAttribute('data-open', '0');
+  ui = document.createElement('div'); ui.setAttribute('data-keep', '1'); ui.className = 'mchp'; ui.setAttribute('data-open', '0');
   ui.innerHTML =
     '<div class="mchp-panel">' +
       '<div class="mchp-h">Station</div>' +
       '<div class="mchp-chips">' +
         '<button class="mchp-chip" data-st="random">Random mix</button>' +
-        '<button class="mchp-chip" data-st="lofi">Lo-fi</button>' +
-        '<button class="mchp-chip" data-st="jazz">Jazz</button>' +
-        '<button class="mchp-chip" data-st="ambient">Ambient</button>' +
+        STATION_ORDER.map(function (k) { return '<button class="mchp-chip" data-st="' + k + '">' + STATIONS[k].name.replace(/ (Kitchen|Cafe)$/, '') + '</button>'; }).join('') +
         '<button class="mchp-chip" data-st="uploads">My music</button>' +
       '</div>' +
       '<div class="mchp-h">Volume</div>' +
@@ -955,7 +968,7 @@ function cursorSet(on) {
   }
   curOn = true; document.documentElement.classList.add('mch-cursor');
   if (!curEl) {
-    var st = document.createElement('style');
+    var st = document.createElement('style'); st.setAttribute('data-sk', '1');
     st.textContent = 'html.mch-cursor,html.mch-cursor *{cursor:none!important}html.mch-cursor input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),html.mch-cursor textarea{cursor:text!important}' +
       '.mchc-dot,.mchc-ring{position:fixed;left:0;top:0;z-index:2147483600;pointer-events:none;border-radius:50%;opacity:0;transition:opacity .25s}' +
       '.mchc-dot{width:7px;height:7px;margin:-3.5px;background:#fff;mix-blend-mode:difference}' +
@@ -964,7 +977,7 @@ function cursorSet(on) {
       '.mchc-ring.down{width:24px;height:24px;margin:-12px}' +
       '.mchc-in .mchc-dot,.mchc-in .mchc-ring{opacity:1}.mchc-txt .mchc-ring{opacity:0}.mchc-txt .mchc-dot{opacity:0}';
     document.head.appendChild(st);
-    curEl = document.createElement('div');
+    curEl = document.createElement('div'); curEl.setAttribute('data-keep', '1');
     curEl.innerHTML = '<i class="mchc-dot"></i><i class="mchc-ring"></i>';
     document.body.appendChild(curEl);
     var dot = curEl.firstChild, ring = curEl.lastChild, x = -100, y = -100, rx = -100, ry = -100, raf = 0;
@@ -1021,22 +1034,162 @@ function paintCart() {
 window.addEventListener('storage', function (e) { if (e.key === 'mch_cart2') paintCart(); });
 window.addEventListener('mch:cart', paintCart);
 
+/* signed in with Google/Microsoft but no password yet: finish setup */
+function gateCheck() {
+  var u = getUser(), path = location.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+  if (u && u.hasPw === false && path !== '/login' && !/^\/(404|privacy|terms)$/.test(path)) {
+    location.replace('/login?setpw=1&next=' + encodeURIComponent(location.pathname + location.search));
+    return true;
+  }
+  return false;
+}
+
+/* =====================================================================
+   SOFT NAVIGATION: moving between our pages swaps the page in place, so the
+   music engine (and everything else in this script) keeps running with no gap
+   and nothing to click. Any problem falls back to a normal page load.
+   ===================================================================== */
+var pageListeners = [], pageTimers = [], navBusy = false, curPath = location.pathname + location.search;
+(function () {
+  var add = EventTarget.prototype.addEventListener;
+  function wrap(target) {
+    var orig = target.addEventListener;
+    target.addEventListener = function (type, fn, opts) {
+      try {
+        var fr = ((new Error()).stack || '').split('\n').filter(function (l) { return /^\s*at |@/.test(l); });
+        var i = 0; while (i < fr.length && !/\/site\.js/.test(fr[i])) i++;
+        var caller = fr[i + 1] || '';
+        if (!/\/(site|loader|data|cms|cartlib|menu)\.js/.test(caller)) pageListeners.push([target, type, fn, opts]);
+      } catch (e) {}
+      return orig.call(this, type, fn, opts);
+    };
+  }
+  wrap(window); wrap(document);
+  /* intervals started by a page are stopped when the page is left */
+  var si = window.setInterval;
+  window.setInterval = function (fn, ms) {
+    var id = si.apply(window, arguments);
+    try {
+      var fr = ((new Error()).stack || '').split('\n').filter(function (l) { return /^\s*at |@/.test(l); });
+      var i = 0; while (i < fr.length && !/\/site\.js/.test(fr[i])) i++;
+      if (!/\/(site|loader|data|cms|cartlib|menu)\.js/.test(fr[i + 1] || '')) pageTimers.push(id);
+    } catch (e) {}
+    return id;
+  };
+})();
+function softOK(a, e) {
+  if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return null;
+  if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download') || a.hasAttribute('data-hard')) return null;
+  var raw = a.getAttribute('href') || '';
+  if (!raw || /^(mailto|tel|javascript):/i.test(raw)) return null;
+  var u; try { u = new URL(a.href, location.href); } catch (x) { return null; }
+  if (u.origin !== location.origin) return null;
+  if (u.pathname === location.pathname && u.search === location.search) return null;      /* same page or #hash */
+  if (/\.[a-z0-9]{2,5}$/i.test(u.pathname) && !/\.html$/i.test(u.pathname)) return null;  /* files */
+  return u;
+}
+function runScripts(list, done) {
+  var i = 0;
+  (function next() {
+    if (i >= list.length) { done(); return; }
+    var old = list[i++], sc = document.createElement('script');
+    if (old.src) {
+      var abs = new URL(old.getAttribute('src'), location.href).href;
+      if (Array.prototype.some.call(document.scripts, function (x) { return x.src === abs; })) { next(); return; }
+      sc.src = abs; if (old.type) sc.type = old.type;
+      sc.onload = sc.onerror = next; document.body.appendChild(sc); return;
+    }
+    var code = old.textContent;
+    if (old.type === 'module') { sc.type = 'module'; sc.textContent = code; document.body.appendChild(sc); next(); return; }
+    sc.textContent = '(function(){\n' + code + '\n})();'; document.body.appendChild(sc); next();
+  })();
+}
+function softGo(url, push) {
+  if (navBusy) return false;
+  navBusy = true;
+  var mini = null; try { mini = window.MCHLoader && MCHLoader.mini ? MCHLoader.mini() : null; } catch (e) {}
+  var hard = function () { navBusy = false; location.href = url.href || url; };
+  var u = typeof url === 'string' ? new URL(url, location.href) : url;
+  fetch(u.pathname + u.search, { credentials: 'same-origin', headers: { Accept: 'text/html' } }).then(function (r) {
+    var ct = r.headers.get('content-type') || '';
+    if (!r.ok || ct.indexOf('text/html') < 0) throw new Error('not a page');
+    return r.text();
+  }).then(function (html) {
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    if (!doc.body || !doc.body.children.length) throw new Error('empty');
+    /* leave the old page */
+    pageTimers.splice(0).forEach(function (id) { try { clearInterval(id); } catch (e) {} });
+    pageListeners.splice(0).forEach(function (l) { try { l[0].removeEventListener(l[1], l[2], l[3]); } catch (e) {} });
+    if (push) history.pushState({ soft: 1 }, '', u.pathname + u.search + u.hash);
+    curPath = u.pathname + u.search;
+    document.title = doc.title || document.title;
+    var md = doc.querySelector('meta[name="description"]'), cd = document.querySelector('meta[name="description"]');
+    if (md && cd) cd.setAttribute('content', md.getAttribute('content') || '');
+    /* page styles: drop the old page's, add the new page's (before site.css so it still wins) */
+    Array.prototype.forEach.call(document.head.querySelectorAll('style:not([data-sk]):not([id])'), function (x) { x.parentNode.removeChild(x); });
+    var anchor = document.head.querySelector('link[href*="site.css"]');
+    Array.prototype.forEach.call(doc.head.querySelectorAll('style'), function (x) {
+      var n = document.createElement('style'); n.textContent = x.textContent; document.head.insertBefore(n, anchor);
+    });
+    Array.prototype.forEach.call(doc.head.querySelectorAll('link[rel="stylesheet"]'), function (x) {
+      var h = new URL(x.getAttribute('href'), location.href).href;
+      if (!Array.prototype.some.call(document.querySelectorAll('link[rel="stylesheet"]'), function (y) { return y.href === h; })) document.head.insertBefore(x.cloneNode(true), anchor);
+    });
+    /* swap the body, keeping what this script owns (player, notifications, cursor) */
+    var keep = Array.prototype.filter.call(document.body.children, function (n) { return n.hasAttribute && (n.hasAttribute('data-keep') || n.id === 'mchld2' || n.id === 'mchld'); });
+    Array.prototype.slice.call(document.body.children).forEach(function (n) { if (keep.indexOf(n) < 0) document.body.removeChild(n); });
+    Array.prototype.slice.call(document.body.attributes).forEach(function (a) { if (a.name !== 'style') document.body.removeAttribute(a.name); });
+    Array.prototype.forEach.call(doc.body.attributes, function (a) { document.body.setAttribute(a.name, a.value); });
+    var scripts = [], first = keep[0] || null;
+    Array.prototype.slice.call(doc.body.childNodes).forEach(function (n) {
+      if (n.nodeName === 'SCRIPT') { scripts.push(n); return; }
+      var imp = document.importNode(n, true);
+      Array.prototype.forEach.call(imp.querySelectorAll ? imp.querySelectorAll('script') : [], function (x) { scripts.push(x); x.parentNode.removeChild(x); });
+      document.body.insertBefore(imp, first);
+    });
+    window.scrollTo(0, 0);
+    applyDisplay(); paintUser(); paintCart(); refreshAuth();
+    if (document.body.getAttribute('data-mch-player') === 'off') { if (ui) ui.style.display = 'none'; }
+    else { if (!ui) buildUI(); if (ui) ui.style.display = S.miniPlayer === false ? 'none' : ''; }
+    if (gateCheck()) return;
+    runScripts(scripts, function () {
+      navBusy = false;
+      if (u.hash) { try { var t = document.querySelector(u.hash); if (t) t.scrollIntoView(); } catch (e) {} }
+      try { window.dispatchEvent(new CustomEvent('mch:page', { detail: { path: u.pathname } })); } catch (e) {}
+      if (mini) mini.finish();
+    });
+  }).catch(function (err) {
+    if (window.console) console.warn('[nav] normal load instead:', err && err.message);
+    hard();
+  });
+  return true;
+}
+document.addEventListener('click', function (e) {
+  var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+  if (!a) return;
+  var u = softOK(a, e);
+  if (!u) return;
+  e.preventDefault();
+  if (!softGo(u, true)) location.href = u.href;
+}, true);
+window.addEventListener('popstate', function () {
+  var p = location.pathname + location.search;
+  if (p === curPath) return;                 /* only the #hash changed */
+  if (!softGo(new URL(location.href), false)) location.reload();
+});
+try { history.scrollRestoration = 'manual'; } catch (e) {}
+
 function ready(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
 ready(function () {
   injectStyle();
   applyDisplay();
-  document.body.appendChild(fileInput);
+  fileInput.setAttribute('data-keep', '1'); document.body.appendChild(fileInput);
   buildUI();
   paintUser();
   cursorSet(S.cursor !== false);
   paintCart();
   refreshAuth();
-  (function gate() {                       /* signed in with Google/Microsoft but no password yet: finish setup */
-    var u = getUser(), path = location.pathname.replace(/\.html$/, '');
-    if (u && u.hasPw === false && path !== '/login' && !/^\/(404|privacy|terms)$/.test(path)) {
-      location.replace('/login?setpw=1&next=' + encodeURIComponent(location.pathname + location.search));
-    }
-  })();
+  gateCheck();
   pendingN.splice(0).forEach(notify);
   if (window.__mchSlow) window.dispatchEvent(new CustomEvent('mch:slowload'));
   if (S.music) startPlayback();
@@ -1056,6 +1209,6 @@ window.MCH = {
   now: nowInfo, lib: function () { return lib.slice(); },
   toggle: player.toggle, next: player.next, playFile: player.playFile, playStation: player.playStation,
   upload: function () { fileInput.click(); }, addFiles: addFiles, remove: removeFile, clearUploads: clearUploads,
-  notify: notify, user: getUser, paintCart: paintCart, cartCount: cartCount, internalNav: INTERNAL, navType: NAVTYPE
+  notify: notify, go: function (href) { var u = new URL(href, location.href); if (!softGo(u, true)) location.href = u.href; }, user: getUser, paintCart: paintCart, cartCount: cartCount, internalNav: INTERNAL, navType: NAVTYPE
 };
 })();

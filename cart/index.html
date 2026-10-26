@@ -248,6 +248,7 @@ footer ul a:hover{text-decoration:underline}
 @media(max-width:700px){.row2{grid-template-columns:1fr}.oc dl{grid-template-columns:1fr;gap:0}.oc dt{margin-top:8px}.cartbox{padding:18px}}
 @media(max-width:380px){.stp em{font-size:.64rem}}
 
+.paynote{margin:14px 0;color:var(--muted);font-size:.9rem;line-height:1.5}.paynote b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -382,7 +383,7 @@ scrim.addEventListener('click',()=>toggleSide(false));
 document.getElementById('searchForm').addEventListener('submit',e=>{
   e.preventDefault();
   const v=document.getElementById('q').value.trim();
-  location.href='/food'+(v?'?search='+encodeURIComponent(v):'');
+  {const u='/food'+(v?'?search='+encodeURIComponent(v):''); if(window.MCH&&MCH.go) MCH.go(u); else location.href=u;}
 });
 
 /* REVEAL + COUNT-UP */
@@ -516,7 +517,7 @@ function drawCart() {
       '<button type="button" class="' + (pay === 'venmo' ? 'on' : '') + '" data-pay="venmo"><span class="pi venmoi">V</span><span><b>Venmo</b><small>' + (VENMO ? 'Pay ' + esc(VENMO) + ' at the door' : 'Pay with your phone at the door') + '</small></span></button></div></div>' +
       totals(s, true) +
       (alc ? '<label class="chk2"><input type="checkbox" id="oage"' + (age ? ' checked' : '') + '><span>I am 21 or older and will show my ID at the door.</span></label>' : '') +
-      '<label class="chk2"><input type="checkbox" id="ocash"><span>I will pay <b>' + money(total) + '</b> by <b>' + (pay === 'venmo' ? 'Venmo' : 'cash') + '</b> when the order arrives.</span></label>' +
+      '<p class="paynote" id="paynote">You will pay <b>' + money(total) + '</b> by <b>' + (pay === 'venmo' ? 'Venmo' : 'cash') + '</b> when your order arrives. Nothing is charged online.</p>' +
       '<div class="cmsg" id="oerr" role="alert" hidden></div>' +
       '<div class="two"><button class="sbtn back" type="button" id="back2">Back</button><button class="sbtn fill" type="button" id="osend"><i class="spin"></i><span class="lbl">Place order &middot; ' + money(total) + '</span></button></div>';
   }
@@ -526,9 +527,9 @@ function drawCart() {
   on('back1', () => { saveDet(); step = 1; drawCart(); });
   on('back2', () => { step = 2; drawCart(); });
   on('edit2', () => { step = 2; drawCart(); });
-  const tr = document.getElementById('tipr'); if (tr) tr.addEventListener('click', e => { const b = e.target.closest('[data-tip]'); if (!b) return; const had = document.getElementById('ocash') && document.getElementById('ocash').checked; tipPct = b.dataset.tip === 'c' ? 'c' : Number(b.dataset.tip); drawCart(); if (had) document.getElementById('ocash').checked = true; if (tipPct === 'c') { const t = document.getElementById('tipin'); if (t) t.focus(); } });
-  const ti = document.getElementById('tipin'); if (ti) ti.addEventListener('input', () => { tipCustom = ti.value.replace(/[^\d.]/g, ''); const sp = document.querySelector('.tot .g span:last-child'); const row = document.querySelector('.tot div:nth-child(3) span:last-child'); if (row) row.textContent = money(tipC()); if (sp) sp.textContent = money(sub() + FEEC + tipC()); const lb = document.querySelector('#osend .lbl'); if (lb) lb.innerHTML = 'Place order &middot; ' + money(sub() + FEEC + tipC()); const ck = document.querySelector('#ocash + span b'); if (ck) ck.textContent = money(sub() + FEEC + tipC()); });
-  const pr = document.getElementById('payr'); if (pr) pr.addEventListener('click', e => { const b = e.target.closest('[data-pay]'); if (!b) return; pay = b.dataset.pay; pr.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); const ck = document.querySelectorAll('#ocash + span b'); if (ck[1]) ck[1].textContent = pay === 'venmo' ? 'Venmo' : 'cash'; });
+  const tr = document.getElementById('tipr'); if (tr) tr.addEventListener('click', e => { const b = e.target.closest('[data-tip]'); if (!b) return; tipPct = b.dataset.tip === 'c' ? 'c' : Number(b.dataset.tip); drawCart(); if (tipPct === 'c') { const t = document.getElementById('tipin'); if (t) t.focus(); } });
+  const ti = document.getElementById('tipin'); if (ti) ti.addEventListener('input', () => { tipCustom = ti.value.replace(/[^\d.]/g, ''); const sp = document.querySelector('.tot .g span:last-child'); const row = document.querySelector('.tot div:nth-child(3) span:last-child'); if (row) row.textContent = money(tipC()); if (sp) sp.textContent = money(sub() + FEEC + tipC()); const lb = document.querySelector('#osend .lbl'); if (lb) lb.innerHTML = 'Place order &middot; ' + money(sub() + FEEC + tipC()); const ck = document.querySelector('#paynote b'); if (ck) ck.textContent = money(sub() + FEEC + tipC()); });
+  const pr = document.getElementById('payr'); if (pr) pr.addEventListener('click', e => { const b = e.target.closest('[data-pay]'); if (!b) return; pay = b.dataset.pay; pr.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); const ck = document.querySelectorAll('#paynote b'); if (ck[1]) ck[1].textContent = pay === 'venmo' ? 'Venmo' : 'cash'; });
   const ag = document.getElementById('oage'); if (ag) ag.addEventListener('change', () => { age = ag.checked; });
   on('osend', place); on('findmap', findOnMap); on('useloc', useLocation);
   const df = document.getElementById('df');
@@ -555,30 +556,57 @@ $('#cartBody').addEventListener('click', e => {
   if (b) { const l = lines.find(x => x.k === b.dataset.k); if (!l) return; l.q = Math.max(0, Math.min(20, l.q + Number(b.dataset.q))); if (!l.q) lines = lines.filter(x => x !== l); C.save(lines); drawCart(); }
   else if (r) { lines = lines.filter(x => x.k !== r.dataset.rm); C.save(lines); drawCart(); }
 });
+let pendingId = null;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const withTimeout = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(Object.assign(new Error('timeout'), { code: 'unavailable' })), ms))]);
 async function place() {
-  const err = $('#oerr'); err.hidden = true; const s = sub();
-  if (!lines.length) { err.hidden = false; err.textContent = 'Your cart is empty.'; return; }
-  if (C.hasAlcohol(lines) && !($('#oage') && $('#oage').checked)) { err.hidden = false; err.textContent = 'Beer is for ages 21 and over. Please confirm that you are 21 or older.'; return; }
-  if (!$('#ocash').checked) { err.hidden = false; err.textContent = 'Please confirm that you will pay when the order arrives.'; return; }
-  try { if (Date.now() - Number(localStorage.getItem('mch_lastorder') || 0) < 20000) { err.hidden = false; err.textContent = 'Please wait a few seconds before placing another order.'; return; } } catch (x) {}
-  const btn = $('#osend'); btn.classList.add('loading'); btn.disabled = true; $('#cartBody').querySelectorAll('.back').forEach(b => b.disabled = true);
-  const slow = setTimeout(() => D.say('info', 'Still sending', 'Your connection is slow. Please keep this page open.'), 6000);
-  const tip = tipC(), total = s + FEEC + tip;
+  const err = $('#oerr'), btn = $('#osend'), s = sub();
+  const fail = (title, text) => { err.hidden = false; err.textContent = text; D.say('error', title, text); };
+  err.hidden = true;
+  if (!lines.length) { fail('Cart is empty', 'Your cart is empty.'); return; }
+  if (C.hasAlcohol(lines) && !($('#oage') && $('#oage').checked)) { err.hidden = false; err.textContent = 'Beer is for ages 21 and over. Please confirm that you are 21 or older.'; D.say('warning', 'Confirm your age', 'Tick the 21+ box to order beer.'); return; }
+  if (!pendingId) { try { if (Date.now() - Number(localStorage.getItem('mch_lastorder') || 0) < 15000) { err.hidden = false; err.textContent = 'Please wait a few seconds before placing another order.'; return; } } catch (x) {} }
+  if (navigator.onLine === false) { fail('You are offline', 'No internet connection. Check your Wi-Fi or data and press the button again. Your cart is safe.'); return; }
+  const lbl = btn.querySelector('.lbl'), lbl0 = lbl.innerHTML;
+  btn.classList.add('loading'); btn.disabled = true; $('#cartBody').querySelectorAll('.back').forEach(b => b.disabled = true);
+  const tip = tipC(), total = s + FEEC + tip, alc = C.hasAlcohol(lines);
   const list = lines.map(l => ({ id: l.id, name: C.items.get(l.id).name, qty: l.q, price: C.unit(l) / 100, fresh: !!l.fresh, options: C.describe(l) }));
-  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: det.onotes || '', items: list, subtotal: s / 100, fee: FEEC / 100, tip: tip / 100, total: total / 100, payment: pay, alcohol: C.hasAlcohol(lines), status: 'new' };
+  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: det.onotes || '', items: list, subtotal: s / 100, fee: FEEC / 100, tip: tip / 100, total: total / 100, payment: pay, alcohol: alc, status: 'new' };
   if (okLL(det.lat, det.lon)) { order.lat = det.lat; order.lon = det.lon; }
+  /* the same order, in the older shape that older database rules accept: payment and tip go in the notes */
+  const legacy = () => { const o = Object.assign({}, order); delete o.tip; delete o.alcohol; o.payment = 'cash_on_delivery'; o.notes = ((order.notes ? order.notes + ' | ' : '') + '[Pay by ' + (pay === 'venmo' ? 'Venmo' : 'cash') + ' at the door. Tip $' + (tip / 100).toFixed(2) + '.' + (alc ? ' Contains beer: check ID, 21+.' : '') + ']').slice(0, 900); return o; };
+  const slow = setTimeout(() => D.say('info', 'Still sending', 'Your connection is slow. Please keep this page open.'), 6000);
+  let ok = false, mode = 'modern', unknown = false, last = null;
   try {
-    const id = await Promise.race([D.add('orders', order), new Promise((_, rej) => setTimeout(() => rej(Object.assign(new Error('timeout'), { code: 'unavailable' })), 25000))]);
-    clearTimeout(slow);
+    for (let n = 0; n < 4 && !ok; n++) {
+      if (n) lbl.textContent = 'Trying again (' + n + ')...';
+      try {
+        if (!pendingId) pendingId = await withTimeout(D.newId('orders'), 15000);
+        await withTimeout(D.put('orders', pendingId, mode === 'modern' ? order : legacy()), 15000);
+        ok = true;
+      } catch (er) {
+        last = er; const code = (er && er.code) || '';
+        if (code === 'permission-denied') {
+          if (unknown) { try { if (await withTimeout(D.exists('orders', pendingId), 8000)) { ok = true; break; } } catch (e2) {} }
+          if (mode === 'modern') { mode = 'legacy'; continue; }
+          break;
+        }
+        unknown = true; await sleep(1000 * (n + 1));
+      }
+    }
+  } finally { clearTimeout(slow); }
+  if (ok) {
+    const id = pendingId; pendingId = null;
     try { localStorage.setItem('mch_lastorder', String(Date.now())); } catch (x) {}
     lines = []; C.save(lines); step = 1; det = {}; age = false;
     showOk(order, id);
-    D.say('success', 'Order placed', 'Pay ' + money(Math.round(order.total * 100)) + (pay === 'venmo' ? ' with Venmo' : ' in cash') + ' at the door.');
-  } catch (er) {
-    clearTimeout(slow);
-    err.hidden = false; err.textContent = D.explain(er); D.say('error', 'Could not place order', D.explain(er));
-    btn.classList.remove('loading'); btn.disabled = false; $('#cartBody').querySelectorAll('.back').forEach(b => b.disabled = false);
+    D.say('success', 'Order placed', 'Pay ' + money(total) + (pay === 'venmo' ? ' with Venmo' : ' in cash') + ' at the door.');
+    return;
   }
+  const code = (last && last.code) || '';
+  const text = code === 'permission-denied' ? 'The database is not accepting orders yet. The owner needs to publish the latest Firestore rules.' : (code === 'unavailable' || /mch\//.test(code) ? 'We could not reach the server. Check your connection and press the button again. You will not be charged twice.' : D.explain(last));
+  fail('Could not place order', text);
+  btn.classList.remove('loading'); btn.disabled = false; lbl.innerHTML = 'Try again &middot; ' + money(total); $('#cartBody').querySelectorAll('.back').forEach(b => b.disabled = false);
 }
 function showOk(o, id) {
   ['#pCart', '#pMine', '#pAll'].forEach(s => $(s).hidden = true); $('#dtabs').hidden = true;
