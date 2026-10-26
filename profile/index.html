@@ -456,7 +456,7 @@ function start(u) {
     try {
       try { await c.A.sendEmailVerification(u, { url: location.origin + '/profile?verified=1' }); }
       catch (e0) { if (e0 && /continue-uri/.test(e0.code || '')) await c.A.sendEmailVerification(u); else throw e0; }
-      D.say('success', 'Email sent', 'Check your inbox (and spam) for the verification link. Open it in this same browser.');
+      D.say('success', 'Email sent', 'We sent a verification link to ' + (u.email || 'your email') + '. Check your inbox and spam, then open the link.');
     } catch (er) { D.say('error', 'Could not send', friendly(er)); }
   });
 

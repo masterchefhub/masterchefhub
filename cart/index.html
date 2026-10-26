@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/loader.js"></script>
 <title>Cart and pay | MasterChefHub</title>
-<meta name="description" content="Review your cart, add your delivery address and place your order. Pay cash when your food arrives.">
+<meta name="description" content="Review your cart, add your delivery address and place your order. Pay the driver at the door in cash or with Venmo.">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -132,6 +132,22 @@ footer ul a:hover{text-decoration:underline}
 .lnav a{padding:9px 18px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:.88rem;transition:.2s}
 .lnav a:hover{border-color:var(--ink)}.lnav a.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 @media(max-width:600px){.doc section{padding:20px 18px}}
+
+.cin{min-width:0;display:flex;flex-direction:column;gap:2px}.cin b{font-size:.95rem}.cin small{color:var(--muted);font-size:.78rem;line-height:1.35}
+.rm{border:0;background:none;color:#8a8a86;font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:4px}.rm:hover{color:#c0261d}
+.il{list-style:none;margin:0;padding:0;display:grid;gap:6px}.il small{display:block;color:var(--muted);font-size:.78rem}
+.lay{border:1.5px solid var(--line);border-radius:22px;padding:16px;margin:14px 0;background:#fff;animation:czin .4s cubic-bezier(.2,.9,.25,1) both}
+.lay-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap}.lay-h b{font-size:1rem}.lay-h small{color:var(--muted);font-size:.78rem}
+.tipr{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));gap:8px}
+.tipr button,.payr button{font-family:inherit;border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:11px 8px;cursor:pointer;transition:border-color .2s,background .2s,color .2s,transform .15s;text-align:center;color:var(--ink)}
+.tipr button b{display:block;font-size:.95rem}.tipr button small{display:block;font-size:.74rem;color:var(--muted);margin-top:2px}
+.tipr button:hover,.payr button:hover{border-color:#8c8c88}.tipr button:active,.payr button:active{transform:scale(.97)}
+.tipr button.on,.payr button.on{background:#0a0a0a;border-color:#0a0a0a;color:#fff}.tipr button.on small,.payr button.on small{color:#cfcfcf}
+.tipc{display:flex;align-items:center;gap:8px;margin-top:10px;border:1.5px solid var(--line);border-radius:14px;padding:0 14px;height:48px;max-width:200px}.tipc span{font-weight:800}.tipc input{border:0;outline:none;font-family:inherit;font-size:1rem;width:100%;background:none}
+.payr{display:grid;grid-template-columns:1fr 1fr;gap:10px}.payr button{display:flex;align-items:center;gap:12px;text-align:left;padding:13px}
+.payr b{display:block}.payr small{display:block;font-size:.76rem;color:var(--muted)}
+.pi{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:1.2rem;flex-shrink:0}.cashi{background:#1f9d55;color:#fff}.venmoi{background:#3d95ce;color:#fff;font-style:italic}
+@media(max-width:560px){.payr{grid-template-columns:1fr}}
 </style>
 <link rel="stylesheet" href="/site.css">
 <style>
@@ -325,7 +341,7 @@ footer ul a:hover{text-decoration:underline}
 
   <div class="wrap">
     <div class="crumbs"><a href="/">Home</a><svg class="ico sm"><use href="#i-chev"/></svg><span style="color:var(--ink)">Cart</span></div>
-    <div class="phead"><h1 class="serif">Cart and pay</h1><p>Check your order, add your address, and place it. You pay cash when the food arrives.</p></div>
+    <div class="phead"><h1 class="serif">Cart and pay</h1><p>Check your order, add your address, add a tip and place it. You pay the driver at the door, in cash or with Venmo.</p></div>
     <div class="dtabs" id="dtabs" role="tablist"></div>
 
     <section id="pCart" class="cartpage"><div class="cartbox" id="cart" aria-label="Your cart"><div id="cartBody"></div></div></section>
@@ -389,16 +405,14 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
 <script type="module">
 import * as D from '/data.js';
-import { MENU, FEE, MIN_ORDER } from '/menu.js';
+import { FEE, MIN_ORDER, VENMO, TIPS } from '/menu.js';
+import * as C from '/cartlib.js';
 const $ = s => document.querySelector(s), esc = D.esc;
-const money = c => '$' + (c / 100).toFixed(2);
+const money = C.money;
 const FEEC = Math.round(FEE * 100), MINC = Math.round(MIN_ORDER * 100);
-const items = new Map(MENU.map(m => [m.id, Object.assign({}, m, { c: Math.round(m.price * 100) })]));
-let cart = {}, user = null, owner = false, tab = 'cart', step = 1, det = {};
-try { const s = JSON.parse(localStorage.getItem('mch_cart') || '{}'); Object.keys(s).forEach(k => { if (items.has(k) && s[k] > 0) cart[k] = Math.min(20, s[k] | 0); }); } catch (e) {}
-const saveCart = () => { try { localStorage.setItem('mch_cart', JSON.stringify(cart)); } catch (e) {} try { window.dispatchEvent(new Event('mch:cart')); } catch (e) {} };
-const sub = () => Object.keys(cart).reduce((t, k) => t + items.get(k).c * cart[k], 0);
-const count = () => Object.keys(cart).reduce((t, k) => t + cart[k], 0);
+let lines = C.load(), user = null, owner = false, tab = 'cart', step = 1, det = {}, tipPct = TIPS.includes(10) ? 10 : (TIPS[1] || 0), tipCustom = '', pay = 'cash', age = false;
+const sub = () => C.sub(lines), count = () => C.count(lines);
+const tipC = () => tipPct === 'c' ? Math.max(0, Math.min(50000, Math.round((parseFloat(tipCustom) || 0) * 100))) : Math.round(sub() * (Number(tipPct) || 0) / 100);
 
 /* ---------- map (OpenStreetMap) ---------- */
 const NOM = 'https://nominatim.openstreetmap.org';
@@ -452,14 +466,15 @@ const STEPS = ['Your cart', 'Delivery details', 'Confirm and pay'];
 function stepper() {
   return '<ol class="stp">' + STEPS.map((t, i) => '<li class="' + (i + 1 === step ? 'on' : (i + 1 < step ? 'done' : '')) + '"><span>' + (i + 1 < step ? '&#10003;' : (i + 1)) + '</span><em>' + esc(t) + '</em></li>').join('') + '</ol>';
 }
-function lines(editable) {
-  return '<div class="cl">' + Object.keys(cart).map(id => { const m = items.get(id), q = cart[id];
+function linesHtml(editable) {
+  return '<div class="cl">' + lines.map(l => { const m = C.items.get(l.id), d = C.describe(l).join(' &middot; ');
     return editable
-      ? '<div class="ci"><img src="' + esc(m.img) + '" alt="" width="64" height="48"><b>' + esc(m.name) + '</b><span class="ip">' + money(m.c * q) + '</span><div class="qty"><button data-q="-1" data-id="' + esc(id) + '" type="button" aria-label="Less">&minus;</button><span>' + q + '</span><button data-q="1" data-id="' + esc(id) + '" type="button" aria-label="More">+</button></div><span></span></div>'
-      : '<div class="ci ro"><b>' + esc(m.name) + ' x ' + q + '</b><span class="ip">' + money(m.c * q) + '</span></div>'; }).join('') + '</div>';
+      ? '<div class="ci"><img src="' + esc(m.img) + '" alt="" width="64" height="48"><div class="cin"><b>' + esc(m.name) + '</b><small>' + (d ? esc(C.describe(l).join(' · ')) : '') + '</small></div><span class="ip">' + money(C.lineTotal(l)) + '</span><div class="qty"><button data-q="-1" data-k="' + esc(l.k) + '" type="button" aria-label="Less">&minus;</button><span>' + l.q + '</span><button data-q="1" data-k="' + esc(l.k) + '" type="button" aria-label="More">+</button></div><button class="rm" data-rm="' + esc(l.k) + '" type="button" aria-label="Remove">Remove</button></div>'
+      : '<div class="ci ro"><div class="cin"><b>' + esc(m.name) + ' x ' + l.q + '</b><small>' + esc(C.describe(l).join(' · ')) + '</small></div><span class="ip">' + money(C.lineTotal(l)) + '</span></div>'; }).join('') + '</div>';
 }
-function totals(s) {
-  return '<div class="tot"><div><span>Food</span><span>' + money(s) + '</span></div><div><span>Delivery</span><span>' + (FEEC ? money(FEEC) : 'Free') + '</span></div><div class="g"><span>Total, pay in cash</span><span>' + money(s + FEEC) + '</span></div></div>';
+function totals(s, withTip) {
+  const t = withTip ? tipC() : 0;
+  return '<div class="tot"><div><span>Food</span><span>' + money(s) + '</span></div><div><span>Delivery</span><span>' + (FEEC ? money(FEEC) : 'Free') + '</span></div>' + (withTip ? '<div><span>Tip for your driver</span><span>' + money(t) + '</span></div>' : '') + '<div class="g"><span>Total' + (withTip ? ', paid at the door' : '') + '</span><span>' + money(s + FEEC + t) + '</span></div></div>';
 }
 function fld(k, label, req, attrs) {
   return '<div class="fld" data-k="' + k + '"><label for="' + k + '">' + label + (req ? ' <i class="rq">*</i>' : '') + '</label><input id="' + k + '" value="' + esc(det[k] || '') + '" ' + attrs + '><small class="ferr"></small></div>';
@@ -469,9 +484,8 @@ function drawCart() {
   if (!n) { step = 1; box.innerHTML = '<div class="cempty"><div class="eic"><svg class="ico"><use href="#i-cart"/></svg></div><h3>Your cart is empty</h3><p>Pick something tasty from the menu.</p><a class="sbtn fill" href="/food">Browse the menu</a></div>'; return; }
   let h = stepper();
   if (step === 1) {
-    h += lines(true) + totals(s);
-    if (MINC && s < MINC) h += '<p class="minwarn">The minimum order is ' + money(MINC) + ' of food. Add ' + money(MINC - s) + ' more.</p>';
-    h += '<button class="sbtn fill wide" type="button" id="go2"' + (MINC && s < MINC ? ' disabled' : '') + '>Continue to delivery details</button><a class="sbtn wide back" href="/food">Add more food</a>';
+    h += linesHtml(true) + totals(s, false);
+    h += '<button class="sbtn fill wide" type="button" id="go2">Continue to delivery details</button><a class="sbtn wide back" href="/food">Add more food</a>';
   } else if (step === 2) {
     if (!user) h += '<div class="cashnote"><svg class="ico"><use href="#i-ok2"/></svg><span>Log in to place your order. Your cart will wait for you.</span></div><a class="sbtn fill wide" href="/login?next=/cart">Log in to order</a><button class="sbtn wide back" type="button" id="back1">Back</button>';
     else {
@@ -489,13 +503,22 @@ function drawCart() {
     }
   } else {
     const addr = [det.oaddr, det.oapt, det.ocity, det.ozip].filter(Boolean).join(', ');
-    h += '<p class="sub">Check everything, then place your order.</p>' + lines(false) + totals(s) +
+    const tt = tipC(), total = s + FEEC + tt, alc = C.hasAlcohol(lines);
+    h += '<p class="sub">Check everything, add a tip, pick how you will pay, then place your order.</p>' + linesHtml(false) +
       '<div class="rv"><div><span>Deliver to</span><b>' + esc(det.oname) + '</b><br>' + esc(addr) + '<br>' + esc(det.ophone) + (det.onotes ? '<br><i>' + esc(det.onotes) + '</i>' : '') + '</div><button class="lnk" type="button" id="edit2">Change</button></div>' +
       (okLL(det.lat, det.lon) ? '<div style="margin-bottom:12px">' + mapHtml(det.lat, det.lon, det.mapname, true) + '</div>' : '') +
-      '<div class="cashnote"><svg class="ico"><use href="#i-plate"/></svg><span><b>Pay when your food arrives.</b> Cash on delivery only. Please have <b>' + money(s + FEEC) + '</b> ready for the driver.</span></div>' +
-      '<label class="chk2"><input type="checkbox" id="ocash"><span>I will pay the total in cash when the order arrives.</span></label>' +
+      '<div class="lay"><div class="lay-h"><b>Tip your driver</b><small>100% goes to the person delivering</small></div><div class="tipr" id="tipr">' +
+      TIPS.map(t => '<button type="button" class="' + (tipPct === t ? 'on' : '') + '" data-tip="' + t + '"><b>' + (t ? t + '%' : 'No tip') + '</b>' + (t ? '<small>' + money(Math.round(s * t / 100)) + '</small>' : '') + '</button>').join('') +
+      '<button type="button" class="' + (tipPct === 'c' ? 'on' : '') + '" data-tip="c"><b>Other</b><small>Your amount</small></button></div>' +
+      (tipPct === 'c' ? '<div class="tipc"><span>$</span><input id="tipin" inputmode="decimal" maxlength="7" placeholder="0.00" value="' + esc(tipCustom) + '"></div>' : '') + '</div>' +
+      '<div class="lay"><div class="lay-h"><b>How will you pay?</b><small>You pay the driver when they are at your door</small></div><div class="payr" id="payr">' +
+      '<button type="button" class="' + (pay === 'cash' ? 'on' : '') + '" data-pay="cash"><span class="pi cashi">$</span><span><b>Cash</b><small>Pay the driver in cash</small></span></button>' +
+      '<button type="button" class="' + (pay === 'venmo' ? 'on' : '') + '" data-pay="venmo"><span class="pi venmoi">V</span><span><b>Venmo</b><small>' + (VENMO ? 'Pay ' + esc(VENMO) + ' at the door' : 'Pay with your phone at the door') + '</small></span></button></div></div>' +
+      totals(s, true) +
+      (alc ? '<label class="chk2"><input type="checkbox" id="oage"' + (age ? ' checked' : '') + '><span>I am 21 or older and will show my ID at the door.</span></label>' : '') +
+      '<label class="chk2"><input type="checkbox" id="ocash"><span>I will pay <b>' + money(total) + '</b> by <b>' + (pay === 'venmo' ? 'Venmo' : 'cash') + '</b> when the order arrives.</span></label>' +
       '<div class="cmsg" id="oerr" role="alert" hidden></div>' +
-      '<div class="two"><button class="sbtn back" type="button" id="back2">Back</button><button class="sbtn fill" type="button" id="osend"><i class="spin"></i><span class="lbl">Place order</span></button></div>';
+      '<div class="two"><button class="sbtn back" type="button" id="back2">Back</button><button class="sbtn fill" type="button" id="osend"><i class="spin"></i><span class="lbl">Place order &middot; ' + money(total) + '</span></button></div>';
   }
   box.innerHTML = h;
   const on = (id, fn) => { const e = document.getElementById(id); if (e) e.addEventListener('click', fn); };
@@ -503,6 +526,10 @@ function drawCart() {
   on('back1', () => { saveDet(); step = 1; drawCart(); });
   on('back2', () => { step = 2; drawCart(); });
   on('edit2', () => { step = 2; drawCart(); });
+  const tr = document.getElementById('tipr'); if (tr) tr.addEventListener('click', e => { const b = e.target.closest('[data-tip]'); if (!b) return; const had = document.getElementById('ocash') && document.getElementById('ocash').checked; tipPct = b.dataset.tip === 'c' ? 'c' : Number(b.dataset.tip); drawCart(); if (had) document.getElementById('ocash').checked = true; if (tipPct === 'c') { const t = document.getElementById('tipin'); if (t) t.focus(); } });
+  const ti = document.getElementById('tipin'); if (ti) ti.addEventListener('input', () => { tipCustom = ti.value.replace(/[^\d.]/g, ''); const sp = document.querySelector('.tot .g span:last-child'); const row = document.querySelector('.tot div:nth-child(3) span:last-child'); if (row) row.textContent = money(tipC()); if (sp) sp.textContent = money(sub() + FEEC + tipC()); const lb = document.querySelector('#osend .lbl'); if (lb) lb.innerHTML = 'Place order &middot; ' + money(sub() + FEEC + tipC()); const ck = document.querySelector('#ocash + span b'); if (ck) ck.textContent = money(sub() + FEEC + tipC()); });
+  const pr = document.getElementById('payr'); if (pr) pr.addEventListener('click', e => { const b = e.target.closest('[data-pay]'); if (!b) return; pay = b.dataset.pay; pr.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); const ck = document.querySelectorAll('#ocash + span b'); if (ck[1]) ck[1].textContent = pay === 'venmo' ? 'Venmo' : 'cash'; });
+  const ag = document.getElementById('oage'); if (ag) ag.addEventListener('change', () => { age = ag.checked; });
   on('osend', place); on('findmap', findOnMap); on('useloc', useLocation);
   const df = document.getElementById('df');
   if (df) {
@@ -523,24 +550,30 @@ function toStep3(e) {
   if (bad) { const m = $('#derr'); m.hidden = false; m.textContent = 'Please fix the highlighted fields.'; return; }
   step = 3; drawCart(); $('#cart').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-$('#cartBody').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; const id = b.dataset.id; cart[id] = (cart[id] || 0) + Number(b.dataset.q); if (cart[id] <= 0) delete cart[id]; if (cart[id] > 20) cart[id] = 20; saveCart(); drawCart(); });
+$('#cartBody').addEventListener('click', e => {
+  const b = e.target.closest('[data-q]'), r = e.target.closest('[data-rm]');
+  if (b) { const l = lines.find(x => x.k === b.dataset.k); if (!l) return; l.q = Math.max(0, Math.min(20, l.q + Number(b.dataset.q))); if (!l.q) lines = lines.filter(x => x !== l); C.save(lines); drawCart(); }
+  else if (r) { lines = lines.filter(x => x.k !== r.dataset.rm); C.save(lines); drawCart(); }
+});
 async function place() {
   const err = $('#oerr'); err.hidden = true; const s = sub();
-  if (MINC && s < MINC) { err.hidden = false; err.textContent = 'Add ' + money(MINC - s) + ' more food to reach the minimum order.'; return; }
-  if (!$('#ocash').checked) { err.hidden = false; err.textContent = 'Please confirm that you will pay in cash on arrival.'; return; }
+  if (!lines.length) { err.hidden = false; err.textContent = 'Your cart is empty.'; return; }
+  if (C.hasAlcohol(lines) && !($('#oage') && $('#oage').checked)) { err.hidden = false; err.textContent = 'Beer is for ages 21 and over. Please confirm that you are 21 or older.'; return; }
+  if (!$('#ocash').checked) { err.hidden = false; err.textContent = 'Please confirm that you will pay when the order arrives.'; return; }
   try { if (Date.now() - Number(localStorage.getItem('mch_lastorder') || 0) < 20000) { err.hidden = false; err.textContent = 'Please wait a few seconds before placing another order.'; return; } } catch (x) {}
   const btn = $('#osend'); btn.classList.add('loading'); btn.disabled = true; $('#cartBody').querySelectorAll('.back').forEach(b => b.disabled = true);
   const slow = setTimeout(() => D.say('info', 'Still sending', 'Your connection is slow. Please keep this page open.'), 6000);
-  const list = Object.keys(cart).map(id => ({ id, name: items.get(id).name, qty: cart[id], price: items.get(id).c / 100 }));
-  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: det.onotes || '', items: list, subtotal: s / 100, fee: FEEC / 100, total: (s + FEEC) / 100, payment: 'cash_on_delivery', status: 'new' };
+  const tip = tipC(), total = s + FEEC + tip;
+  const list = lines.map(l => ({ id: l.id, name: C.items.get(l.id).name, qty: l.q, price: C.unit(l) / 100, fresh: !!l.fresh, options: C.describe(l) }));
+  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: det.onotes || '', items: list, subtotal: s / 100, fee: FEEC / 100, tip: tip / 100, total: total / 100, payment: pay, alcohol: C.hasAlcohol(lines), status: 'new' };
   if (okLL(det.lat, det.lon)) { order.lat = det.lat; order.lon = det.lon; }
   try {
     const id = await Promise.race([D.add('orders', order), new Promise((_, rej) => setTimeout(() => rej(Object.assign(new Error('timeout'), { code: 'unavailable' })), 25000))]);
     clearTimeout(slow);
     try { localStorage.setItem('mch_lastorder', String(Date.now())); } catch (x) {}
-    cart = {}; saveCart(); step = 1; det = {};
+    lines = []; C.save(lines); step = 1; det = {}; age = false;
     showOk(order, id);
-    D.say('success', 'Order placed', 'Pay ' + money(Math.round(order.total * 100)) + ' in cash on arrival.');
+    D.say('success', 'Order placed', 'Pay ' + money(Math.round(order.total * 100)) + (pay === 'venmo' ? ' with Venmo' : ' in cash') + ' at the door.');
   } catch (er) {
     clearTimeout(slow);
     err.hidden = false; err.textContent = D.explain(er); D.say('error', 'Could not place order', D.explain(er));
@@ -550,7 +583,7 @@ async function place() {
 function showOk(o, id) {
   ['#pCart', '#pMine', '#pAll'].forEach(s => $(s).hidden = true); $('#dtabs').hidden = true;
   const b = $('#okBox'); b.hidden = false;
-  b.innerHTML = '<div class="eic"><svg class="ico"><use href="#i-ok2"/></svg></div><h2>Order placed</h2><p>Order number <span class="big">#' + esc(id.slice(-6).toUpperCase()) + '</span></p><p>We will bring it to <span class="big">' + esc(o.address) + ', ' + esc(o.city) + '</span>.</p><p>Please pay <span class="big">' + money(Math.round(o.total * 100)) + '</span> in cash when it arrives.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px"><button class="sbtn fill" id="track" type="button">Track my order</button><a class="sbtn" href="/food">Order more</a></div>';
+  b.innerHTML = '<div class="eic"><svg class="ico"><use href="#i-ok2"/></svg></div><h2>Order placed</h2><p>Order number <span class="big">#' + esc(id.slice(-6).toUpperCase()) + '</span></p><p>We will bring it to <span class="big">' + esc(o.address) + ', ' + esc(o.city) + '</span>.</p><p>Please pay <span class="big">' + money(Math.round(o.total * 100)) + '</span> by ' + (o.payment === 'venmo' ? 'Venmo' + (VENMO ? ' to ' + esc(VENMO) : '') : 'cash') + ' when it arrives.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px"><button class="sbtn fill" id="track" type="button">Track my order</button><a class="sbtn" href="/food">Order more</a></div>';
   $('#track').addEventListener('click', () => { b.hidden = true; $('#dtabs').hidden = false; setTab('mine'); });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -560,7 +593,8 @@ const ST = [['new', 'New'], ['preparing', 'Cooking'], ['out', 'Out for delivery'
 const stLabel = s => (ST.find(x => x[0] === s) || [0, 'New'])[1];
 const ms = t => { try { return t && t.toMillis ? t.toMillis() : (t && t.seconds ? t.seconds * 1000 : (t ? new Date(t).getTime() : 0)) || 0; } catch (e) { return 0; } };
 const when = t => { const x = ms(t); return x ? new Date(x).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : ''; };
-const itemsHtml = o => '<ul>' + (o.items || []).map(i => '<li>' + esc(i.qty) + ' x ' + esc(i.name) + '</li>').join('') + '</ul>';
+const itemsHtml = o => '<ul class="il">' + (o.items || []).map(i => '<li><b>' + esc(i.qty) + ' x ' + esc(i.name) + '</b>' + ((i.options || []).length ? '<small>' + esc(i.options.join(' · ')) + '</small>' : '') + '</li>').join('') + '</ul>';
+const payName = o => o.payment === 'venmo' ? 'Venmo' : 'Cash';
 function orderCard(o, isOwner) {
   const total = '$' + Number(o.total || 0).toFixed(2);
   let h = '<div class="oc" data-id="' + esc(o.id) + '"><div class="oh"><div><div class="no">Order #' + esc(String(o.id).slice(-6).toUpperCase()) + '</div><div class="dt">' + esc(when(o.createdAt)) + '</div></div><span class="pill ' + esc(o.status || 'new') + '">' + esc(stLabel(o.status)) + '</span></div>';
@@ -574,7 +608,7 @@ function orderCard(o, isOwner) {
   }
   h += '<dt>Items</dt><dd>' + itemsHtml(o) + '</dd>';
   if (o.notes) h += '<dt>Notes</dt><dd>' + esc(o.notes) + '</dd>';
-  h += '<dt>Cash to collect</dt><dd><b>' + total + '</b> (food $' + Number(o.subtotal || 0).toFixed(2) + ' + delivery $' + Number(o.fee || 0).toFixed(2) + ')</dd></dl>';
+  h += '<dt>' + (isOwner ? 'Collect' : 'Total') + '</dt><dd><b>' + total + '</b> by <b>' + payName(o) + '</b> at the door (food $' + Number(o.subtotal || 0).toFixed(2) + ' + delivery $' + Number(o.fee || 0).toFixed(2) + (o.tip ? ' + tip $' + Number(o.tip).toFixed(2) : '') + ')</dd>' + (o.alcohol ? '<dt>ID check</dt><dd><b>Contains beer: check ID, 21 and over</b></dd>' : '') + '</dl>';
   if (isOwner) h += '<div class="oact">' + ST.map(s => '<button type="button" data-st="' + s[0] + '" class="' + (o.status === s[0] ? 'cur' : '') + '">' + s[1] + '</button>').join('') + '<button type="button" class="del" data-del="1">Delete</button></div>';
   return h + '</div>';
 }

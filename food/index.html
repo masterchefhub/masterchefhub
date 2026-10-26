@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/loader.js"></script>
 <title>Food | MasterChefHub</title>
-<meta name="description" content="Order simple home-cooked food: sandwiches, burgers, pasta, breakfast, cakes and drinks. Delivered to your door, pay cash on arrival.">
+<meta name="description" content="Order simple home-cooked food: sandwiches, burgers, pasta, breakfast, cakes and drinks. Delivered to your door, pay cash or Venmo at the door.">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -177,6 +177,58 @@ footer ul a:hover{text-decoration:underline}
 @media(max-width:700px){.mgrid{grid-template-columns:1fr 1fr;gap:10px}.mbody{padding:12px}.mi p{display:none}}
 @media(max-width:420px){.mgrid{grid-template-columns:1fr}.mi p{display:block}}
 
+
+@keyframes miIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.stag .mi{animation:miIn .5s cubic-bezier(.2,.8,.2,1) both}
+.stag .mi:nth-child(2){animation-delay:.04s}.stag .mi:nth-child(3){animation-delay:.08s}.stag .mi:nth-child(4){animation-delay:.12s}.stag .mi:nth-child(5){animation-delay:.16s}.stag .mi:nth-child(6){animation-delay:.2s}.stag .mi:nth-child(n+7){animation-delay:.24s}
+/* ---- customizer ---- */
+.mi{cursor:pointer}
+.mimg{position:relative}
+.inc{position:absolute;left:12px;top:12px;background:#0a0a0a;color:#fff;font-size:.72rem;font-weight:800;padding:5px 10px;border-radius:99px;animation:mchPop .35s cubic-bezier(.2,.9,.3,1.4)}
+.tagf{font-size:.72rem;color:var(--muted);font-weight:600}
+.cz{position:fixed;inset:0;z-index:900;display:none;align-items:center;justify-content:center;padding:18px}
+.cz.on{display:flex}
+.cz-bg{position:absolute;inset:0;background:rgba(10,10,10,.55);backdrop-filter:blur(6px);animation:czfade .25s ease}
+.cz-card{position:relative;background:#fff;border-radius:28px;width:min(600px,100%);max-height:min(92vh,880px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.35);animation:czin .35s cubic-bezier(.2,.9,.25,1)}
+@keyframes czfade{from{opacity:0}to{opacity:1}}
+@keyframes czin{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
+.cz-x{position:absolute;right:14px;top:14px;z-index:3;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.92);cursor:pointer;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .25s}
+.cz-x:hover{transform:rotate(90deg) scale(1.08)}
+.cz-x svg{width:18px;height:18px;stroke:#0a0a0a;fill:none;stroke-width:2.4;stroke-linecap:round}
+.cz-scroll{overflow-y:auto;flex:1;overscroll-behavior:contain;position:relative;min-height:0}
+.cz-hero{aspect-ratio:16/8;background:#eee;overflow:hidden}
+.cz-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.cz-body{padding:20px 22px 8px}
+.cz-body h2{font-size:1.5rem;line-height:1.15;margin:0 0 6px;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:2rem}
+.cz-body p.d{color:var(--muted);margin:0 0 4px;font-size:.92rem}
+.cz-warn{margin:12px 0 0;padding:11px 14px;border-radius:14px;background:#fff4e5;color:#7a4300;font-size:.84rem;font-weight:600}
+.cg{margin-top:20px}
+.cg-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.cg-h b{font-size:.98rem}
+.cg-h i{font-style:normal;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:#efefec;color:#555}
+.cg.bad .cg-h i{background:#c0261d;color:#fff;animation:czshake .4s}
+@keyframes czshake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.cg.bad{outline:2px solid #c0261d;outline-offset:8px;border-radius:14px}
+.cq{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cq label,.co label{cursor:pointer;display:block}
+.cq label,.co label{position:relative}.cq input,.co input{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
+.cq .b{display:block;border:1.5px solid var(--line);border-radius:18px;padding:13px 14px;transition:border-color .2s,background .2s,transform .15s}
+.cq .b strong{display:block;font-size:.95rem}.cq .b em{display:block;font-style:normal;color:var(--muted);font-size:.78rem;margin-top:2px}.cq .b span{display:block;font-weight:800;margin-top:6px}
+.cq label:hover .b,.co label:hover .b{border-color:#9a9a96}
+.cq input:checked+.b,.co input:checked+.b{border-color:#0a0a0a;background:#0a0a0a;color:#fff}
+.cq input:checked+.b em,.co input:checked+.b small{color:#cfcfcf}
+.cq label:active .b,.co label:active .b{transform:scale(.97)}
+.co{display:flex;flex-wrap:wrap;gap:8px}
+.co .b{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:99px;padding:9px 15px;font-size:.88rem;font-weight:600;transition:border-color .2s,background .2s,transform .15s}
+.co .b small{color:var(--muted);font-weight:700;font-size:.78rem}
+.cz-note{width:100%;border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;font-family:inherit;font-size:.92rem;margin-top:8px;resize:none}
+.cz-note:focus{outline:none;border-color:#0a0a0a}
+.cz-foot{display:flex;gap:12px;align-items:center;padding:14px 22px 18px;border-top:1px solid var(--line);background:#fff}
+.cz-foot .qty button{width:38px;height:38px}
+.cz-add{flex:1;height:52px;border-radius:99px;border:0;background:#0a0a0a;color:#fff;font-family:inherit;font-weight:800;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:0 24px;transition:transform .2s,background .2s}
+.cz-add:hover{background:#262626;transform:translateY(-1px)}.cz-add:active{transform:scale(.98)}
+@media(max-width:640px){.cz{align-items:flex-end;padding:0}.cz-card{border-radius:26px 26px 0 0;max-height:94vh;width:100%;animation:czup .35s cubic-bezier(.2,.9,.25,1)}.cq{grid-template-columns:1fr}.cz-body h2{font-size:1.7rem}}
+@keyframes czup{from{transform:translateY(100%)}to{transform:none}}
 </style>
 </head>
 <body>
@@ -270,10 +322,10 @@ footer ul a:hover{text-decoration:underline}
 
   <div class="wrap">
     <div class="crumbs"><a href="/">Home</a><svg class="ico sm"><use href="#i-chev"/></svg><span style="color:var(--ink)">Food</span></div>
-    <div class="phead"><h1 class="serif">Food</h1><p>Pick what you want and add it to your cart. We cook it at home and bring it to your door. You pay cash when it arrives.</p></div>
+    <div class="phead"><h1 class="serif">Food</h1><p>Pick what you want and add it to your cart. We cook it at home and bring it to your door. Choose Basic or Fresh and homemade, add toppings, and pay cash or Venmo at the door.</p></div>
     <div class="facts">
       <div class="fact"><div class="fi"><svg class="ico"><use href="#i-truck"/></svg></div><div><b>Delivered to you</b><span>Home delivery only</span></div></div>
-      <div class="fact"><div class="fi"><svg class="ico"><use href="#i-plate"/></svg></div><div><b>Pay cash on arrival</b><span>No card, nothing online</span></div></div>
+      <div class="fact"><div class="fi"><svg class="ico"><use href="#i-plate"/></svg></div><div><b>Cash or Venmo at the door</b><span>Nothing paid online</span></div></div>
       <div class="fact"><div class="fi"><svg class="ico"><use href="#i-bowl"/></svg></div><div><b id="factFee">Delivery fee</b><span id="factMin">Simple home cooking</span></div></div>
     </div>
     <div class="ftools"><label class="fsearch"><svg class="ico sm"><use href="#i-search"/></svg><input id="msearch" type="search" placeholder="Search the menu" aria-label="Search the menu" autocomplete="off"></label><span class="fcount" id="fcount"></span></div>
@@ -332,54 +384,98 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{
 }),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
+<div class="cz" id="cz" role="dialog" aria-modal="true" aria-labelledby="czT"><div class="cz-bg" data-close></div><div class="cz-card"><button class="cz-x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button><div class="cz-scroll" id="czScroll"></div><div class="cz-foot"><div class="qty"><button type="button" id="czM" aria-label="Less">&minus;</button><span id="czQ">1</span><button type="button" id="czP" aria-label="More">+</button></div><button class="cz-add" type="button" id="czAdd"><span>Add to cart</span><span id="czT2"></span></button></div></div></div>
 <script type="module">
 import * as D from '/data.js';
-import { MENU, CATS, FEE, MIN_ORDER } from '/menu.js';
-const $ = s => document.querySelector(s), esc = D.esc;
-const money = c => '$' + (c / 100).toFixed(2);
+import { MENU, CATS, FEE, MIN_ORDER, freshExtra } from '/menu.js';
+import * as C from '/cartlib.js';
+const $ = s => document.querySelector(s), esc = D.esc, money = C.money;
 const FEEC = Math.round(FEE * 100), MINC = Math.round(MIN_ORDER * 100);
-const items = new Map(MENU.map(m => [m.id, Object.assign({}, m, { c: Math.round(m.price * 100) })]));
-let cart = {}, cat = 'all', q = '';
-try { const s = JSON.parse(localStorage.getItem('mch_cart') || '{}'); Object.keys(s).forEach(k => { if (items.has(k) && s[k] > 0) cart[k] = Math.min(20, s[k] | 0); }); } catch (e) {}
-const saveCart = () => { try { localStorage.setItem('mch_cart', JSON.stringify(cart)); } catch (e) {} try { window.dispatchEvent(new Event('mch:cart')); } catch (e) {} };
-const sub = () => Object.keys(cart).reduce((t, k) => t + items.get(k).c * cart[k], 0);
-const count = () => Object.keys(cart).reduce((t, k) => t + cart[k], 0);
+let lines = C.load(), cat = 'all', q = '';
 $('#factFee').textContent = FEEC ? 'Delivery fee ' + money(FEEC) : 'Free delivery';
-$('#factMin').textContent = MINC ? 'Minimum order ' + money(MINC) : 'Simple home cooking';
+$('#factMin').textContent = 'Order one dish or a full feast';
 const p = new URLSearchParams(location.search);
 if (CATS.some(c => c[0] === p.get('category'))) cat = p.get('category');
 q = (p.get('search') || '').trim(); $('#msearch').value = q;
 
+const inCart = id => lines.filter(l => l.id === id).reduce((t, l) => t + l.q, 0);
 function drawChips() { $('#dchips').innerHTML = CATS.map(c => '<button class="opt' + (c[0] === cat ? ' act' : '') + '" data-c="' + c[0] + '" type="button">' + esc(c[1]) + '</button>').join(''); }
-function foot(id) {
-  const n = cart[id] || 0;
-  return '<span class="pr">' + money(items.get(id).c) + '</span>' + (n
-    ? '<div class="qty"><button data-q="-1" data-id="' + esc(id) + '" type="button" aria-label="Less">&minus;</button><span>' + n + '</span><button data-q="1" data-id="' + esc(id) + '" type="button" aria-label="More">+</button></div>'
-    : '<button class="addb" data-add="' + esc(id) + '" type="button"><svg class="ico"><use href="#i-plus"/></svg>Add</button>');
-}
+function stag() { const g = $('#mgrid'); g.classList.add('stag'); clearTimeout(stag.t); stag.t = setTimeout(() => g.classList.remove('stag'), 900); }
 function drawMenu() {
   const t = q.toLowerCase();
   const list = MENU.filter(m => (cat === 'all' || m.cat === cat) && (!t || (m.name + ' ' + m.desc).toLowerCase().includes(t)));
   $('#fcount').textContent = list.length + (list.length === 1 ? ' dish' : ' dishes');
-  $('#mgrid').innerHTML = list.length ? list.map(m => '<div class="mi" data-id="' + esc(m.id) + '"><div class="mimg"><img src="' + esc(m.img) + '" alt="' + esc(m.name) + '" width="640" height="480" loading="lazy" decoding="async"></div><div class="mbody"><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p><div class="mb">' + foot(m.id) + '</div></div></div>').join('')
+  $('#mgrid').innerHTML = list.length ? list.map(m => { const n = inCart(m.id);
+    return '<div class="mi" data-id="' + esc(m.id) + '"><div class="mimg"><img src="' + esc(m.img) + '" alt="' + esc(m.name) + '" width="640" height="480" loading="lazy" decoding="async">' + (n ? '<span class="inc">' + n + ' in cart</span>' : '') + '</div><div class="mbody"><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p><div class="mb"><span class="pr">' + money(C.items.get(m.id).c) + (m.groups.length || m.canFresh ? ' <span class="tagf">+ options</span>' : '') + '</span><button class="addb" data-open="' + esc(m.id) + '" type="button"><svg class="ico"><use href="#i-plus"/></svg>Add</button></div></div></div>'; }).join('')
     : '<div class="fempty">Nothing matches that search. Try another word or pick All.</div>';
 }
 function bar() {
-  const n = count(), b = $('#cbar'); b.classList.toggle('on', n > 0);
-  $('#cbarN').textContent = 'View cart (' + n + ')'; $('#cbarT').textContent = money(sub() + FEEC);
+  const n = C.count(lines), b = $('#cbar'); b.classList.toggle('on', n > 0);
+  $('#cbarN').textContent = 'View cart (' + n + ')'; $('#cbarT').textContent = money(C.sub(lines) + FEEC);
 }
-function change(id, d) {
-  cart[id] = Math.max(0, Math.min(20, (cart[id] || 0) + d)); if (!cart[id]) delete cart[id];
-  saveCart(); bar();
-  const card = document.querySelector('.mi[data-id="' + id + '"] .mb'); if (card) card.innerHTML = foot(id);
+
+/* ---------- the customizer ---------- */
+let cur = null;
+function curLine() { return { id: cur.m.id, q: cur.q, fresh: cur.fresh, sel: cur.sel, note: '' }; }
+function czTotal() { $('#czT2').textContent = money(C.unit(curLine()) * cur.q); $('#czQ').textContent = cur.q; }
+function openItem(id) {
+  const m = C.items.get(id); if (!m) return;
+  cur = { m, q: 1, fresh: false, sel: {}, note: '' };
+  const fx = freshExtra(m.price), baseC = m.c;
+  let h = '<div class="cz-hero"><img src="' + esc(m.img) + '" alt=""></div><div class="cz-body"><h2 id="czT">' + esc(m.name) + '</h2><p class="d">' + esc(m.desc) + '</p><p class="d"><b>' + money(baseC) + '</b> to start</p>';
+  if (m.alcohol) h += '<div class="cz-warn">21 and over only. The driver checks your ID at the door. No ID, no beer.</div>';
+  if (m.canFresh) h += '<div class="cg" data-g="_q"><div class="cg-h"><b>How should we make it?</b><i>Choose one</i></div><div class="cq">' +
+    '<label><input type="radio" name="czq" value="0" checked><span class="b"><strong>Basic</strong><em>Simple and tasty, made to order</em><span>' + money(baseC) + '</span></span></label>' +
+    '<label><input type="radio" name="czq" value="1"><span class="b"><strong>Fresh and homemade</strong><em>Made from scratch today, extra care</em><span>' + money(baseC + Math.round(fx * 100)) + ' <small style="font-weight:600;opacity:.7">(+' + money(Math.round(fx * 100)) + ')</small></span></span></label></div></div>';
+  m.groups.forEach(g => {
+    h += '<div class="cg" data-g="' + g.id + '"><div class="cg-h"><b>' + esc(g.label) + '</b><i>' + (g.req ? 'Required' : (g.type === 'multi' ? 'Pick any' : 'Optional')) + '</i></div><div class="co">' +
+      g.choices.map((c, i) => '<label><input type="' + (g.type === 'multi' ? 'checkbox' : 'radio') + '" name="g_' + g.id + '" value="' + i + '"><span class="b">' + esc(c[0]) + (c[1] ? ' <small>+' + money(Math.round(c[1] * 100)) + '</small>' : '') + '</span></label>').join('') + '</div></div>';
+  });
+  h += '<div class="cg"><div class="cg-h"><b>Special request</b><i>Optional</i></div><textarea class="cz-note" id="czNote" rows="2" maxlength="120" placeholder="No onions, allergy, extra crispy..."></textarea></div><div style="height:12px"></div></div>';
+  $('#czScroll').innerHTML = h; $('#czScroll').scrollTop = 0;
+  czTotal(); $('#cz').classList.add('on'); document.documentElement.style.overflow = 'hidden';
 }
-$('#dchips').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return; cat = b.dataset.c; drawChips(); drawMenu(); });
-$('#msearch').addEventListener('input', e => { q = e.target.value.trim(); drawMenu(); });
-$('#mgrid').addEventListener('click', e => {
-  const a = e.target.closest('[data-add]'); if (a) { change(a.dataset.add, 1); D.say('success', 'Added to cart', items.get(a.dataset.add).name); return; }
-  const b = e.target.closest('[data-q]'); if (b) change(b.dataset.id, Number(b.dataset.q));
+function closeItem() { $('#cz').classList.remove('on'); document.documentElement.style.overflow = ''; cur = null; }
+$('#cz').addEventListener('click', e => { if (e.target.closest('[data-close]')) closeItem(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && cur) closeItem(); });
+$('#czScroll').addEventListener('change', e => {
+  const el = e.target; if (!cur || !el.name) return;
+  if (el.name === 'czq') { cur.fresh = el.value === '1'; }
+  else {
+    const gid = el.name.slice(2), g = cur.m.groups.find(x => x.id === gid); if (!g) return;
+    cur.sel[gid] = Array.from(document.querySelectorAll('input[name="' + el.name + '"]:checked')).map(i => g.choices[Number(i.value)][0]);
+    if (!cur.sel[gid].length) delete cur.sel[gid];
+    const box = el.closest('.cg'); if (box) box.classList.remove('bad');
+  }
+  czTotal();
 });
-drawChips(); drawMenu(); bar();
+/* radio groups that are optional can be un-picked by tapping the choice again */
+$('#czScroll').addEventListener('click', e => {
+  const lab = e.target.closest('.co label'); if (!lab) return; const i = lab.querySelector('input[type=radio]'); if (!i) return;
+  const g = cur && cur.m.groups.find(x => 'g_' + x.id === i.name); if (!g || g.req) return;
+  if (i.dataset.was === '1') { e.preventDefault(); i.checked = false; i.dataset.was = ''; i.dispatchEvent(new Event('change', { bubbles: true })); }
+  else { document.querySelectorAll('input[name="' + i.name + '"]').forEach(x => x.dataset.was = ''); i.dataset.was = '1'; }
+});
+$('#czP').addEventListener('click', () => { if (cur && cur.q < 20) { cur.q++; czTotal(); } });
+$('#czM').addEventListener('click', () => { if (cur && cur.q > 1) { cur.q--; czTotal(); } });
+$('#czAdd').addEventListener('click', () => {
+  if (!cur) return;
+  const miss = cur.m.groups.find(g => g.req && !(cur.sel[g.id] || []).length);
+  if (miss) {
+    const box = document.querySelector('.cg[data-g="' + miss.id + '"]'); box.classList.add('bad'); box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    D.say('warning', 'Pick an option', 'Please choose: ' + miss.label); return;
+  }
+  const l = curLine(); l.k = Math.random().toString(36).slice(2); l.note = ($('#czNote').value || '').trim().slice(0, 120);
+  C.add(lines, l); bar(); drawMenu();
+  D.say('success', 'Added to cart', cur.m.name + ' x ' + cur.q);
+  closeItem();
+});
+
+$('#dchips').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return; cat = b.dataset.c; drawChips(); stag(); drawMenu(); });
+$('#msearch').addEventListener('input', e => { q = e.target.value.trim(); drawMenu(); });
+$('#mgrid').addEventListener('click', e => { const c = e.target.closest('.mi'); if (c) openItem(c.dataset.id); });
+window.addEventListener('storage', e => { if (e.key === C.KEY) { lines = C.load(); bar(); drawMenu(); } });
+drawChips(); stag(); drawMenu(); bar();
 try { await D.whenUser(); } catch (e) {}
 </script>
 </body>

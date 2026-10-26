@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/loader.js"></script>
 <title>MasterChefHub | Home-cooked food, delivered</title>
-<meta name="description" content="Order simple home-cooked meals and get them delivered to your door. Pay cash when your food arrives.">
+<meta name="description" content="Order simple home-cooked meals and get them delivered to your door. Pick Basic or Fresh and homemade, add toppings, and pay cash or Venmo at the door.">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -277,6 +277,24 @@ footer ul a:hover{text-decoration:underline}
   .big h3{font-size:2.1rem}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.strip{overflow:hidden;margin:6px -4px 34px;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.strip-in{display:flex;gap:14px;width:max-content;animation:mchStrip 60s linear infinite}
+.strip:hover .strip-in{animation-play-state:paused}
+.strip figure{margin:0;width:190px;flex-shrink:0;border-radius:20px;overflow:hidden;background:#fff;border:1px solid var(--line);position:relative}
+.strip img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .5s}
+.strip figure:hover img{transform:scale(1.08)}
+.strip figcaption{position:absolute;left:8px;bottom:8px;background:rgba(10,10,10,.82);color:#fff;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:99px}
+@keyframes mchStrip{to{transform:translateX(-50%)}}
+.how{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.hw{position:relative;background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px 20px;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.hw:hover{transform:translateY(-6px);box-shadow:0 22px 48px rgba(0,0,0,.1)}
+.hn{position:absolute;right:18px;top:14px;font-family:'Instrument Serif',Georgia,serif;font-size:2.6rem;color:#e6e6e2;line-height:1}
+.hi{width:50px;height:50px;border-radius:16px;background:#0a0a0a;color:#fff;display:grid;place-items:center;margin-bottom:14px;transition:transform .4s cubic-bezier(.2,.9,.3,1.4)}
+.hw:hover .hi{transform:rotate(-8deg) scale(1.1)}
+.hi svg{width:24px;height:24px}
+.hw h3{margin:0 0 6px;font-size:1.05rem}.hw p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.5}
+@media(max-width:900px){.how{grid-template-columns:1fr 1fr}}@media(max-width:520px){.how{grid-template-columns:1fr}.strip figure{width:150px}}
 </style>
 <link rel="stylesheet" href="/site.css">
 </head>
@@ -370,7 +388,7 @@ footer ul a:hover{text-decoration:underline}
       <div class="hero-txt">
         <div class="live"><i></i>Home-cooked, delivered</div>
         <h1 class="serif">Cook with <em>precision.</em><br>Eat with joy.</h1>
-        <p>Order simple home-cooked meals and we bring them to your door. Pay cash when your food arrives.</p>
+        <p>Order simple home-cooked meals and we bring them to your door. Pick Basic or Fresh and homemade, add toppings, and pay cash or Venmo at the door.</p>
         <div class="hero-btns">
           <a href="/food" class="btn btn-white">Order food <svg class="ico arrow"><use href="#i-arrow"/></svg></a>
           <a href="/videos" class="btn btn-line">Watch videos</a>
@@ -378,18 +396,32 @@ footer ul a:hover{text-decoration:underline}
       </div>
       <div class="hero-img">
         <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80')"></div>
-        <div class="float f1"><div class="fi"><svg class="ico"><use href="#i-truck"/></svg></div><div><b>Home delivery</b><small>Pay cash on arrival</small></div></div>
+        <div class="float f1"><div class="fi"><svg class="ico"><use href="#i-truck"/></svg></div><div><b>Home delivery</b><small>Cash or Venmo at the door</small></div></div>
         <div class="float f2"><div class="fi"><svg class="ico"><use href="#i-food"/></svg></div><div><b id="fMenu">50+ dishes</b><small>Made at home</small></div></div>
       </div>
     </div>
+
+    <!-- MENU STRIP -->
+    <div class="strip" aria-hidden="true"><div class="strip-in" id="strip"></div></div>
 
     <!-- STATS -->
     <div class="stats reveal">
       <div class="stat"><div class="si"><svg class="ico"><use href="#i-food"/></svg></div><div><b id="statDishes">50+</b><span>Dishes on the menu</span></div></div>
       <div class="stat"><div class="si"><svg class="ico"><use href="#i-truck"/></svg></div><div><b>Home</b><span>Delivery to your door</span></div></div>
-      <div class="stat"><div class="si"><svg class="ico"><use href="#i-plate"/></svg></div><div><b>Cash</b><span>Pay when it arrives</span></div></div>
+      <div class="stat"><div class="si"><svg class="ico"><use href="#i-plate"/></svg></div><div><b>Cash or Venmo</b><span>Pay at the door</span></div></div>
       <div class="stat"><div class="si"><svg class="ico"><use href="#i-video"/></svg></div><div><b id="statVideos">0</b><span>Video lessons</span></div></div>
     </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="reveal">
+      <div class="head"><div><div class="eyebrow">How it works</div><h2 class="serif">From our kitchen to your door</h2></div></div>
+      <div class="how">
+        <div class="hw"><span class="hn">1</span><div class="hi"><svg class="ico"><use href="#i-food"/></svg></div><h3>Pick your food</h3><p>Browse the menu. One meal or one drink is fine, there is no minimum.</p></div>
+        <div class="hw"><span class="hn">2</span><div class="hi"><svg class="ico"><use href="#i-plate"/></svg></div><h3>Make it yours</h3><p>Choose toppings and sauces. Go Basic, or Fresh and homemade for a few dollars more.</p></div>
+        <div class="hw"><span class="hn">3</span><div class="hi"><svg class="ico"><use href="#i-pin"/></svg></div><h3>Add your address</h3><p>Find your house on the map, add a tip and place the order.</p></div>
+        <div class="hw"><span class="hn">4</span><div class="hi"><svg class="ico"><use href="#i-truck"/></svg></div><h3>Pay at the door</h3><p>Pay the driver in cash or with Venmo when your food arrives.</p></div>
+      </div>
+    </section>
 
     <!-- CATEGORIES -->
     <section class="reveal">
@@ -404,6 +436,7 @@ footer ul a:hover{text-decoration:underline}
         <a href="/food?category=breakfast" class="cat"><div class="ci"><svg class="ico"><use href="#i-coffee"/></svg></div><b>Breakfast</b><small>Order</small></a>
         <a href="/food?category=sweets" class="cat"><div class="ci"><svg class="ico"><use href="#i-cake"/></svg></div><b>Cakes and sweets</b><small>Order</small></a>
         <a href="/food?category=drinks" class="cat"><div class="ci"><svg class="ico"><use href="#i-drink"/></svg></div><b>Drinks</b><small>Order</small></a>
+        <a href="/food?category=dinners" class="cat"><div class="ci"><svg class="ico"><use href="#i-truck"/></svg></div><b>Dinners and platters</b><small>Order</small></a>
       </div>
     </section>
 
@@ -495,6 +528,7 @@ const $ = s => document.querySelector(s);
 const sk = n => Array(n).fill('<div class="ccard sk"><div class="cthumb"></div><div class="cbody"><i></i><i></i></div></div>').join('');
 const empty = (t, p) => '<div class="empty"><div class="eic">' + IC.hat + '</div><h3>' + t + '</h3><p>' + p + '</p></div>';
 const money = v => '$' + Number(v).toFixed(2);
+(function(){ const ids = ['cheeseburger','pizza-slice','spaghetti-meat','pancakes','choc-cake','tacos','fries','lemonade','ribeye-dinner','cupcake','alfredo','wings-24','waffles','milkshake']; const one = ids.map(id => MENU.find(m => m.id === id)).filter(Boolean).map(m => '<figure><img src="' + m.img + '" alt="" width="320" height="240" loading="lazy"><figcaption>' + D.esc(m.name) + '</figcaption></figure>').join(''); $('#strip').innerHTML = one + one; })();
 $('#statDishes').textContent = MENU.length + '+'; $('#fMenu').textContent = MENU.length + '+ dishes';
 const PICK = ['cheeseburger', 'pizza-slice', 'spaghetti-meat', 'pancakes', 'choc-cake', 'milkshake'];
 $('#homeDishes').innerHTML = PICK.map(id => MENU.find(m => m.id === id)).filter(Boolean).map(m =>

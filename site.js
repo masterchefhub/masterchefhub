@@ -42,7 +42,7 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
 /* =====================================================================
    AUDIO CONTEXT
    ===================================================================== */
-var ctx = null, comp = null, musicGain = null, sfxGain = null, noiseBuf = null, gestured = false;
+var ctx = null, comp = null, musicGain = null, sfxGain = null, noiseBuf = null, gestured = !!INTERNAL;   /* moving between our own pages: try to resume sound straight away */
 
 function ac() {
   if (!ctx) {
@@ -1007,7 +1007,7 @@ function refreshAuth() {
 }
 function cartCount() {
   var n = 0;
-  try { var c = JSON.parse(localStorage.getItem('mch_cart') || '{}'); Object.keys(c).forEach(function (k) { n += (c[k] | 0); }); } catch (e) {}
+  try { var c = JSON.parse(localStorage.getItem('mch_cart2') || '[]'); if (Array.isArray(c)) c.forEach(function (l) { n += (l && l.q | 0); }); } catch (e) {}
   return n;
 }
 function paintCart() {
@@ -1018,7 +1018,7 @@ function paintCart() {
     b.textContent = n > 99 ? '99+' : n; b.hidden = !n;
   });
 }
-window.addEventListener('storage', function (e) { if (e.key === 'mch_cart') paintCart(); });
+window.addEventListener('storage', function (e) { if (e.key === 'mch_cart2') paintCart(); });
 window.addEventListener('mch:cart', paintCart);
 
 function ready(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
@@ -1040,6 +1040,7 @@ ready(function () {
   pendingN.splice(0).forEach(notify);
   if (window.__mchSlow) window.dispatchEvent(new CustomEvent('mch:slowload'));
   if (S.music) startPlayback();
+  if (INTERNAL && S.music) [250, 900, 2000].forEach(function (ms) { setTimeout(function () { if (ctx && ctx.state === 'suspended') ctx.resume().catch(function () {}); if (cur && cur.type === 'file' && au.paused && au.src) au.play().catch(function () {}); }, ms); });
   /* browsers block sound until the first tap: say so once, politely */
   if (!INTERNAL) setTimeout(function () {
     if (S.music && !gestured && !yielded && !running()) notify({ type: 'info', title: 'Tap to start the music', message: 'Your browser needs one tap on the page before it can play sound.' });
