@@ -114,92 +114,102 @@ footer ul a:hover{text-decoration:underline}
 }
 @media(max-width:600px){.top-links{display:none}.fgrid{grid-template-columns:1fr}}
 
-/* SETTINGS PAGE */
-.crumbs{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.84rem;font-weight:500;margin-bottom:18px}
+/* SETTINGS PAGE (side list + panel) */
+.crumbs{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.84rem;font-weight:500;margin-bottom:14px}
 .crumbs a:hover{color:var(--ink)}
-.phead{margin-bottom:30px}
-.phead h1{font-size:clamp(2.8rem,5.4vw,4.6rem);line-height:1;margin:10px 0 12px}
-.phead p{color:var(--muted);max-width:600px;font-size:1.04rem}
-.warn{background:#fff3ee;border:1px solid #ffd2c0;color:#7a2a0e;border-radius:16px;padding:16px 20px;margin-bottom:20px;font-weight:600;font-size:.92rem}
-.sgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start}
-.col{display:grid;gap:20px}
-.scard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px}
-.scard h2{display:flex;align-items:center;gap:14px;font-size:1.9rem;line-height:1.05;margin-bottom:6px}
-.scard h2 .hi{width:46px;height:46px;border-radius:14px;background:var(--ink);color:#fff;display:grid;place-items:center;flex-shrink:0}
-.scard .sub{color:var(--muted);font-size:.92rem;margin-bottom:14px}
-.srow{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 0;border-top:1px solid var(--line)}
-.srow b{display:block;font-size:.98rem}
-.srow small{color:var(--muted);font-size:.84rem;display:block}
-.switch{width:56px;height:32px;border-radius:99px;background:#d4d4d0;border:0;position:relative;cursor:pointer;flex-shrink:0;transition:.3s}
-.switch::after{content:"";position:absolute;left:4px;top:4px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:.3s}
+.warn{background:#fff3ee;border:1px solid #ffd2c0;color:#7a2a0e;border-radius:10px;padding:14px 18px;margin-bottom:18px;font-weight:600;font-size:.92rem}
+.sh{display:grid;grid-template-columns:260px minmax(0,1fr);gap:36px;align-items:start}
+.snav{position:sticky;top:96px;display:grid;gap:2px}
+.snav h1{font-family:'Inter',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-.03em;margin:0 0 14px 12px}
+.snav .grp{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:16px 12px 6px}
+.snav button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:9px 12px;border:0;background:transparent;border-radius:8px;font:500 .93rem Inter,sans-serif;color:#3a3a3a;cursor:pointer;transition:background .18s,color .18s,transform .18s}
+.snav button .ico{width:18px;height:18px;color:#7a7a7a;transition:color .18s,transform .25s}
+.snav button:hover{background:#ecece8;color:var(--ink)}
+.snav button:hover .ico{transform:scale(1.12)}
+.snav button.on{background:var(--ink);color:#fff}
+.snav button.on .ico{color:#fff}
+.spanel{min-width:0}
+.pane{display:none;animation:paneIn .3s var(--ease,ease) both}
+.pane.on{display:block}
+@keyframes paneIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.pane>h2{font-family:'Inter',sans-serif;font-size:1.55rem;font-weight:700;letter-spacing:-.03em;margin-bottom:4px}
+.pane>.lead{color:var(--muted);font-size:.95rem;margin-bottom:20px;max-width:620px}
+.blk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;overflow:hidden}
+.blk>h3{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:14px 20px 0}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 20px;border-top:1px solid var(--line)}
+.blk>h3+.srow,.blk>.srow:first-child{border-top:0}
+.srow b{display:block;font-size:.95rem;font-weight:600}
+.srow small{color:var(--muted);font-size:.83rem;display:block;margin-top:1px}
+.switch{width:44px;height:26px;border-radius:99px;background:#d4d4d0;border:0;position:relative;cursor:pointer;flex-shrink:0;transition:background .25s}
+.switch::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
 .switch[aria-checked="true"]{background:var(--ink)}
-.switch[aria-checked="true"]::after{transform:translateX(24px)}
-.range{display:flex;align-items:center;gap:14px;min-width:210px}
+.switch[aria-checked="true"]::after{transform:translateX(18px)}
+.range{display:flex;align-items:center;gap:12px;min-width:220px}
 .range input{flex:1;accent-color:#0a0a0a;height:4px;cursor:pointer}
-.range span{width:44px;text-align:right;font-weight:700;font-size:.86rem}
-.opts{display:flex;flex-wrap:wrap;gap:8px;padding:16px 0 6px}
-.opts-label{padding-top:18px;border-top:1px solid var(--line)}
-.opts-label b{display:block;font-size:.98rem}.opts-label small{color:var(--muted);font-size:.84rem}
-.opt{padding:10px 18px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:.88rem;cursor:pointer;transition:.2s;font-family:inherit;color:var(--ink)}
-.opt:hover{border-color:var(--ink)}
+.range span{width:46px;text-align:right;font-weight:600;font-size:.84rem}
+.opts{display:flex;flex-wrap:wrap;gap:6px;padding:4px 20px 18px}
+.opts-label{padding:16px 20px 8px;border-top:1px solid var(--line)}
+.opts-label b{display:block;font-size:.95rem;font-weight:600}.opts-label small{color:var(--muted);font-size:.83rem}
+.opt{padding:7px 13px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:600;font-size:.84rem;cursor:pointer;transition:background .18s,color .18s,border-color .18s,transform .18s;font-family:inherit;color:var(--ink)}
+.opt:hover{border-color:var(--ink);transform:translateY(-1px)}
 .opt.act{background:var(--ink);color:#fff;border-color:var(--ink)}
-.tbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:99px;border:1.5px solid var(--ink);background:transparent;font-weight:700;font-size:.85rem;cursor:pointer;font-family:inherit;color:var(--ink);transition:.2s}
+.tbtn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;border:1px solid var(--ink);background:transparent;font-weight:600;font-size:.85rem;cursor:pointer;font-family:inherit;color:var(--ink);transition:background .18s,color .18s}
 .tbtn:hover{background:var(--ink);color:#fff}
-.tbtn:hover .ico{animation:wiggle .6s ease}
 .tbtn.danger{border-color:#e5484d;color:#e5484d}.tbtn.danger:hover{background:#e5484d;color:#fff}
-.tests{display:flex;flex-wrap:wrap;gap:8px;padding:16px 0 4px;border-top:1px solid var(--line)}
-.hint{color:var(--muted);font-size:.82rem;min-height:20px;margin-top:6px}
-@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg) scale(1.1)}60%{transform:rotate(10deg) scale(1.1)}}
-
-.np{position:relative;background:var(--ink);color:#fff;border-radius:var(--r);padding:32px;overflow:hidden}
-.np::before,.np::after{content:"";position:absolute;border:1px solid #2a2a2a;border-radius:50%}
-.np::before{right:-110px;top:-110px;width:320px;height:320px}
-.np::after{right:-40px;top:-40px;width:180px;height:180px}
+.hint{color:var(--muted);font-size:.82rem;min-height:20px;margin:6px 4px 0}
+.fgrid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 20px 20px}
+.fgrid2 label{display:grid;gap:6px;font-size:.8rem;font-weight:600;color:#3a3a3a}
+.fgrid2 label.full{grid-column:1/-1}
+.fgrid2 input,.fgrid2 textarea,.sfind{font:inherit;font-size:.92rem;font-weight:400;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);width:100%}
+.fgrid2 textarea{min-height:70px;resize:vertical}
+.sfind{margin:4px 20px 12px;width:calc(100% - 40px)}
+.stgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px;padding:0 20px 20px;max-height:340px;overflow:auto}
+.stgrid .opt{text-align:left;padding:11px 12px;display:flex;align-items:center;gap:9px}
+.stgrid .opt i{width:8px;height:8px;border-radius:50%;background:#bbb;flex-shrink:0}
+.stgrid .opt[data-k="lofi"] i{background:#ff6a1a}.stgrid .opt[data-k="jazz"] i{background:#3b82f6}.stgrid .opt[data-k="ambient"] i{background:#8b5cf6}
+.stgrid .opt.act i{box-shadow:0 0 0 3px rgba(255,255,255,.3)}
+.np{position:relative;background:var(--ink);color:#fff;border-radius:12px;padding:26px;overflow:hidden;margin-bottom:16px}
+.np::before{content:"";position:absolute;right:-90px;top:-90px;width:260px;height:260px;border:1px solid #2a2a2a;border-radius:50%}
 .np > *{position:relative;z-index:2}
 .np .eyebrow{color:#8a8a8a}
-.np h3{font-size:2.3rem;line-height:1.05;margin:4px 0 6px;word-break:break-word}
-.np p{color:#a3a3a3;font-size:.92rem}
-.eqbig{display:flex;gap:5px;align-items:flex-end;height:50px;margin:22px 0}
-.eqbig i{width:6px;border-radius:3px;background:#fff;height:6px;display:block;transition:height .3s}
+.np h3{font-size:1.9rem;line-height:1.1;margin:4px 0 6px;word-break:break-word;font-family:'Instrument Serif',serif;font-weight:400}
+.np p{color:#a3a3a3;font-size:.9rem}
+.eqbig{display:flex;gap:4px;align-items:flex-end;height:42px;margin:18px 0}
+.eqbig i{width:5px;border-radius:2px;background:#fff;height:5px;display:block;transition:height .3s}
 .np.on .eqbig i{animation:eqb 1.1s ease-in-out infinite}
-@keyframes eqb{0%,100%{height:6px}50%{height:48px}}
+@keyframes eqb{0%,100%{height:5px}50%{height:40px}}
 .ctr{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.pbtn{width:60px;height:60px;border-radius:50%;background:#fff;color:#0a0a0a;border:0;display:grid;place-items:center;cursor:pointer;transition:.25s}
-.pbtn:hover{transform:scale(1.08)}
-.pbtn .ico{width:26px;height:26px}
-.nbtn{display:inline-flex;align-items:center;gap:8px;padding:14px 22px;border-radius:99px;border:1.5px solid #3a3a3a;background:transparent;color:#fff;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit;transition:.25s}
-.nbtn:hover{background:#fff;color:#0a0a0a;border-color:#fff}
-.nbtn .ico{width:18px;height:18px}
-
-.drop{border:1.5px dashed #bdbdb8;border-radius:18px;padding:30px 20px;text-align:center;cursor:pointer;transition:.25s;margin:6px 0 18px}
+.pbtn{width:52px;height:52px;border-radius:50%;background:#fff;color:#0a0a0a;border:0;display:grid;place-items:center;cursor:pointer;transition:transform .2s}
+.pbtn:hover{transform:scale(1.08)}.pbtn .ico{width:24px;height:24px}
+.nbtn{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:8px;border:1px solid #3a3a3a;background:transparent;color:#fff;font-weight:600;font-size:.86rem;cursor:pointer;font-family:inherit;transition:background .18s,color .18s}
+.nbtn:hover{background:#fff;color:#0a0a0a;border-color:#fff}.nbtn .ico{width:17px;height:17px}
+.drop{border:1.5px dashed #bdbdb8;border-radius:12px;padding:26px 20px;text-align:center;cursor:pointer;transition:.2s;margin:16px 20px}
 .drop:hover,.drop.over{border-color:var(--ink);background:#faf9f6}
-.drop .di{width:56px;height:56px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;margin:0 auto 12px;transition:.3s}
-.drop:hover .di{transform:translateY(-4px)}
+.drop .di{width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;margin:0 auto 10px}
 .drop b{display:block}.drop small{color:var(--muted)}
-.songs{display:grid;gap:8px}
-.song{display:flex;align-items:center;gap:10px;padding:8px 8px 8px 18px;border:1px solid var(--line);border-radius:16px;background:#fff;transition:.2s}
-.song:hover{border-color:var(--ink)}
+.songs{display:grid;gap:6px;padding:0 20px 18px}
+.song{display:flex;align-items:center;gap:10px;padding:6px 6px 6px 14px;border:1px solid var(--line);border-radius:8px;background:#fff}
 .song.act{background:var(--ink);color:#fff;border-color:var(--ink)}
-.song .nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;font-size:.92rem}
+.song .nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;font-size:.9rem}
 .song small{color:var(--muted);font-size:.78rem;flex-shrink:0}.song.act small{color:#aaa}
-.ib{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:0;background:transparent;color:inherit;cursor:pointer;transition:.2s;flex-shrink:0}
-.ib:hover{background:rgba(127,127,127,.2)}
-.ib .ico{width:18px;height:18px}
-.none{color:var(--muted);font-size:.9rem;text-align:center;padding:6px 0 2px}
-.note{color:var(--muted);font-size:.8rem;margin-top:14px}
-.acct{display:flex;align-items:center;gap:16px;padding:18px 0 6px;border-top:1px solid var(--line)}
-.acct .av{width:56px;height:56px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.3rem;overflow:hidden;flex-shrink:0}
+.ib{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;border:0;background:transparent;color:inherit;cursor:pointer;flex-shrink:0}
+.ib:hover{background:rgba(127,127,127,.2)}.ib .ico{width:17px;height:17px}
+.none{color:var(--muted);font-size:.9rem;text-align:center;padding:4px 0 14px}
+.acct{display:flex;align-items:center;gap:16px;padding:18px 20px}
+.acct .av{width:52px;height:52px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.2rem;overflow:hidden;flex-shrink:0}
 .acct .av img{width:100%;height:100%;object-fit:cover}
 .acct .tx{flex:1;min-width:0}.acct b{display:block}.acct small{color:var(--muted);display:block;overflow:hidden;text-overflow:ellipsis}
-@media(max-width:1100px){.sgrid{grid-template-columns:1fr}}
-@media(max-width:600px){.srow{flex-wrap:wrap}.range{min-width:100%}.scard,.np{padding:22px}.np h3{font-size:1.9rem}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:12px 20px;border-top:1px solid var(--line);font-size:.9rem}
+.kv span:first-child{color:var(--muted)}
+@media(max-width:960px){.sh{grid-template-columns:1fr;gap:14px}.snav{position:static;display:flex;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:none}.snav::-webkit-scrollbar{display:none}.snav h1,.snav .grp{display:none}.snav button{width:auto;white-space:nowrap;border:1px solid var(--line);background:#fff}.snav button .ico{display:none}}
+@media(max-width:600px){.srow{flex-wrap:wrap}.range{min-width:100%}.fgrid2{grid-template-columns:1fr}}
 </style>
 <link rel="stylesheet" href="/site.css">
 </head>
 <body data-mch-player="off">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
   <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h10M19 18h2"/><circle cx="15" cy="6" r="2.5"/><circle cx="9" cy="12" r="2.5"/><circle cx="16" cy="18" r="2.5"/></symbol>
   <symbol id="i-hat" viewBox="9 8 47 47"><g fill="currentColor" stroke="none"><circle cx="20.5" cy="25" r="9.5"/><circle cx="32" cy="20" r="11.5"/><circle cx="43.5" cy="25" r="9.5"/><rect x="17" y="25" width="30" height="19"/><rect x="17" y="47" width="30" height="8" rx="2.5"/></g><path d="M26 33.5v9M38 33.5v9" fill="none" stroke-width="1.7" stroke-linecap="round" style="stroke:var(--mark-bg,#fff)"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
@@ -288,26 +298,38 @@ footer ul a:hover{text-decoration:underline}
 
   <div class="wrap">
     <div class="crumbs"><a href="/">Home</a><svg class="ico sm"><use href="#i-chev"/></svg><span style="color:var(--ink)">Settings</span></div>
-    <div class="phead">
-      <div class="eyebrow">Preferences</div>
-      <h1 class="serif">Settings</h1>
-      <p>Control sound, music, the loading screen, notifications and display. Your choices are saved on this device and apply to every page.</p>
-    </div>
-    <div class="warn" id="engineWarn" hidden>The settings engine (site.js) could not be loaded, so these controls are not active. Upload site.js to the same folder as your pages.</div>
-    <div class="sgrid">
-      <div class="col"><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-speaker"/></svg></span>Sound effects</h2><p class="sub">The small clicks, taps and chimes you hear around the site.</p><div class="srow"><div><b>Sound effects</b><small>Play sounds when you click and tap</small></div><button class="switch" role="switch" data-key="sfx" aria-label="Sound effects"></button></div><div class="srow"><div><b>Hover sounds</b><small>A soft tick when your mouse moves over buttons</small></div><button class="switch" role="switch" data-key="hoverSfx" aria-label="Hover sounds"></button></div><div class="srow"><div><b>Effects volume</b><small>How loud the sounds are</small></div><div class="range"><input type="range" data-key="sfxVolume" data-out="o-sfx" min="0" max="100" aria-label="Effects volume"><span id="o-sfx"></span></div></div><div class="srow"><div><b>Try it out</b><small>Hear a sample effect</small></div><button class="tbtn" id="testSfx"><svg class="ico"><use href="#i-play2"/></svg>Play sample</button></div></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-note"/></svg></span>Music</h2><p class="sub">Relaxing music while you browse and cook. A new song is created every time.</p><div class="srow"><div><b>Music</b><small>Turn background music on or off</small></div><button class="switch" role="switch" data-key="music" aria-label="Music"></button></div><div class="srow"><div><b>Autoplay when I visit</b><small>Start a random song when you open the site in a new tab, or refresh</small></div><button class="switch" role="switch" data-key="autoplay" aria-label="Autoplay when I visit"></button></div><div class="srow"><div><b>Show the mini player</b><small>The small player at the bottom of every page</small></div><button class="switch" role="switch" data-key="miniPlayer" aria-label="Show the mini player"></button></div><div class="srow"><div><b>Music volume</b><small>How loud the music is</small></div><div class="range"><input type="range" data-key="musicVolume" data-out="o-mus" min="0" max="100" aria-label="Music volume"><span id="o-mus"></span></div></div><div class="opts-label"><b>Station</b><small>Choose the style of music</small></div><div class="opts" id="stations"><button class="opt" data-st="random">Random mix</button><button class="opt" data-st="lofi">Lo-fi Kitchen</button><button class="opt" data-st="jazz">Jazz Cafe</button><button class="opt" data-st="ambient">Sunday Ambient</button><button class="opt" data-st="morning">Morning Coffee</button><button class="opt" data-st="chill">Chillhop Beats</button><button class="opt" data-st="rainy">Rainy Window</button><button class="opt" data-st="bossa">Bossa Dinner</button><button class="opt" data-st="funk">Sunday Funk</button><button class="opt" data-st="piano">Evening Keys</button><button class="opt" data-st="dream">Dream Pads</button><button class="opt" data-st="stars">Starlight Bells</button><button class="opt" data-st="uploads">My music</button></div><div class="srow"><div><b>Mix in my uploads</b><small>Include your own songs in the Random mix</small></div><button class="switch" role="switch" data-key="shuffleUploads" aria-label="Mix in my uploads"></button></div><p class="note">The music keeps playing as you move between pages. If your browser blocks sound when you first open the site, tap anywhere once.</p></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-loader"/></svg></span>Loading screen</h2><p class="sub">Shown when you visit or refresh the site, and when a page is slow to load. It never appears for quick page changes.</p><div class="srow"><div><b>Show the loading screen</b><small>Turn the loading animation on or off</small></div><button class="switch" role="switch" data-key="loader" aria-label="Show the loading screen"></button></div><div class="srow"><div><b>Quick loading screen</b><small>A shorter animation so you get in faster</small></div><button class="switch" role="switch" data-key="loaderFast" aria-label="Quick loading screen"></button></div></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-eye"/></svg></span>Display and accessibility</h2><p class="sub">Make the site easier on your eyes.</p><div class="srow"><div><b>Custom cursor</b><small>A smooth animated mouse pointer on computers</small></div><button class="switch" role="switch" data-key="cursor" aria-label="Custom cursor"></button></div><div class="opts-label"><b>Text size</b><small>Scales text across the site</small></div><div class="opts" data-key="textSize"><button class="opt" data-val="small">Small</button><button class="opt" data-val="normal">Default</button><button class="opt" data-val="large">Large</button></div></div></div>
-      <div class="col"><div class="np" id="np">
-  <div class="eyebrow">Now playing</div>
-  <h3 class="serif" id="npTitle">Music is off</h3>
-  <p id="npSub">Press play to listen</p>
-  <div class="eqbig" aria-hidden="true"><i style="animation-delay:-0.00s"></i><i style="animation-delay:-0.17s"></i><i style="animation-delay:-0.34s"></i><i style="animation-delay:-0.51s"></i><i style="animation-delay:-0.68s"></i><i style="animation-delay:-0.85s"></i><i style="animation-delay:-1.02s"></i><i style="animation-delay:-1.19s"></i><i style="animation-delay:-1.36s"></i><i style="animation-delay:-1.53s"></i><i style="animation-delay:-1.70s"></i><i style="animation-delay:-1.87s"></i><i style="animation-delay:-2.04s"></i><i style="animation-delay:-2.21s"></i><i style="animation-delay:-2.38s"></i><i style="animation-delay:-2.55s"></i></div>
-  <div class="ctr">
-    <button class="pbtn" id="npPlay" aria-label="Play or pause"></button>
-    <button class="nbtn" id="npNext"><svg class="ico"><use href="#i-next2"/></svg>Next song</button>
-    <button class="nbtn" id="npUp"><svg class="ico"><use href="#i-upload"/></svg>Upload</button>
-  </div>
-</div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-upload"/></svg></span>My music</h2><p class="sub">Upload your own songs and play them on any page.</p><div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload music"><div class="di"><svg class="ico"><use href="#i-upload"/></svg></div><b>Click to upload, or drop songs here</b><small>MP3, WAV, M4A, OGG or FLAC</small></div><div class="songs" id="songs"></div><p class="note">Your songs are saved privately in this browser and are never uploaded to our servers.</p></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-bell"/></svg></span>Notifications</h2><p class="sub">Pop-up messages for things like uploads, sign-in problems and connection changes.</p><div class="srow"><div><b>Notifications</b><small>Show pop-up notifications</small></div><button class="switch" role="switch" data-key="notifications" aria-label="Notifications"></button></div><div class="srow"><div><b>Notification sound</b><small>Play a short sound with each notification</small></div><button class="switch" role="switch" data-key="notifySound" aria-label="Notification sound"></button></div><div class="srow"><div><b>Show for</b><small>How long a notification stays on screen</small></div><div class="range"><input type="range" data-key="notifyDuration" data-out="o-dur" min="2" max="10" step="1" data-scale="1" data-unit="s" aria-label="Show for"><span id="o-dur"></span></div></div><div class="opts-label"><b>Position</b><small>Where notifications appear</small></div><div class="opts" data-key="notifyPos"><button class="opt" data-val="bottom-left">Bottom left</button><button class="opt" data-val="top-right">Top right</button><button class="opt" data-val="top-center">Top center</button><button class="opt" data-val="bottom-right">Bottom right</button></div><div class="hint" id="notifyHint"></div></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-person"/></svg></span>Account</h2><p class="sub">Your sign-in on this device.</p><div class="acct" id="acct"></div></div><div class="scard"><h2 class="serif"><span class="hi"><svg class="ico"><use href="#i-shield2"/></svg></span>Data and reset</h2><p class="sub">Your settings and songs stay on this device.</p><div class="srow"><div><b>Clear my uploaded music</b><small>Remove every song you uploaded from this device</small></div><button class="tbtn danger" id="clearMusic"><svg class="ico"><use href="#i-trash"/></svg>Clear music</button></div><div class="srow"><div><b>Reset all settings</b><small>Go back to the defaults</small></div><button class="tbtn" id="reset"><svg class="ico"><use href="#i-reset"/></svg>Reset</button></div></div></div>
-    </div>
+    <div class="warn" id="engineWarn" hidden>The settings engine (site.js) could not be loaded, so these controls are not active.</div>
+    <div class="sh"><nav class="snav" id="snav" aria-label="Settings sections"><h1>Settings</h1><div class="grp">Account</div><button type="button" data-pane="account"><svg class="ico"><use href="#i-user"/></svg>Account</button><button type="button" data-pane="profile"><svg class="ico"><use href="#i-heart"/></svg>Profile</button><button type="button" data-pane="orders"><svg class="ico"><use href="#i-cart"/></svg>Orders and payment</button><button type="button" data-pane="history"><svg class="ico"><use href="#i-clock"/></svg>Order history</button><button type="button" data-pane="delivery"><svg class="ico"><use href="#i-truck"/></svg>Delivery details</button><div class="grp">Preferences</div><button type="button" data-pane="notify"><svg class="ico"><use href="#i-bell"/></svg>Notifications</button><button type="button" data-pane="sound"><svg class="ico"><use href="#i-speaker"/></svg>Sound and music</button><button type="button" data-pane="library"><svg class="ico"><use href="#i-note"/></svg>My music</button><button type="button" data-pane="appearance"><svg class="ico"><use href="#i-eye"/></svg>Appearance</button><div class="grp">More</div><button type="button" data-pane="privacy"><svg class="ico"><use href="#i-shield"/></svg>Privacy and data</button><button type="button" data-pane="help"><svg class="ico"><use href="#i-info"/></svg>Help and about</button></nav><div class="spanel"><section class="pane" id="p-account"><h2>Account</h2><p class="lead">Who you are on MasterChefHub. Sign in to keep your orders and settings together.</p>
+<div class="blk"><div class="acct" id="acct"></div><div class="kv"><span>Email status</span><span id="verTxt">Signed out</span></div></div></section><section class="pane" id="p-profile"><h2>Profile</h2><p class="lead">Your name and photo are shown on your orders and messages.</p>
+<div class="blk"><div class="srow"><div><b>Edit your profile</b><small>Change your display name, photo and phone number.</small></div><a class="tbtn" href="/profile">Open profile</a></div></div></section><section class="pane" id="p-orders"><h2>Orders and payment</h2><p class="lead">Defaults used when you check out. You pay at your door, in cash or with Venmo.</p>
+<div class="blk"><h3>Checkout defaults</h3><div class="opts-label"><b>Pay with</b><small>Chosen again next time you check out</small></div><div class="opts" data-key="pref:pay"><button class="opt" data-val="cash">Cash</button><button class="opt" data-val="venmo">Venmo</button></div><div class="opts-label"><b>Default tip</b><small>Added to each order</small></div><div class="opts" data-key="pref:tip"><button class="opt" data-val="0">No tip</button><button class="opt" data-val="10">10%</button><button class="opt" data-val="15">15%</button><button class="opt" data-val="20">20%</button></div></div>
+<div class="blk"><h3>Venmo</h3><div class="fgrid2"><label class="full">Your Venmo username (optional)<input id="pf-venmo" placeholder="@yourname" autocomplete="off"></label></div></div>
+<div class="blk"><h3>Cart</h3><div class="srow"><div><b>Remember my cart</b><small>Keep items in your cart on this device between visits</small></div><button class="switch" role="switch" data-key="saveCart" aria-checked="false" aria-label="Remember my cart"></button></div></div><p class="hint">Payment is collected at delivery. No card details are ever stored here.</p></section><section class="pane" id="p-history"><h2>Order history</h2><p class="lead">Your past orders, their status and totals.</p>
+<div class="blk"><div class="srow"><div><b>View my orders</b><small>Open your profile to see every order you placed.</small></div><a class="tbtn" href="/profile">View orders</a></div>
+<div class="srow"><div><b>Order again</b><small>Browse the menu and rebuild a favourite meal.</small></div><a class="tbtn" href="/food">Open menu</a></div>
+<div class="kv"><span>Items in cart now</span><span id="cartN">0</span></div></div></section><section class="pane" id="p-delivery"><h2>Delivery details</h2><p class="lead">Saved on this device only, so checkout is faster. You can always change them at checkout.</p>
+<div class="blk"><h3>Contact</h3><div class="fgrid2"><label>Name<input id="pf-name" autocomplete="name"></label><label>Phone<input id="pf-phone" type="tel" autocomplete="tel"></label></div></div>
+<div class="blk"><h3>Where to deliver</h3><div class="fgrid2"><label class="full">Street address<input id="pf-addr" autocomplete="street-address"></label><label>City<input id="pf-city" autocomplete="address-level2"></label><label>ZIP<input id="pf-zip" autocomplete="postal-code" inputmode="numeric"></label><label class="full">Notes for the driver<textarea id="pf-note" placeholder="Gate code, apartment number, leave at the door..."></textarea></label></div></div>
+<p class="hint" id="pfHint">Changes save automatically.</p></section><section class="pane" id="p-notify"><h2>Notifications</h2><p class="lead">Pop-ups on the screen while you browse.</p>
+<div class="blk"><h3>Pop-ups</h3><div class="srow"><div><b>Show notifications</b><small>Success, error and info pop-ups</small></div><button class="switch" role="switch" data-key="notifications" aria-checked="false" aria-label="Show notifications"></button></div><div class="srow"><div><b>Notification sound</b><small>A short chime when one appears</small></div><button class="switch" role="switch" data-key="notifySound" aria-checked="false" aria-label="Notification sound"></button></div><div class="srow"><div><b>Order updates</b><small>Tell me when my order status changes</small></div><button class="switch" role="switch" data-key="orderAlerts" aria-checked="false" aria-label="Order updates"></button></div>
+<div class="srow"><div><b>Stay on screen</b><small>How long each pop-up stays</small></div><div class="range"><input type="range" data-key="notifyDuration" data-out="o-dur" min="0" max="100" aria-label="Stay on screen" min="2" max="12" data-scale="1" data-unit="s"><span id="o-dur"></span></div></div><div class="opts-label"><b>Position</b><small>Where pop-ups appear</small></div><div class="opts" data-key="notifyPos"><button class="opt" data-val="bottom-left">Bottom left</button><button class="opt" data-val="bottom-right">Bottom right</button><button class="opt" data-val="top-right">Top right</button><button class="opt" data-val="top-center">Top center</button></div></div></section><section class="pane" id="p-sound"><h2>Sound and music</h2><p class="lead">Radio made live in your browser, so it never repeats. It keeps playing as you move between pages.</p>
+<div class="np" id="np"><div class="eyebrow">Now playing</div><h3 id="npTitle">Music is off</h3><p id="npSub">Press play to listen</p>
+<div class="eqbig" aria-hidden="true"><i style="animation-delay:-0.00s"></i><i style="animation-delay:-0.12s"></i><i style="animation-delay:-0.24s"></i><i style="animation-delay:-0.36s"></i><i style="animation-delay:-0.48s"></i><i style="animation-delay:-0.60s"></i><i style="animation-delay:-0.72s"></i><i style="animation-delay:-0.84s"></i><i style="animation-delay:-0.96s"></i><i style="animation-delay:-1.08s"></i><i style="animation-delay:-1.20s"></i><i style="animation-delay:-1.32s"></i><i style="animation-delay:-1.44s"></i><i style="animation-delay:-1.56s"></i><i style="animation-delay:-1.68s"></i><i style="animation-delay:-1.80s"></i></div>
+<div class="ctr"><button class="pbtn" id="npPlay" aria-label="Play or pause"></button><button class="nbtn" id="npNext"><svg class="ico"><use href="#i-next2"/></svg>Next song</button><button class="nbtn" id="npUp"><svg class="ico"><use href="#i-upload"/></svg>Upload</button></div></div>
+<div class="blk"><h3>Music</h3><div class="srow"><div><b>Background music</b><small>Play the radio on every page</small></div><button class="switch" role="switch" data-key="music" aria-checked="false" aria-label="Background music"></button></div><div class="srow"><div><b>Start automatically</b><small>Resume when you open another page</small></div><button class="switch" role="switch" data-key="autoplay" aria-checked="false" aria-label="Start automatically"></button></div><div class="srow"><div><b>Music volume</b><small>How loud the music is</small></div><div class="range"><input type="range" data-key="musicVolume" data-out="o-mus" min="0" max="100" aria-label="Music volume" ><span id="o-mus"></span></div></div><div class="srow"><div><b>Mix in my uploads</b><small>Include your own songs in the Random mix</small></div><button class="switch" role="switch" data-key="shuffleUploads" aria-checked="false" aria-label="Mix in my uploads"></button></div></div>
+<div class="blk"><h3>Player bar</h3><div class="srow"><div><b>Show the player bar</b><small>The small controls in the corner</small></div><button class="switch" role="switch" data-key="miniPlayer" aria-checked="false" aria-label="Show the player bar"></button></div><div class="srow"><div><b>Minimize the bar</b><small>Shrink it to a single button, tap it to open again</small></div><button class="switch" role="switch" data-key="playerMin" aria-checked="false" aria-label="Minimize the bar"></button></div></div>
+<div class="blk"><h3>Stations <span id="stCount"></span></h3><input class="sfind" id="stFind" placeholder="Search stations" aria-label="Search stations"><div class="stgrid" id="stations"></div></div>
+<div class="blk"><h3>Sound effects</h3><div class="srow"><div><b>Interface sounds</b><small>Soft clicks and taps</small></div><button class="switch" role="switch" data-key="sfx" aria-checked="false" aria-label="Interface sounds"></button></div><div class="srow"><div><b>Hover sounds</b><small>A tick when you move over buttons</small></div><button class="switch" role="switch" data-key="hoverSfx" aria-checked="false" aria-label="Hover sounds"></button></div><div class="srow"><div><b>Effects volume</b><small>How loud the clicks are</small></div><div class="range"><input type="range" data-key="sfxVolume" data-out="o-sfx" min="0" max="100" aria-label="Effects volume" ><span id="o-sfx"></span></div></div><div class="srow"><div><b>Test the sound</b><small>Plays a short chime</small></div><button class="tbtn" id="testSfx" type="button">Play</button></div></div></section><section class="pane" id="p-library"><h2>My music</h2><p class="lead">Upload your own songs and play them on any page. Files stay in this browser.</p>
+<div class="blk"><div class="drop" id="drop" tabindex="0" role="button"><div class="di"><svg class="ico"><use href="#i-upload"/></svg></div><b>Drop songs here or click to choose</b><small>MP3, M4A, WAV, OGG, FLAC</small></div><div class="songs" id="songs"></div>
+<div class="srow"><div><b>Remove all uploads</b><small>Deletes every song you added</small></div><button class="tbtn danger" id="clearMusic" type="button"><svg class="ico sm"><use href="#i-trash"/></svg>Clear music</button></div></div></section><section class="pane" id="p-appearance"><h2>Appearance</h2><p class="lead">How the site looks and moves.</p>
+<div class="blk"><h3>Display</h3><div class="opts-label"><b>Text size</b><small>Make everything smaller or larger</small></div><div class="opts" data-key="textSize"><button class="opt" data-val="small">Small</button><button class="opt" data-val="normal">Normal</button><button class="opt" data-val="large">Large</button></div><div class="opts-label"><b>Density</b><small>Spacing between items</small></div><div class="opts" data-key="density"><button class="opt" data-val="comfortable">Comfortable</button><button class="opt" data-val="compact">Compact</button></div></div>
+<div class="blk"><h3>Motion</h3><div class="srow"><div><b>Animations</b><small>Page transitions, hover effects and reveals</small></div><button class="switch" role="switch" data-key="animations" aria-checked="false" aria-label="Animations"></button></div><div class="srow"><div><b>Custom cursor</b><small>A soft ring that follows your mouse</small></div><button class="switch" role="switch" data-key="cursor" aria-checked="false" aria-label="Custom cursor"></button></div><div class="srow"><div><b>Loading screen</b><small>The brand screen when the site first opens</small></div><button class="switch" role="switch" data-key="loader" aria-checked="false" aria-label="Loading screen"></button></div><div class="srow"><div><b>Faster loading screen</b><small>Shorter intro</small></div><button class="switch" role="switch" data-key="loaderFast" aria-checked="false" aria-label="Faster loading screen"></button></div></div></section><section class="pane" id="p-privacy"><h2>Privacy and data</h2><p class="lead">What is stored on this device and how to clear it.</p>
+<div class="blk"><div class="srow"><div><b>Clear my cart</b><small>Removes every item from your cart</small></div><button class="tbtn" id="clrCart" type="button">Clear cart</button></div>
+<div class="srow"><div><b>Forget saved delivery details</b><small>Name, phone, address and notes on this device</small></div><button class="tbtn" id="clrPref" type="button">Forget</button></div>
+<div class="srow"><div><b>Reset all settings</b><small>Put every option back to its default</small></div><button class="tbtn danger" id="reset" type="button"><svg class="ico sm"><use href="#i-reset"/></svg>Reset</button></div></div>
+<div class="blk"><div class="srow"><div><b>Privacy policy</b><small>How we handle your information</small></div><a class="tbtn" href="/privacy">Read</a></div><div class="srow"><div><b>Terms of service</b><small>The rules for using MasterChefHub</small></div><a class="tbtn" href="/terms">Read</a></div></div></section><section class="pane" id="p-help"><h2>Help and about</h2><p class="lead">Questions about an order or the site.</p>
+<div class="blk"><div class="srow"><div><b>Contact us</b><small>Message the kitchen about an order</small></div><a class="tbtn" href="/contact">Contact</a></div><div class="srow"><div><b>About MasterChefHub</b><small>Home cooking, delivered to your door</small></div><a class="tbtn" href="/about">About</a></div>
+<div class="kv"><span>Site version</span><span id="verNo">-</span></div></div></section></div></div>
   </div>
 
   <footer>
@@ -346,6 +368,20 @@ $('#searchForm').addEventListener('submit',e=>{
 const M=window.MCH;
 if(!M){ $('#engineWarn').hidden=false; return; }
 const S=M.settings;
+/* local order/delivery preferences */
+const PK='mch_pref'; let P={}; try{P=JSON.parse(localStorage.getItem(PK)||'{}')||{};}catch(e){}
+const saveP=()=>{ try{localStorage.setItem(PK,JSON.stringify(P));}catch(e){} };
+/* side list */
+const panes=$$('.pane'), navb=$$('#snav [data-pane]');
+function showPane(k,push){ if(!panes.some(p=>p.id==='p-'+k)) k='account'; panes.forEach(p=>p.classList.toggle('on',p.id==='p-'+k)); navb.forEach(b=>b.classList.toggle('on',b.dataset.pane===k)); if(push){ try{history.replaceState(null,'','#'+k);}catch(e){} } window.scrollTo({top:0,behavior:'smooth'}); }
+navb.forEach(b=>b.addEventListener('click',()=>{ sfx.click&&0; showPane(b.dataset.pane,true); }));
+showPane((location.hash||'').slice(1)||'account',false);
+window.addEventListener('hashchange',()=>showPane((location.hash||'').slice(1),false));
+/* stations list */
+const stBox=$('#stations'), stDefs=[['random','Random mix','x']].concat(Object.keys(M.stations).map(k=>[k,M.stations[k].name,M.stations[k].kind||k])).concat([['uploads','My music','x']]);
+stBox.innerHTML=stDefs.map(d=>'<button class="opt" data-st="'+d[0]+'" data-k="'+(d[2]||'')+'" data-n="'+esc(d[1].toLowerCase())+'"><i></i>'+esc(d[1])+'</button>').join('');
+$('#stCount').textContent='('+(stDefs.length-2)+')';
+$('#stFind').addEventListener('input',e=>{ const q=e.target.value.trim().toLowerCase(); stBox.querySelectorAll('.opt').forEach(o=>{ o.style.display=!q||o.dataset.n.includes(q)?'':'none'; }); });
 const fmt=b=>b>1048576?(b/1048576).toFixed(1)+' MB':Math.max(1,Math.round(b/1024))+' KB';
 let libKey='';
 
@@ -373,7 +409,7 @@ function render(){
     if(document.activeElement!==r) r.value=v;
     $('#'+r.dataset.out).textContent=v+(r.dataset.unit||'%');
   });
-  $$('.opts[data-key]').forEach(g=>g.querySelectorAll('.opt').forEach(o=>o.classList.toggle('act',o.dataset.val===String(S[g.dataset.key]))));
+  $$('.opts[data-key]').forEach(g=>{ const k=g.dataset.key, v=k.startsWith('pref:')?(P[k.slice(5)]!=null?P[k.slice(5)]:(k==='pref:pay'?'cash':'0')):S[k]; g.querySelectorAll('.opt').forEach(o=>o.classList.toggle('act',o.dataset.val===String(v))); });
   $$('#stations .opt').forEach(o=>o.classList.toggle('act',o.dataset.st===S.station));
   const n=M.now();
   $('#npTitle').textContent=n.title;
@@ -402,6 +438,7 @@ $$('input[type=range][data-out]').forEach(r=>{
 /* option groups (text size, notification position) */
 $$('.opts[data-key]').forEach(g=>g.addEventListener('click',e=>{
   const o=e.target.closest('.opt'); if(!o) return;
+  if(g.dataset.key.startsWith('pref:')){ P[g.dataset.key.slice(5)]=o.dataset.val; saveP(); render(); return; }
   M.set(g.dataset.key,o.dataset.val); render();
   if(g.dataset.key==='notifyPos') M.notify({type:'info',title:'Notifications will appear here'});
 }));
@@ -438,8 +475,17 @@ $('#clearMusic').addEventListener('click',e=>{
 });
 $('#reset').addEventListener('click',()=>{ M.reset(); M.notify({type:'info',title:'Settings reset',message:'Everything is back to the defaults.'}); render(); });
 
+/* saved delivery details */
+const pfIds={name:'pf-name',phone:'pf-phone',addr:'pf-addr',city:'pf-city',zip:'pf-zip',note:'pf-note',venmo:'pf-venmo'};
+Object.keys(pfIds).forEach(k=>{ const el=document.getElementById(pfIds[k]); if(!el) return; el.value=P[k]||''; el.addEventListener('input',()=>{ P[k]=el.value; saveP(); const h=$('#pfHint'); if(h){ h.textContent='Saved on this device.'; } }); });
+$('#clrPref').addEventListener('click',()=>{ ['name','phone','addr','city','zip','note','venmo'].forEach(k=>{ delete P[k]; const el=document.getElementById(pfIds[k]); if(el) el.value=''; }); saveP(); M.notify({type:'info',title:'Saved details removed'}); });
+$('#clrCart').addEventListener('click',()=>{ try{localStorage.removeItem('mch_cart2');}catch(e){} if(M.paintCart) M.paintCart(); cartN(); M.notify({type:'info',title:'Cart cleared'}); });
+function cartN(){ let n=0; try{ (JSON.parse(localStorage.getItem('mch_cart2')||'[]')||[]).forEach(l=>n+=(l.q||1)); }catch(e){} $('#cartN').textContent=n; }
+function acctInfo(){ const u=M.user(); $('#verTxt').textContent=!u?'Signed out':(u.verified===false?'Not verified yet':'Signed in'); }
+fetch('/version.json',{cache:'no-store'}).then(r=>r.json()).then(j=>{ const d=new Date(+j.v*1000); $('#verNo').textContent=isNaN(d)?String(j.v):d.toISOString().slice(0,16).replace('T',' ')+' UTC'; }).catch(()=>{});
+cartN(); acctInfo();
 M.on('settings',render); M.on('track',render); M.on('lib',()=>{ libKey=''; render(); });
-setInterval(render,1000);
+setInterval(()=>{render();cartN();acctInfo();},1000);
 renderAccount(); render();
 window.addEventListener('storage',e=>{ if(e.key==='mch_user') renderAccount(); });
 })();

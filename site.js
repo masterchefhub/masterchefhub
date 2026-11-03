@@ -13,7 +13,8 @@ var defaults = {
   music: true, autoplay: true, musicVolume: 0.5, station: 'random', shuffleUploads: true, miniPlayer: true,
   loader: true, loaderFast: false,
   notifications: true, notifySound: true, notifyPos: 'bottom-left', notifyDuration: 5,
-  cursor: true, textSize: 'normal', posV: 2
+  cursor: true, textSize: 'normal', posV: 2,
+  playerMin: false, animations: true, density: 'comfortable', sleepMin: 0, orderAlerts: true, saveCart: true
 };
 var S = Object.assign({}, defaults);
 try {
@@ -121,6 +122,40 @@ var sfx = {
 window.sfx = sfx;
 
 var lastHover = 0;
+/* Photo fallback: if a remote dish photo fails, use the bundled illustration. */
+document.addEventListener('error', function (e) {
+  var t = e.target;
+  if (t && t.tagName === 'IMG' && t.dataset && t.dataset.fb && t.getAttribute('src') !== t.dataset.fb) t.src = t.dataset.fb;
+}, true);
+
+/* ===== Update available banner (all pages) ===== */
+(function () {
+  if (window.__mchUpd) return; window.__mchUpd = true;
+  var base = null, bar = null, snooze = 0;
+  function show() {
+    if (bar || Date.now() < snooze) return;
+    bar = document.createElement('div'); bar.id = 'mch-upd'; bar.setAttribute('data-keep', ''); bar.setAttribute('role', 'status');
+    bar.innerHTML = '<span class="u-dot"></span><span><b>A new version is ready.</b> Refresh the page to resume.</span><button class="go" type="button">Refresh now</button><button type="button">Refresh soon</button>';
+    document.body.appendChild(bar);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { bar.classList.add('on'); }); });
+    bar.querySelector('.go').onclick = function () { location.reload(); };
+    bar.querySelectorAll('button')[1].onclick = function () {
+      snooze = Date.now() + 10 * 60 * 1000; bar.classList.remove('on');
+      setTimeout(function () { if (bar) bar.remove(); bar = null; }, 500);
+    };
+  }
+  function check() {
+    fetch('/version.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (!j || !j.v) return;
+      if (base === null) { base = j.v; return; }
+      if (j.v !== base) show();
+    }).catch(function () {});
+  }
+  check(); setInterval(check, 45000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) check(); });
+  window.addEventListener('focus', check);
+})();
+
 document.addEventListener('mouseover', function (e) {
   var t = e.target && e.target.closest && e.target.closest('a,.btn,button,.cat,.card,.row,.val,.step,.stat,.tl,.coll,.chip,.switch,.opt,.mchp-chip');
   if (!t || (e.relatedTarget && t.contains(e.relatedTarget))) return;
@@ -169,16 +204,43 @@ var STATIONS = {
   funk:    { name: 'Sunday Funk',     bpm: [104, 118], swing: 0.12, bars: 32, kind: 'jazz' },
   piano:   { name: 'Evening Keys',    bpm: [60, 72],  swing: 0.05, bars: 28, kind: 'lofi' },
   dream:   { name: 'Dream Pads',      bpm: [58, 68],  swing: 0,    bars: 24, kind: 'ambient' },
-  stars:   { name: 'Starlight Bells', bpm: [52, 62],  swing: 0,    bars: 24, kind: 'ambient' }
+  stars:   { name: 'Starlight Bells', bpm: [52, 62],  swing: 0,    bars: 24, kind: 'ambient' },
+  sunrise: { name: 'Sunrise Toast',   bpm: [80, 92],  swing: 0.12, bars: 32, kind: 'lofi',  keys: [0, 5, 7], progs: [0, 3, 4, 7] },
+  brunch:  { name: 'Brunch Club',     bpm: [96, 108], swing: 0.26, bars: 32, kind: 'jazz',  keys: [0, 5, 7], progs: [0, 3, 7, 8] },
+  grill:   { name: 'Backyard Grill',  bpm: [100, 116], swing: 0.16, bars: 32, kind: 'jazz', keys: [7, 0, 2], progs: [4, 7, 8] },
+  simmer:  { name: 'Slow Simmer',     bpm: [62, 72],  swing: 0.12, bars: 32, kind: 'lofi',  keys: [2, 3, 5], progs: [2, 5, 9] },
+  midnight:{ name: 'Midnight Snack',  bpm: [66, 78],  swing: 0.2,  bars: 32, kind: 'lofi',  keys: [3, 8, 10], progs: [1, 2, 5, 9] },
+  cafe:    { name: 'Corner Cafe',     bpm: [88, 100], swing: 0.22, bars: 32, kind: 'jazz',  keys: [0, 7, 5], progs: [0, 6, 7] },
+  vinyl:   { name: 'Vinyl Dust',      bpm: [72, 82],  swing: 0.24, bars: 32, kind: 'lofi',  keys: [2, 7, 9], progs: [1, 2, 6] },
+  smooth:  { name: 'Smooth Dinner',   bpm: [84, 96],  swing: 0.28, bars: 32, kind: 'jazz',  keys: [5, 0, 10], progs: [0, 1, 6] },
+  rooftop: { name: 'Rooftop Sunset',  bpm: [90, 102], swing: 0.14, bars: 32, kind: 'lofi',  keys: [7, 0, 2], progs: [3, 4, 8] },
+  study:   { name: 'Quiet Study',     bpm: [58, 68],  swing: 0.04, bars: 32, kind: 'lofi',  keys: [0, 2, 5], progs: [2, 5, 7] },
+  swing:   { name: 'Late Swing',      bpm: [116, 132], swing: 0.34, bars: 32, kind: 'jazz', keys: [10, 3, 5], progs: [0, 2, 6] },
+  tropic:  { name: 'Tropical Plate',  bpm: [98, 112], swing: 0.18, bars: 32, kind: 'jazz',  keys: [5, 7, 0], progs: [3, 4, 8, 10] },
+  snow:    { name: 'Snowed In',       bpm: [54, 64],  swing: 0.02, bars: 28, kind: 'lofi',  keys: [3, 8, 10], progs: [1, 5, 9] },
+  forest:  { name: 'Forest Pantry',   bpm: [56, 66],  swing: 0,    bars: 24, kind: 'ambient', keys: [2, 7, 9] },
+  ocean:   { name: 'Ocean Steam',     bpm: [50, 60],  swing: 0,    bars: 24, kind: 'ambient', keys: [0, 5, 7] },
+  nebula:  { name: 'Nebula Pads',     bpm: [48, 58],  swing: 0,    bars: 24, kind: 'ambient', keys: [3, 8, 10] },
+  glass:   { name: 'Glass Bells',     bpm: [60, 70],  swing: 0,    bars: 24, kind: 'ambient', keys: [0, 2, 7] },
+  hearth:  { name: 'Warm Hearth',     bpm: [60, 70],  swing: 0.06, bars: 28, kind: 'lofi',  keys: [5, 3, 0], progs: [0, 3, 4] },
+  neon:    { name: 'Neon Kitchen',    bpm: [92, 104], swing: 0.1,  bars: 32, kind: 'lofi',  keys: [8, 10, 3], progs: [1, 9, 10] },
+  garden:  { name: 'Herb Garden',     bpm: [76, 88],  swing: 0.15, bars: 32, kind: 'lofi',  keys: [7, 0, 5], progs: [3, 7, 8] },
+  matinee: { name: 'Matinee Jazz',    bpm: [76, 90],  swing: 0.3,  bars: 32, kind: 'jazz',  keys: [3, 5, 10], progs: [0, 2, 6, 9] },
+  delivery:{ name: 'On The Way',      bpm: [104, 120], swing: 0.1, bars: 32, kind: 'lofi',  keys: [0, 7, 5], progs: [4, 7, 10] },
+  weekend: { name: 'Weekend Prep',    bpm: [94, 106], swing: 0.2,  bars: 32, kind: 'jazz',  keys: [2, 7, 0], progs: [0, 4, 8] },
+  dusk:    { name: 'Golden Dusk',     bpm: [68, 80],  swing: 0.12, bars: 32, kind: 'lofi',  keys: [5, 7, 0], progs: [3, 5, 8] },
+  clouds:  { name: 'Cloud Drift',     bpm: [52, 62],  swing: 0,    bars: 24, kind: 'ambient', keys: [0, 5, 7] },
+  espresso:{ name: 'Espresso Shot',   bpm: [110, 124], swing: 0.22, bars: 32, kind: 'jazz', keys: [0, 7, 2], progs: [6, 7, 8] }
 };
-var STATION_ORDER = ['lofi', 'jazz', 'ambient', 'morning', 'chill', 'rainy', 'bossa', 'funk', 'piano', 'dream', 'stars'];
+var STATION_ORDER = Object.keys(STATIONS);
 function makePlan(station, seed) {
   var r = rng(seed), st = STATIONS[station];
-  var keys = [0, 2, 3, 5, 7, 8, 10];
+  var keys = st.keys || [0, 2, 3, 5, 7, 8, 10];
+  var progPool = st.progs ? st.progs.map(function (i) { return PROGS[i]; }) : PROGS;
   return {
     station: station, seed: seed, st: st,
     key: 48 + keys[Math.floor(r() * keys.length)],
-    prog: PROGS[Math.floor(r() * PROGS.length)],
+    prog: progPool[Math.floor(r() * progPool.length)],
     bpm: st.bpm[0] + Math.floor(r() * (st.bpm[1] - st.bpm[0] + 1)),
     title: st.name + ' · ' + (seed % 9000 + 1000)
   };
@@ -606,7 +668,7 @@ function set(k, v) {
   }
   if (k === 'sfxVolume' && sfxGain) sfxGain.gain.setTargetAtTime(v, ctx.currentTime, 0.05);
   if (k === 'music') { if (v) { ac(); startPlayback(); } else stopAll(); }
-  if (k === 'textSize') applyDisplay();
+  if (k === 'textSize' || k === 'animations' || k === 'density') applyDisplay();
   if (k === 'cursor') cursorSet(!!v);
   if (k === 'miniPlayer' && ui) ui.style.display = v ? '' : 'none';
   if (k === 'notifyPos' && nWrap) nWrap.setAttribute('data-pos', v);
@@ -663,6 +725,8 @@ var ICON = {
   play: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>',
   pause: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/></svg>',
   next: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M5 5v14l10-7z"/><rect x="16.5" y="5" width="2.5" height="14" rx="1"/></svg>',
+  min: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>',
+  expand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v6h6M20 10V4h-6M4 20l7-7M20 4l-7 7"/></svg>',
   up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>',
   upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>',
   trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
@@ -748,6 +812,19 @@ var CSS =
 '.mchu-tx small{display:block;font-size:.72rem;color:#8f8f8f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
 '.mchu:hover{background:#1d1d1d;border-color:#3a3a3a}.mchu-out{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#bbb;flex-shrink:0;transition:.2s}.mchu-out:hover{background:#2a2a2a;color:#fff}.mchu-out svg{width:17px;height:17px}' +
 '@media(max-width:600px){.mchn-wrap[data-pos="top-right"],.mchn-wrap[data-pos="top-center"]{top:12px;left:14px;right:14px;width:auto;transform:none}.mchn-wrap[data-pos="bottom-right"],.mchn-wrap[data-pos="bottom-left"]{right:14px;left:14px;width:auto}.mchn-wrap[data-pos="bottom-left"]{bottom:92px}}' +
+'.mchp{transition:width .35s cubic-bezier(.2,.8,.2,1)}' +
+'.mchp-bar{border-radius:12px!important;transition:padding .3s,border-radius .3s,transform .3s}' +
+'.mchp-panel{border-radius:12px!important;transform-origin:bottom right;animation:mchpUp .28s cubic-bezier(.2,.8,.2,1)}' +
+'@keyframes mchpUp{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}' +
+'.mchp-chips{max-height:170px;overflow:auto;padding-right:2px}' +
+'.mchp-chip,.mchp-btn,.mchp-item{border-radius:8px!important}' +
+'.mchp-expb{display:none}' +
+'.mchp.min{width:auto;margin-left:auto}' +
+'.mchp.min .mchp-panel{display:none!important}' +
+'.mchp.min .mchp-txt,.mchp.min .mchp-next,.mchp.min [data-act="next"],.mchp.min .mchp-more,.mchp.min .mchp-minb{display:none}' +
+'.mchp.min .mchp-expb{display:grid}' +
+'.mchp.min .mchp-bar{width:max-content;margin-left:auto;padding:5px;border-radius:99px!important;animation:mchpPop .35s cubic-bezier(.2,.8,.2,1)}' +
+'@keyframes mchpPop{from{transform:scale(.85);opacity:.4}to{transform:none;opacity:1}}' +
 '@media(max-width:960px){.mchp{right:14px;left:14px;bottom:14px;width:auto;max-width:none}}' +
 '@media(prefers-reduced-motion:reduce){.mchp *{animation:none!important;transition:none!important}}';
 
@@ -759,6 +836,8 @@ function injectStyle() {
 function applyDisplay() {
   var r = document.documentElement;
   r.style.fontSize = S.textSize === 'small' ? '15px' : S.textSize === 'large' ? '17.5px' : '';
+  r.setAttribute('data-anim', S.animations === false ? 'off' : 'on');
+  r.setAttribute('data-density', S.density === 'compact' ? 'compact' : 'comfortable');
 }
 
 /* ---------------- NOTIFICATIONS ---------------- */
@@ -892,6 +971,8 @@ function buildUI() {
       '<div class="mchp-info"><div class="mchp-eq"><i></i><i></i><i></i><i></i></div><div class="mchp-txt"><b></b><small></small></div></div>' +
       '<button class="mchp-ico" data-act="next" aria-label="Next song">' + ICON.next + '</button>' +
       '<button class="mchp-ico mchp-more" data-act="more" aria-label="Music menu">' + ICON.up + '</button>' +
+      '<button class="mchp-ico mchp-minb" data-act="min" aria-label="Minimize player" title="Minimize">' + ICON.min + '</button>' +
+      '<button class="mchp-ico mchp-expb" data-act="min" aria-label="Expand player" title="Expand">' + ICON.expand + '</button>' +
     '</div>';
   document.body.appendChild(ui);
 
@@ -900,6 +981,7 @@ function buildUI() {
     if (!b) return;
     if (b.dataset.act === 'toggle') { var willOn = player.isYielded() ? true : !S.music; player.toggle(); willOn ? sfx.on() : sfx.off(); }
     else if (b.dataset.act === 'next') player.next();
+    else if (b.dataset.act === 'min') { ui.setAttribute('data-open', '0'); set('playerMin', !S.playerMin); }
     else if (b.dataset.act === 'more') ui.setAttribute('data-open', ui.getAttribute('data-open') === '1' ? '0' : '1');
     else if (b.dataset.act === 'upload') fileInput.click();
     else if (b.dataset.st) player.playStation(b.dataset.st);
@@ -910,6 +992,7 @@ function buildUI() {
   vol.addEventListener('input', function () { set('musicVolume', vol.value / 100); });
   document.addEventListener('click', function (e) { if (ui.getAttribute('data-open') === '1' && !ui.contains(e.target)) ui.setAttribute('data-open', '0'); });
   if (S.miniPlayer === false) ui.style.display = 'none';
+  ui.classList.toggle('min', !!S.playerMin);
   paint();
 }
 
@@ -927,6 +1010,7 @@ function paint() {
   if (!ui) return;
   var n = nowInfo();
   ui.classList.toggle('on', n.playing && n.running);
+  ui.classList.toggle('min', !!S.playerMin);
   ui.querySelector('.mchp-play').innerHTML = (S.music && !yielded) ? ICON.pause : ICON.play;
   ui.querySelector('.mchp-txt b').textContent = n.title;
   ui.querySelector('.mchp-txt small').textContent = n.sub;

@@ -274,3 +274,42 @@ a:focus-visible,button:focus-visible{outline:2px solid #0a0a0a;outline-offset:3p
 .collage .c1{width:56%}.collage .c2{width:50%}.collage .c3{width:42%}
 @media(max-width:900px){.hero-img{min-height:360px}.collage .c1{left:4%;top:8%;width:54%}.collage .c2{right:2%;top:24%;width:50%}.collage .c3{left:16%;bottom:6%;width:40%}.f2{left:10px;top:16px}.f1{right:14px;bottom:18px}}
 .f2{left:22px}
+
+/* ============ SHARP v4: crisp, thin, modern ============ */
+:root{--r:12px;--shadow:0 1px 2px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);--shadow-lg:0 2px 4px rgba(0,0,0,.08),0 24px 48px rgba(0,0,0,.16)}
+#cbar,.addb,.bd,.btn,.cdel,.chip,.cz-add,.fsearch,.ghost,.inc,.nbtn,.opt,.pill,.sbtn,.search,.submit,.tabs,.tbtn,.qty,.ctag,.em,.live,.soonTag,.sound-btn,.badge{border-radius:8px!important}
+.bart,.card,.cartbox,.cat,.ccard,.cform2,.cm-box,.coll,.cstat,.ctile,.cz-card,.drop,.empty,.fact,.fempty,.float,.hw,.hi,.lay,.mapout,.mi,.msg,.msgi,.oc,.ok,.pcard,.scard,.sent,.setup,.song,.spwho,.stat,.story-img,.warn,.cz-note,.cz-warn,.cashnote,.cmsg,.pmsg,.tipc,.rv,.cg.bad,.big,.clg{border-radius:12px!important}
+.hero,.cta,.news,.phero{border-radius:16px!important}
+.fld>input,.fld>select,.fld>textarea,.inp,input,select,textarea,.soc,.logo,.logo-mark,.burger{border-radius:8px}
+.menu a{border-radius:8px}
+.hero{box-shadow:0 20px 50px rgba(0,0,0,.2)}
+.clg{box-shadow:0 14px 30px rgba(0,0,0,.4);border-radius:10px!important;border:1px solid rgba(255,255,255,.18)}
+.ccard,.mi,.cat,.stat,.scard,.card,.hw{border-width:1px;box-shadow:none}
+.ccard:hover,.cat:hover,.stat:hover,.mi:hover{transform:translateY(-3px)!important;box-shadow:0 12px 28px rgba(0,0,0,.1)!important}
+.btn,.sbtn,.addb,.cz-add,.submit{border-width:1px;letter-spacing:.01em;font-weight:600}
+.btn:hover,.sbtn:hover{transform:translateY(-1px)}
+.addb{box-shadow:none}.opt.act{box-shadow:none}
+body{letter-spacing:-.005em}
+h1,h2,h3,.head h2,.phead h1{letter-spacing:-.03em}
+.eyebrow::before{height:1px;width:18px}
+.menu a.active{box-shadow:none}
+.cz-card{box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.mimg,.cthumb{border-radius:12px 12px 0 0;overflow:hidden}
+.mimg img,.cthumb img{transition:transform .7s var(--ease)}
+.mi:hover .mimg img,.ccard:hover .cthumb img{transform:scale(1.06)}
+/* snappier motion */
+.main{animation:pgIn .35s var(--ease) both}
+.reveal{transition:opacity .55s var(--ease),transform .55s var(--ease)}
+/* page-wide update banner */
+#mch-upd{position:fixed;left:50%;bottom:22px;transform:translate(-50%,140%);z-index:9999;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;max-width:calc(100vw - 24px);padding:12px 14px 12px 16px;background:#0a0a0a;color:#fff;border:1px solid #2a2a2a;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,.4);font:500 .9rem/1.3 Inter,sans-serif;transition:transform .5s var(--ease)}
+#mch-upd.on{transform:translate(-50%,0)}
+#mch-upd b{font-weight:700}
+#mch-upd .u-dot{width:8px;height:8px;border-radius:50%;background:#ff6a1a;box-shadow:0 0 0 0 rgba(255,106,26,.6);animation:uping 1.6s infinite}
+@keyframes uping{70%{box-shadow:0 0 0 9px rgba(255,106,26,0)}100%{box-shadow:0 0 0 0 rgba(255,106,26,0)}}
+#mch-upd button{font:600 .84rem Inter,sans-serif;padding:8px 14px;border-radius:8px;border:1px solid #3a3a3a;background:transparent;color:#fff;cursor:pointer;transition:background .2s}
+#mch-upd button:hover{background:#1c1c1c}
+#mch-upd button.go{background:#fff;color:#0a0a0a;border-color:#fff}#mch-upd button.go:hover{background:#e6e6e6}
+.ph-credit{font-size:.72rem;color:#8a8a8a;text-align:center;padding:10px 0}
+
+html[data-anim="off"] *,html[data-anim="off"] *::before,html[data-anim="off"] *::after{animation:none!important;transition:none!important}
+html[data-density="compact"] .wrap{padding-top:22px}html[data-density="compact"] .mbody,html[data-density="compact"] .cbody{padding:12px}

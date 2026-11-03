@@ -495,7 +495,7 @@ footer ul a:hover{text-decoration:underline}
       <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
       <div><h5>Account</h5><ul><li><a href="/login">Log in</a></li><li><a href="/login">Create account</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
     </div>
-    <div class="copy"><span>&copy; 2026 MasterChefHub.com</span><span>All rights reserved.</span></div>
+    <div class="copy"><span>&copy; 2026 MasterChefHub.com</span><span>Food photos from <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>. All rights reserved.</span></div>
   </footer>
 </div>
 
@@ -528,11 +528,11 @@ const $ = s => document.querySelector(s);
 const sk = n => Array(n).fill('<div class="ccard sk"><div class="cthumb"></div><div class="cbody"><i></i><i></i></div></div>').join('');
 const empty = (t, p) => '<div class="empty"><div class="eic">' + IC.hat + '</div><h3>' + t + '</h3><p>' + p + '</p></div>';
 const money = v => '$' + Number(v).toFixed(2);
-(function(){ const ids = ['cheeseburger','pizza-slice','spaghetti-meat','pancakes','choc-cake','tacos','fries','lemonade','ribeye-dinner','cupcake','alfredo','wings-24','waffles','milkshake']; const one = ids.map(id => MENU.find(m => m.id === id)).filter(Boolean).map(m => '<figure><img src="' + m.img + '" alt="" width="320" height="240" loading="lazy"><figcaption>' + D.esc(m.name) + '</figcaption></figure>').join(''); $('#strip').innerHTML = one + one; })();
+(function(){ const ids = ['cheeseburger','pizza-slice','spaghetti-meat','pancakes','choc-cake','tacos','fries','lemonade','ribeye-dinner','cupcake','alfredo','wings-24','waffles','milkshake']; const one = ids.map(id => MENU.find(m => m.id === id)).filter(Boolean).map(m => '<figure><img data-fb="/img/menu/' + m.id + '.svg" src="' + m.img + '" alt="" width="320" height="240" loading="lazy"><figcaption>' + D.esc(m.name) + '</figcaption></figure>').join(''); $('#strip').innerHTML = one + one; })();
 $('#statDishes').textContent = MENU.length + '+'; $('#fMenu').textContent = MENU.length + '+ dishes';
 const PICK = ['cheeseburger', 'pizza-slice', 'spaghetti-meat', 'pancakes', 'choc-cake', 'milkshake'];
 $('#homeDishes').innerHTML = PICK.map(id => MENU.find(m => m.id === id)).filter(Boolean).map(m =>
-  '<a class="ccard dish" href="/food?search=' + encodeURIComponent(m.name) + '"><div class="cthumb"><img src="' + m.img + '" alt="' + D.esc(m.name) + '" loading="lazy" width="640" height="480"></div><div class="cbody"><h3>' + D.esc(m.name) + '</h3><div class="cmeta"><span>' + money(m.price) + '</span></div></div></a>').join('');
+  '<a class="ccard dish" href="/food?search=' + encodeURIComponent(m.name) + '"><div class="cthumb"><img data-fb="/img/menu/' + m.id + '.svg" src="' + m.img + '" alt="' + D.esc(m.name) + '" loading="lazy" width="640" height="480"></div><div class="cbody"><h3>' + D.esc(m.name) + '</h3><div class="cmeta"><span>' + money(m.price) + '</span></div></div></a>').join('');
 $('#homeVideos').innerHTML = sk(3);
 (async () => {
   try { const u = await D.whenUser(); if (u) { D.cacheUser(u); const j = $('#joinSec'); if (j) j.hidden = true; } } catch (e) {}

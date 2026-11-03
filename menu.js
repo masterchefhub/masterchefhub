@@ -147,16 +147,90 @@ export const MENU = [
   { id: 'pizza-party', cat: 'dinners', name: 'Party pizza (large)', price: 25.00, desc: 'A large homemade pizza with your toppings. Cut in 12.', set: 'pizza' },
   { id: 'whole-cake', cat: 'dinners', name: 'Whole chocolate cake', price: 30.00, desc: 'A full chocolate cake, enough for a party of ten.', set: 'dinner' },
   { id: 'dessert-box', cat: 'dinners', name: 'Dessert box', price: 25.00, desc: 'Cupcakes, brownies and cookies in one box. About a dozen treats.', set: 'dinner' },
-  { id: 'soda-2l', cat: 'drinks', name: 'Soda, 2 liter', price: 6.00, desc: 'A big cold bottle to share. Pick your brand.', set: 'soda2', img: '/img/menu/soda.svg', fresh: false },
-  { id: 'soda-6', cat: 'drinks', name: 'Soda, 6 pack', price: 9.00, desc: 'Six cold cans. Pick your brand.', set: 'soda2', img: '/img/menu/soda.svg', fresh: false },
-  { id: 'beer', cat: 'drinks', name: 'Beer (bottle)', price: 5.50, desc: 'A cold bottle of beer. 21 and over only, ID checked at the door.', set: 'beer', img: '/img/menu/beer.svg', fresh: false, alcohol: true },
-  { id: 'beer-6', cat: 'drinks', name: 'Beer, 6 pack', price: 13.00, desc: 'Six cold bottles. 21 and over only, ID checked at the door.', set: 'beer', img: '/img/menu/beer.svg', fresh: false, alcohol: true }
+  { id: 'soda-2l', cat: 'drinks', name: 'Soda, 2 liter', price: 6.00, desc: 'A big cold bottle to share. Pick your brand.', set: 'soda2', fresh: false },
+  { id: 'soda-6', cat: 'drinks', name: 'Soda, 6 pack', price: 9.00, desc: 'Six cold cans. Pick your brand.', set: 'soda2', fresh: false },
+  { id: 'beer', cat: 'drinks', name: 'Beer (bottle)', price: 5.50, desc: 'A cold bottle of beer. 21 and over only, ID checked at the door.', set: 'beer', fresh: false, alcohol: true },
+  { id: 'beer-6', cat: 'drinks', name: 'Beer, 6 pack', price: 13.00, desc: 'Six cold bottles. 21 and over only, ID checked at the door.', set: 'beer', fresh: false, alcohol: true }
 ];
+
+const PHOTOS = {
+  'grilled-cheese': 14941252,
+  'turkey-sandwich': 8113035,
+  'blt': 19202817,
+  'ham-cheese': 17780276,
+  'club': 19202827,
+  'chicken-sandwich': 38895555,
+  'pbj': 5419208,
+  'cheeseburger': 19247562,
+  'hamburger': 1556698,
+  'hotdog': 4518639,
+  'tacos': 5848703,
+  'quesadilla': 13243944,
+  'pizza-slice': 29605927,
+  'nuggets': 10183543,
+  'chicken-rice': 12916867,
+  'fried-rice': 13425806,
+  'tomato-soup': 17302314,
+  'chicken-soup': 12077982,
+  'spaghetti-meat': 6287520,
+  'mac-cheese': 5107161,
+  'butter-noodles': 725990,
+  'alfredo': 11220208,
+  'lasagna': 9650082,
+  'eggs-toast': 34871731,
+  'pancakes': 2280545,
+  'breakfast-sandwich': 12261092,
+  'omelette': 1437268,
+  'french-toast': 8143760,
+  'waffles': 7937375,
+  'oatmeal': 4725747,
+  'fries': 4109234,
+  'salad': 1013518,
+  'garlic-bread': 10337726,
+  'onion-rings': 6941051,
+  'mashed-potatoes': 30635680,
+  'corn': 12242700,
+  'choc-cake': 30128890,
+  'vanilla-cake': 998238,
+  'brownies': 2373520,
+  'cookies': 1626668,
+  'cupcake': 853005,
+  'apple-pie': 15954374,
+  'banana-bread': 4114141,
+  'ice-cream': 16015237,
+  'lemonade': 5507724,
+  'iced-tea': 40594,
+  'orange-juice': 3642,
+  'milkshake': 18133821,
+  'hot-chocolate': 7994278,
+  'coffee': 544113,
+  'soda': 8880742,
+  'water': 113734,
+  'ribeye-dinner': 6542787,
+  'bbq-ribs': 8250702,
+  'burger-feast': 39140403,
+  'sandwich-platter': 31742775,
+  'taco-night': 15434312,
+  'family-lasagna': 4078163,
+  'roast-chicken': 19259179,
+  'shrimp-scampi': 2092906,
+  'spaghetti-tray': 9617397,
+  'wings-24': 32067295,
+  'pizza-party': 8165423,
+  'whole-cake': 24247232,
+  'dessert-box': 17517693,
+  'soda-2l': 4113669,
+  'soda-6': 15205136,
+  'beer': 5538222,
+  'beer-6': 4620723
+};
+const photoUrl = n => 'https://images.pexels.com/photos/' + n + '/pexels-photo-' + n + '.jpeg?auto=compress&cs=tinysrgb&w=640';
 
 /* Every dish gets a picture from /img/menu/<id>.svg by default.
  * To use your own photo, upload it to the img/menu folder and add  img: '/img/menu/yourfile.jpg'  to the dish above. */
 MENU.forEach(m => {
-  if (!m.img) m.img = '/img/menu/' + m.id + '.svg';
+  m.fb = '/img/menu/' + m.id + '.svg';
+  if (!m.img) m.img = PHOTOS[m.id] ? photoUrl(PHOTOS[m.id]) : m.fb;
   m.set = m.set || DEFAULT_SET[m.cat];
   m.groups = (SETS[m.set] || []).map(id => Object.assign({ id }, GROUPS[id]));
   m.canFresh = m.fresh !== false;

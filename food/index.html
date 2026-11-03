@@ -345,7 +345,7 @@ footer ul a:hover{text-decoration:underline}
       <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
       <div><h5>Account</h5><ul><li><a href="/login">Log in</a></li><li><a href="/login">Create account</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
     </div>
-    <div class="copy"><span>&copy; 2026 MasterChefHub.com</span><span>All rights reserved.</span></div>
+    <div class="copy"><span>&copy; 2026 MasterChefHub.com</span><span>Food photos from <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>. All rights reserved.</span></div>
   </footer>
 </div>
 
@@ -406,7 +406,7 @@ function drawMenu() {
   const list = MENU.filter(m => (cat === 'all' || m.cat === cat) && (!t || (m.name + ' ' + m.desc).toLowerCase().includes(t)));
   $('#fcount').textContent = list.length + (list.length === 1 ? ' dish' : ' dishes');
   $('#mgrid').innerHTML = list.length ? list.map(m => { const n = inCart(m.id);
-    return '<div class="mi" data-id="' + esc(m.id) + '"><div class="mimg"><img src="' + esc(m.img) + '" alt="' + esc(m.name) + '" width="640" height="480" loading="lazy" decoding="async">' + (n ? '<span class="inc">' + n + ' in cart</span>' : '') + '</div><div class="mbody"><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p><div class="mb"><span class="pr">' + money(C.items.get(m.id).c) + (m.groups.length || m.canFresh ? ' <span class="tagf">+ options</span>' : '') + '</span><button class="addb" data-open="' + esc(m.id) + '" type="button"><svg class="ico"><use href="#i-plus"/></svg>Add</button></div></div></div>'; }).join('')
+    return '<div class="mi" data-id="' + esc(m.id) + '"><div class="mimg"><img data-fb="/img/menu/' + esc(m.id) + '.svg" src="' + esc(m.img) + '" alt="' + esc(m.name) + '" width="640" height="480" loading="lazy" decoding="async">' + (n ? '<span class="inc">' + n + ' in cart</span>' : '') + '</div><div class="mbody"><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p><div class="mb"><span class="pr">' + money(C.items.get(m.id).c) + (m.groups.length || m.canFresh ? ' <span class="tagf">+ options</span>' : '') + '</span><button class="addb" data-open="' + esc(m.id) + '" type="button"><svg class="ico"><use href="#i-plus"/></svg>Add</button></div></div></div>'; }).join('')
     : '<div class="fempty">Nothing matches that search. Try another word or pick All.</div>';
 }
 function bar() {
@@ -422,7 +422,7 @@ function openItem(id) {
   const m = C.items.get(id); if (!m) return;
   cur = { m, q: 1, fresh: false, sel: {}, note: '' };
   const fx = freshExtra(m.price), baseC = m.c;
-  let h = '<div class="cz-hero"><img src="' + esc(m.img) + '" alt=""></div><div class="cz-body"><h2 id="czT">' + esc(m.name) + '</h2><p class="d">' + esc(m.desc) + '</p><p class="d"><b>' + money(baseC) + '</b> to start</p>';
+  let h = '<div class="cz-hero"><img data-fb="/img/menu/' + esc(m.id) + '.svg" src="' + esc(m.img) + '" alt=""></div><div class="cz-body"><h2 id="czT">' + esc(m.name) + '</h2><p class="d">' + esc(m.desc) + '</p><p class="d"><b>' + money(baseC) + '</b> to start</p>';
   if (m.alcohol) h += '<div class="cz-warn">21 and over only. The driver checks your ID at the door. No ID, no beer.</div>';
   if (m.canFresh) h += '<div class="cg" data-g="_q"><div class="cg-h"><b>How should we make it?</b><i>Choose one</i></div><div class="cq">' +
     '<label><input type="radio" name="czq" value="0" checked><span class="b"><strong>Basic</strong><em>Simple and tasty, made to order</em><span>' + money(baseC) + '</span></span></label>' +

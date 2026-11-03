@@ -365,7 +365,7 @@ footer ul a:hover{text-decoration:underline}
       <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
       <div><h5>Account</h5><ul><li><a href="/login">Log in</a></li><li><a href="/login">Create account</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
     </div>
-    <div class="copy"><span>&copy; 2026 MasterChefHub.com</span><span>All rights reserved.</span></div>
+    <div class="copy"><span>&copy; 2026 MasterChefHub.com</span><span>Food photos from <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>. All rights reserved.</span></div>
   </footer>
 </div>
 
@@ -470,7 +470,7 @@ function stepper() {
 function linesHtml(editable) {
   return '<div class="cl">' + lines.map(l => { const m = C.items.get(l.id), d = C.describe(l).join(' &middot; ');
     return editable
-      ? '<div class="ci"><img src="' + esc(m.img) + '" alt="" width="64" height="48"><div class="cin"><b>' + esc(m.name) + '</b><small>' + (d ? esc(C.describe(l).join(' · ')) : '') + '</small></div><span class="ip">' + money(C.lineTotal(l)) + '</span><div class="qty"><button data-q="-1" data-k="' + esc(l.k) + '" type="button" aria-label="Less">&minus;</button><span>' + l.q + '</span><button data-q="1" data-k="' + esc(l.k) + '" type="button" aria-label="More">+</button></div><button class="rm" data-rm="' + esc(l.k) + '" type="button" aria-label="Remove">Remove</button></div>'
+      ? '<div class="ci"><img data-fb="/img/menu/' + esc(m.id) + '.svg" src="' + esc(m.img) + '" alt="" width="64" height="48"><div class="cin"><b>' + esc(m.name) + '</b><small>' + (d ? esc(C.describe(l).join(' · ')) : '') + '</small></div><span class="ip">' + money(C.lineTotal(l)) + '</span><div class="qty"><button data-q="-1" data-k="' + esc(l.k) + '" type="button" aria-label="Less">&minus;</button><span>' + l.q + '</span><button data-q="1" data-k="' + esc(l.k) + '" type="button" aria-label="More">+</button></div><button class="rm" data-rm="' + esc(l.k) + '" type="button" aria-label="Remove">Remove</button></div>'
       : '<div class="ci ro"><div class="cin"><b>' + esc(m.name) + ' x ' + l.q + '</b><small>' + esc(C.describe(l).join(' · ')) + '</small></div><span class="ip">' + money(C.lineTotal(l)) + '</span></div>'; }).join('') + '</div>';
 }
 function totals(s, withTip) {
