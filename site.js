@@ -776,16 +776,15 @@ var CSS =
 '.mchp-btn svg{width:15px;height:15px}' +
 '.mchp-toast{position:fixed;left:50%;bottom:96px;z-index:500;transform:translateX(-50%) translateY(10px);background:#fff;color:#0a0a0a;font:600 .82rem Inter,system-ui,sans-serif;padding:11px 20px;border-radius:99px;opacity:0;pointer-events:none;transition:.3s;white-space:nowrap;box-shadow:0 14px 34px rgba(0,0,0,.3);border:1px solid #e4e4e1}' +
 '.mchp-toast.show{opacity:1;transform:translateX(-50%)}' +
-'.mchn-wrap{position:fixed;z-index:600;display:flex;flex-direction:column;gap:10px;width:min(390px,calc(100vw - 28px));pointer-events:none}' +
+'.mchn-wrap{position:fixed;z-index:2147482000;display:flex;flex-direction:column;gap:8px;width:min(370px,calc(100vw - 28px));pointer-events:none}' +
 '.mchn-wrap[data-pos="top-right"]{top:18px;right:18px}' +
 '.mchn-wrap[data-pos="top-center"]{top:18px;left:50%;transform:translateX(-50%)}' +
 '.mchn-wrap[data-pos="bottom-right"]{bottom:92px;right:18px;flex-direction:column-reverse}' +
-'.mchn-wrap[data-pos="bottom-left"]{bottom:22px;left:22px;flex-direction:column-reverse}' +
-'@media(min-width:961px){.mchn-wrap[data-pos="bottom-left"]{left:290px}}' +
+'.mchn-wrap[data-pos="bottom-left"]{bottom:14px;left:14px;flex-direction:column-reverse}' +
 '.mchn-wrap[data-pos="bottom-left"] .mchn{animation-name:mchnInL}' +
 '.mchn-wrap[data-pos="bottom-left"] .mchn.out{animation-name:mchnOutL}' +
 '@keyframes mchnInL{from{opacity:0;transform:translateX(-32px) scale(.96)}to{opacity:1;transform:none}}@keyframes mchnOutL{to{opacity:0;transform:translateX(-32px) scale(.96)}}' +
-'.mchn{pointer-events:auto;position:relative;overflow:hidden;display:flex;gap:12px;align-items:flex-start;background:#0a0a0a;color:#fff;border:1px solid #2c2c2c;border-radius:18px;padding:14px 14px 17px;box-shadow:0 20px 50px rgba(0,0,0,.4);font-family:Inter,system-ui,sans-serif;animation:mchnIn .5s cubic-bezier(.2,.9,.3,1.2) both}' +
+'.mchn{pointer-events:auto;position:relative;overflow:hidden;display:flex;gap:12px;align-items:flex-start;background:#0a0a0a;color:#fff;border:1px solid #2c2c2c;border-radius:10px;padding:14px 14px 17px;box-shadow:0 20px 50px rgba(0,0,0,.4);font-family:Inter,system-ui,sans-serif;animation:mchnIn .5s cubic-bezier(.2,.9,.3,1.2) both}' +
 '.mchn.out{animation:mchnOut .32s ease forwards}' +
 '@keyframes mchnIn{from{opacity:0;transform:translateX(40px) scale(.94)}to{opacity:1;transform:none}}' +
 '@keyframes mchnOut{to{opacity:0;transform:translateX(40px) scale(.94)}}' +

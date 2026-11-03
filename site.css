@@ -313,3 +313,16 @@ h1,h2,h3,.head h2,.phead h1{letter-spacing:-.03em}
 
 html[data-anim="off"] *,html[data-anim="off"] *::before,html[data-anim="off"] *::after{animation:none!important;transition:none!important}
 html[data-density="compact"] .wrap{padding-top:22px}html[data-density="compact"] .mbody,html[data-density="compact"] .cbody{padding:12px}
+/* sharper pass */
+:root{--line:#dadad6}
+.ccard,.mi,.cat,.stat,.scard,.card,.hw,.blk,.cartbox,.search,.fld>input{border-color:#d6d6d2}
+.hero,.phero,.cta,.news{border-radius:12px!important}
+.ccard,.mi,.cat,.stat,.scard,.card,.hw,.cartbox,.cz-card{border-radius:10px!important}
+.btn,.sbtn,.addb,.cz-add,.submit,.opt,.chip,.search,.tabs,.fsearch,.qty,#cbar{border-radius:6px!important}
+.mimg,.cthumb{border-radius:10px 10px 0 0}
+.logo-mark{border-radius:8px}
+.menu a{border-radius:6px}
+.eyebrow{font-weight:700;letter-spacing:.18em}
+img{image-rendering:auto}
+.mimg img,.cthumb img,.cz-hero img{filter:saturate(1.06) contrast(1.03)}
+.mchp-bar{border-radius:10px!important}
