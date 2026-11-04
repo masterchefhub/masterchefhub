@@ -412,6 +412,18 @@ const $ = s => document.querySelector(s), esc = D.esc;
 const money = C.money;
 const FEEC = Math.round(FEE * 100), MINC = Math.round(MIN_ORDER * 100);
 let lines = C.load(), user = null, owner = false, tab = 'cart', step = 1, det = {}, tipPct = TIPS.includes(10) ? 10 : (TIPS[1] || 0), tipCustom = '', pay = 'cash', age = false;
+/* defaults saved in Settings */
+(function () {
+  let P = {}, S = {};
+  try { P = JSON.parse(localStorage.getItem('mch_pref') || '{}') || {}; } catch (e) {}
+  try { S = JSON.parse(localStorage.getItem('mch_settings') || '{}') || {}; } catch (e) {}
+  if (P.pay === 'venmo' || P.pay === 'cash') pay = P.pay;
+  if (P.tip != null && TIPS.includes(+P.tip)) tipPct = +P.tip;
+  const seed = () => {
+    det = { oname: P.name || '', ophone: P.phone || '', oaddr: P.addr || '', ocity: P.city || '', ozip: P.zip || '', onotes: [P.note || '', S.leaveAtDoor ? 'Leave at the door.' : '', S.utensils === false ? 'No utensils needed.' : ''].filter(Boolean).join(' ') };
+  };
+  seed(); window.__seedDet = seed;
+})();
 const sub = () => C.sub(lines), count = () => C.count(lines);
 const tipC = () => tipPct === 'c' ? Math.max(0, Math.min(50000, Math.round((parseFloat(tipCustom) || 0) * 100))) : Math.round(sub() * (Number(tipPct) || 0) / 100);
 
@@ -598,7 +610,7 @@ async function place() {
   if (ok) {
     const id = pendingId; pendingId = null;
     try { localStorage.setItem('mch_lastorder', String(Date.now())); } catch (x) {}
-    lines = []; C.save(lines); step = 1; det = {}; age = false;
+    lines = []; C.save(lines); step = 1; if (window.__seedDet) window.__seedDet(); else det = {}; age = false;
     showOk(order, id);
     D.say('success', 'Order placed', 'Pay ' + money(total) + (pay === 'venmo' ? ' with Venmo' : ' in cash') + ' at the door.');
     return;

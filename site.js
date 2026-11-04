@@ -14,7 +14,7 @@ var defaults = {
   loader: true, loaderFast: false,
   notifications: true, notifySound: true, notifyPos: 'bottom-left', notifyDuration: 5,
   cursor: true, textSize: 'normal', posV: 2,
-  playerMin: false, animations: true, density: 'comfortable', sleepMin: 0, orderAlerts: true, saveCart: true
+  playerMin: false, sideHidden: false, lowData: false, leaveAtDoor: false, utensils: true, confirmOrder: true, animations: true, density: 'comfortable', sleepMin: 0, orderAlerts: true, saveCart: true
 };
 var S = Object.assign({}, defaults);
 try {
@@ -668,7 +668,7 @@ function set(k, v) {
   }
   if (k === 'sfxVolume' && sfxGain) sfxGain.gain.setTargetAtTime(v, ctx.currentTime, 0.05);
   if (k === 'music') { if (v) { ac(); startPlayback(); } else stopAll(); }
-  if (k === 'textSize' || k === 'animations' || k === 'density') applyDisplay();
+  if (k === 'textSize' || k === 'animations' || k === 'density' || k === 'sideHidden') applyDisplay();
   if (k === 'cursor') cursorSet(!!v);
   if (k === 'miniPlayer' && ui) ui.style.display = v ? '' : 'none';
   if (k === 'notifyPos' && nWrap) nWrap.setAttribute('data-pos', v);
@@ -837,7 +837,27 @@ function applyDisplay() {
   r.style.fontSize = S.textSize === 'small' ? '15px' : S.textSize === 'large' ? '17.5px' : '';
   r.setAttribute('data-anim', S.animations === false ? 'off' : 'on');
   r.setAttribute('data-density', S.density === 'compact' ? 'compact' : 'comfortable');
+  r.setAttribute('data-side', S.sideHidden ? 'off' : 'on');
+  var sbt = document.getElementById('mchSideBtn');
+  if (sbt) { sbt.setAttribute('aria-pressed', S.sideHidden ? 'true' : 'false'); sbt.title = S.sideHidden ? 'Show sidebar' : 'Hide sidebar'; sbt.setAttribute('aria-label', sbt.title); }
 }
+
+/* ---------------- SIDEBAR TOGGLE ---------------- */
+function buildSideBtn() {
+  if (document.getElementById('mchSideBtn')) return;
+  if (!document.querySelector('.sidebar')) return;
+  var b = document.createElement('button');
+  b.id = 'mchSideBtn'; b.type = 'button'; b.setAttribute('data-keep', '1');
+  b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M9 4v16"/><path class="sb-ar" d="m15.5 9-3 3 3 3"/></svg>';
+  b.addEventListener('click', function () { set('sideHidden', !S.sideHidden); try { sfx.click(); } catch (e) {} });
+  document.body.appendChild(b);
+  applyDisplay();
+}
+document.addEventListener('keydown', function (e) {
+  if (e.key !== '[' || e.ctrlKey || e.metaKey || e.altKey) return;
+  var t = e.target; if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName || '') || (t && t.isContentEditable)) return;
+  set('sideHidden', !S.sideHidden);
+});
 
 /* ---------------- NOTIFICATIONS ---------------- */
 var NI = {
@@ -1231,7 +1251,7 @@ function softGo(url, push) {
       document.body.insertBefore(imp, first);
     });
     window.scrollTo(0, 0);
-    applyDisplay(); paintUser(); paintCart(); refreshAuth();
+    applyDisplay(); buildSideBtn(); paintUser(); paintCart(); refreshAuth();
     if (document.body.getAttribute('data-mch-player') === 'off') { if (ui) ui.style.display = 'none'; }
     else { if (!ui) buildUI(); if (ui) ui.style.display = S.miniPlayer === false ? 'none' : ''; }
     if (gateCheck()) return;
@@ -1268,6 +1288,7 @@ ready(function () {
   applyDisplay();
   fileInput.setAttribute('data-keep', '1'); document.body.appendChild(fileInput);
   buildUI();
+  buildSideBtn();
   paintUser();
   cursorSet(S.cursor !== false);
   paintCart();
