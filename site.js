@@ -128,6 +128,18 @@ document.addEventListener('error', function (e) {
   if (t && t.tagName === 'IMG' && t.dataset && t.dataset.fb && t.getAttribute('src') !== t.dataset.fb) t.src = t.dataset.fb;
 }, true);
 
+/* ===== Notice shown when someone opened /order-success without paying ===== */
+(function () {
+  function check() {
+    if (!/[?&]unpaid=1\b/.test(location.search)) return;
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+    setTimeout(function () {
+      if (window.MCH && window.MCH.notify) window.MCH.notify({ type: 'error', title: 'You did not pay', message: 'No payment was found, so there is no order to show. Choose your food and check out to place an order.' });
+    }, 900);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', check); else check();
+})();
+
 /* ===== Update available banner (all pages) ===== */
 (function () {
   if (window.__mchUpd) return; window.__mchUpd = true;
