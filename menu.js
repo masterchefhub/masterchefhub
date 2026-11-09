@@ -4,7 +4,7 @@
 export const CURRENCY = 'USD';
 export const FEE = 3.00;          /* flat delivery fee in dollars (use 0 for free delivery) */
 export const MIN_ORDER = 0;       /* no minimum: one meal or one drink is fine */
-export const VENMO = '';          /* your Venmo name shown to customers who pay with Venmo, for example '@your-name' (leave empty to hide) */
+export const CHECKOUT_URL = '';  /* address of the Stripe checkout worker (see worker/README.md) */          /* your Venmo name shown to customers who pay with Venmo, for example '@your-name' (leave empty to hide) */
 export const TIPS = [0, 10, 15, 20];   /* quick tip buttons, in percent */
 
 /* "Fresh and homemade" costs a little more than "Basic". small items +3, meals +4, big dinners +6. */

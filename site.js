@@ -858,9 +858,15 @@ function applyDisplay() {
 function buildSideBtn() {
   if (document.getElementById('mchSideBtn')) return;
   if (!document.querySelector('.sidebar')) return;
+  if (!document.getElementById('mchSprite')) {
+    var sp = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    sp.id = 'mchSprite'; sp.setAttribute('width', '0'); sp.setAttribute('height', '0'); sp.setAttribute('style', 'position:absolute'); sp.setAttribute('data-keep', '1');
+    sp.innerHTML = '<symbol id="i-mch-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol><symbol id="i-mch-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>';
+    document.body.appendChild(sp);
+  }
   var b = document.createElement('button');
   b.id = 'mchSideBtn'; b.type = 'button'; b.setAttribute('data-keep', '1');
-  b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M9 4v16"/><path class="sb-ar" d="m15.5 9-3 3 3 3"/></svg>';
+  b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path class="sb-ar" d="m14.5 6-6 6 6 6"/></svg>';
   b.addEventListener('click', function () { set('sideHidden', !S.sideHidden); try { sfx.click(); } catch (e) {} });
   document.body.appendChild(b);
   applyDisplay();
