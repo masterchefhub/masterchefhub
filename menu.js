@@ -275,7 +275,11 @@ const photoUrl = n => 'https://images.pexels.com/photos/' + n + '/pexels-photo-'
 
 /* Every dish gets a picture from /img/menu/<id>.svg by default.
  * To use your own photo, upload it to the img/menu folder and add  img: '/img/menu/yourfile.jpg'  to the dish above. */
+/* Stripe: every dish is a live Stripe product whose id equals the dish id (the delivery fee is product 'delivery-fee').
+ * Prices in Stripe are the base prices above. Extras (fresh, options) are sent as ad-hoc line items by the checkout backend. */
+export const STRIPE_FEE_PRODUCT = 'delivery-fee';
 MENU.forEach(m => {
+  m.stripe = m.id;
   m.fb = '/img/menu/' + m.id + '.svg';
   if (!m.img) m.img = (PHOTOS[m.id] && !LOWDATA) ? photoUrl(PHOTOS[m.id]) : m.fb;
   m.set = m.set || DEFAULT_SET[m.cat];
