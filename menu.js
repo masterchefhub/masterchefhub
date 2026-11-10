@@ -277,6 +277,8 @@ const photoUrl = n => 'https://images.pexels.com/photos/' + n + '/pexels-photo-'
  * To use your own photo, upload it to the img/menu folder and add  img: '/img/menu/yourfile.jpg'  to the dish above. */
 /* Stripe: every dish is a live Stripe product whose id equals the dish id (the delivery fee is product 'delivery-fee').
  * Prices in Stripe are the base prices above. Extras (fresh, options) are sent as ad-hoc line items by the checkout backend. */
+/* Sales tax added to food at checkout (not to delivery). Change this to your local rate, for example 0.0625 for 6.25%. */
+export const TAX_RATE = 0.07;
 export const STRIPE_FEE_PRODUCT = 'delivery-fee';
 MENU.forEach(m => {
   m.stripe = m.id;

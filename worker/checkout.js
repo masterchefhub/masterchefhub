@@ -39,8 +39,8 @@ export default {
         p.set(`line_items[${n}][price_data][product]`, prod.id);
         n++;
       }
-      const fee = Math.max(0, Math.min(2000, Number(b.fee) | 0)), tip = Math.max(0, Math.min(20000, Number(b.tip) | 0));
-      for (const [name, amt] of [['Delivery fee', fee], ['Driver tip', tip]]) {
+      const fee = Math.max(0, Math.min(2000, Number(b.fee) | 0)), tax = Math.max(0, Math.min(50000, Number(b.tax) | 0)), tip = Math.max(0, Math.min(20000, Number(b.tip) | 0));
+      for (const [name, amt] of [['Delivery fee', fee], ['Sales tax', tax], ['Driver tip', tip]]) {
         if (!amt) continue;
         p.set(`line_items[${n}][quantity]`, '1');
         p.set(`line_items[${n}][price_data][currency]`, 'usd');
