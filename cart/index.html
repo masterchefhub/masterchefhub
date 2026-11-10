@@ -350,7 +350,7 @@ footer ul a:hover{text-decoration:underline}
 
   <div class="wrap">
     <div class="crumbs"><a href="/">Home</a><svg class="ico sm"><use href="#i-chev"/></svg><span style="color:var(--ink)">Cart</span></div>
-    <div class="phead"><h1 class="serif">Cart and pay</h1><p>Check your order, add your address, add a tip and place it. You pay on the next screens.</p></div>
+    <div class="phead"><h1 class="serif">Cart and pay</h1><p>Check your order, change quantities, then proceed to checkout.</p></div>
     <div class="dtabs" id="dtabs" role="tablist"></div>
 
     <section id="pCart" class="cartpage"><div class="cartbox" id="cart" aria-label="Your cart"><div id="cartBody"></div></div></section>
@@ -502,10 +502,10 @@ function fld(k, label, req, attrs) {
 function drawCart() {
   const n = count(), s = sub(), box = $('#cartBody');
   if (!n) { step = 1; box.innerHTML = '<div class="cempty"><div class="eic"><svg class="ico"><use href="#i-cart"/></svg></div><h3>Your cart is empty</h3><p>Pick something tasty from the menu.</p><a class="sbtn fill" href="/food">Browse the menu</a></div>'; return; }
-  let h = stepper();
+  let h = '';
   if (step === 1) {
     h += linesHtml(true) + totals(s, false);
-    h += '<button class="sbtn fill wide" type="button" id="go2">Continue to delivery details</button><a class="sbtn wide back" href="/food">Add more food</a>';
+    h += '<button class="sbtn fill wide" type="button" id="go2">Proceed to checkout</button><a class="sbtn wide back" href="/food">Add more food</a>';
   } else if (step === 2) {
     if (!user) h += '<div class="cashnote"><svg class="ico"><use href="#i-ok2"/></svg><span>Log in to place your order. Your cart will wait for you.</span></div><a class="sbtn fill wide" href="/login?next=/cart">Log in to order</a><button class="sbtn wide back" type="button" id="back1">Back</button>';
     else {
@@ -538,7 +538,11 @@ function drawCart() {
   }
   box.innerHTML = h;
   const on = (id, fn) => { const e = document.getElementById(id); if (e) e.addEventListener('click', fn); };
-  on('go2', () => { step = 2; drawCart(); $('#cart').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  on('go2', () => {
+    if (!lines.length) return;
+    try { sessionStorage.setItem('mch_ck', JSON.stringify({ t: Date.now(), lines: lines })); } catch (x) { D.say('error', 'Could not continue', 'Your browser blocked saving this step. Please allow site data and try again.'); return; }
+    if (window.MCH && MCH.go) MCH.go('/checkout'); else location.href = '/checkout';
+  });
   on('back1', () => { saveDet(); step = 1; drawCart(); });
   on('back2', () => { step = 2; drawCart(); });
   on('edit2', () => { step = 2; drawCart(); });

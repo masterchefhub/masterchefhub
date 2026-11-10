@@ -301,110 +301,27 @@ footer ul a:hover{text-decoration:underline}
   <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
 <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M6 19.5a1.5 1.5 0 1 0 0-.01M17 19.5a1.5 1.5 0 1 0 0-.01"/></symbol><symbol id="i-cart" viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7zM9 7V6a3 3 0 0 1 6 0v1"/></symbol><symbol id="i-sand" viewBox="0 0 24 24"><path d="M4 10a8 5 0 0 1 16 0zM3 13.5h18M5 17h14l-1 3H6z"/></symbol><symbol id="i-coffee" viewBox="0 0 24 24"><path d="M5 9h11v5a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5zM16 10h2a2 2 0 0 1 0 4h-2M8 3v3M12 3v3"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-ok2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.5"/></symbol><symbol id="i-plate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol><symbol id="i-locate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol><symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 11h18a9 9 0 0 1-18 0zM8 7c0-2 2-2 2-4M13 7c0-2 2-2 2-4"/></symbol></svg>
 
-<aside class="sidebar" id="sidebar">
-  <a href="/" class="logo">
-    <div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div>
-    <div class="logo-text">MCH<small>Master Chef Hub</small></div>
-  </a>
-  <div class="nav-label">Menu</div>
-  <ul class="menu">
-    <li><a href="/"><svg class="ico"><use href="#i-home"/></svg>Home</a></li>
-    <li><a href="/food"><svg class="ico"><use href="#i-food"/></svg>Food</a></li>
-    <li><a href="/cart" class="active"><svg class="ico"><use href="#i-cart"/></svg>Cart</a></li>
-    <li><a href="/videos"><svg class="ico"><use href="#i-video"/></svg>Videos</a></li>
-    <li><a href="/membership"><svg class="ico"><use href="#i-hat"/></svg>Membership</a></li>
-  </ul>
-  <div class="nav-label">Company</div>
-  <ul class="menu">
-    <li><a href="/blog"><svg class="ico"><use href="#i-pen"/></svg>Blog</a></li>
-    <li><a href="/about"><svg class="ico"><use href="#i-info"/></svg>About</a></li>
-    <li><a href="/contact"><svg class="ico"><use href="#i-mail"/></svg>Contact</a></li>
-  </ul>
-  <div class="nav-label">Account</div>
-  <ul class="menu">
-    <li><a href="/profile"><svg class="ico"><use href="#i-user"/></svg>Profile</a></li>
-    <li><a href="/settings"><svg class="ico"><use href="#i-sliders"/></svg>Settings</a></li>
-    <li><a href="/terms"><svg class="ico"><use href="#i-mch-doc"/></svg>Terms</a></li>
-    <li><a href="/privacy"><svg class="ico"><use href="#i-mch-lock"/></svg>Privacy</a></li>
-  </ul>
-  <div class="side-bottom">
-    <a href="/login" class="btn btn-white"><svg class="ico"><use href="#i-user"/></svg>Log in</a>
-    <a href="/login" class="btn btn-line">Create account</a>
+<div class="ckwrap">
+  <header class="ckhead"><a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a><a class="sbtn back ckback" href="/cart/">Go back to cart</a></header>
+  <div class="ckmain">
+    <h1 class="serif">Checkout</h1>
+    <p class="cksub">Add your delivery details, check your bill, then confirm and pay.</p>
+    <div class="cartbox" id="cart"><div id="ckBody"><p style="color:var(--muted)">Loading your order...</p></div></div>
   </div>
-</aside>
-<div class="scrim" id="scrim"></div>
-
-<div class="main">
-  <div class="topbar">
-    <button class="burger" id="burger" aria-label="Open menu"><svg class="ico"><use href="#i-menu"/></svg></button>
-    <form class="search" id="searchForm">
-      <svg class="ico" style="color:var(--muted)"><use href="#i-search"/></svg>
-      <input id="q" type="text" placeholder="Search the menu..." aria-label="Search">
-      <button type="submit" aria-label="Search"><svg class="ico sm"><use href="#i-arrow"/></svg></button>
-    </form>
-    <nav class="top-links">
-      <a href="/cart" class="chip">Cart</a>
-      <a href="/videos" class="chip">Videos</a>
-      <a href="/food" class="chip food"><svg class="ico sm"><use href="#i-food"/></svg>Food</a>
-    </nav>
-  </div>
-
-
-  <div class="wrap">
-    <div class="crumbs"><a href="/">Home</a><svg class="ico sm"><use href="#i-chev"/></svg><a href="/cart">Cart</a><svg class="ico sm"><use href="#i-chev"/></svg><span style="color:var(--ink)">Checkout</span></div>
-    <div class="phead"><h1 class="serif">Checkout</h1><p>This is your full bill. Check it, then press proceed to pay.</p></div>
-    <section class="cartpage"><div class="cartbox" id="cart"><div id="ckBody"><div class="cempty"><p>Loading your order...</p></div></div></div></section>
-  </div>
-
-  <footer>
-    <div class="fgrid">
-      <div>
-        <a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a>
-        <p>Simple home-cooked food, delivered to your door.</p>
-      </div>
-      <div><h5>Explore</h5><ul><li><a href="/food">Food</a></li><li><a href="/cart">Cart</a></li><li><a href="/videos">Videos</a></li></ul></div>
-      <div><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
-      <div><h5>Account</h5><ul><li><a href="/login">Log in</a></li><li><a href="/login">Create account</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
-    </div>
-    <div class="copy"><span>&copy; 2026 MasterChefHub.com</span><span>Food photos from <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>. All rights reserved.</span></div>
-  </footer>
 </div>
-
-</div>
+<style>
+.main,.sidebar,.scrim,#mchSideBtn{display:none!important}
+body{background:var(--bg)}
+.ckwrap{max-width:760px;margin:0 auto;padding:22px 20px 60px}
+.ckhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:22px}
+.ckhead .logo{color:var(--ink);padding:0}.ckhead .logo-mark{background:var(--ink);color:#fff}
+.ckback{display:grid;place-items:center;height:46px;padding:0 20px;width:auto}
+.ckmain h1{font-size:2.6rem;line-height:1.1}.cksub{color:var(--muted);margin:6px 0 20px}
+.ckmain .cartbox{max-width:none}
+.cksec{margin:22px 0 8px;font-weight:800;font-size:1.05rem}
+</style>
 <script src="/site.js"></script>
 <script>window.sfx=window.sfx||{hover(){},click(){},on(){},off(){},open(){},heart(){},success(){},whoops(){},boing(){}};</script>
-<script>
-/* MOBILE SIDEBAR */
-const sidebar=document.getElementById('sidebar'), scrim=document.getElementById('scrim');
-function toggleSide(o){ sidebar.classList.toggle('open',o); scrim.classList.toggle('show',o); if(o) sfx.open(); }
-document.getElementById('burger').addEventListener('click',()=>toggleSide(true));
-scrim.addEventListener('click',()=>toggleSide(false));
-
-/* SEARCH */
-document.getElementById('searchForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const v=document.getElementById('q').value.trim();
-  {const u='/food'+(v?'?search='+encodeURIComponent(v):''); if(window.MCH&&MCH.go) MCH.go(u); else location.href=u;}
-});
-
-/* REVEAL + COUNT-UP */
-function countUp(el){
-  const target=+el.dataset.count, isRating=target===49, dur=1400, start=performance.now();
-  (function step(now){
-    const p=Math.min((now-start)/dur,1), e=1-Math.pow(1-p,3), v=target*e;
-    el.textContent=isRating?(v/10).toFixed(1):Math.round(v).toLocaleString()+(target===8500||target===1500?'+':'');
-    if(p<1) requestAnimationFrame(step);
-  })(start);
-}
-const io=new IntersectionObserver(es=>es.forEach(e=>{
-  if(e.isIntersecting){
-    e.target.classList.add('in');
-    e.target.querySelectorAll('[data-count]').forEach(countUp);
-    io.unobserve(e.target);
-  }
-}),{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-</script>
 <script type="module">
 import * as D from '/data.js';
 import { FEE, TAX_RATE, CHECKOUT_URL } from '/menu.js';
@@ -416,24 +333,49 @@ const home = () => location.replace('/');
 if (!d || !Array.isArray(d.lines) || !d.lines.length || Date.now() - d.t > 2 * 3600 * 1000) home();
 const lines = (d && d.lines || []).filter(l => C.items.has(l.id));
 if (!lines.length) home();
-const det = d.det || {}, tip = Math.max(0, Math.min(50000, d.tip | 0)), FEEC = Math.round(FEE * 100);
-const s = C.sub(lines), tax = Math.round(s * TAX_RATE), total = s + FEEC + tax + tip;
+const FEEC = Math.round(FEE * 100), tip = 0;
+const s = C.sub(lines), tax = Math.round(s * TAX_RATE), total = s + FEEC + tax;
 const alc = C.hasAlcohol(lines);
-const addr = [det.oaddr, det.oapt, det.ocity, det.ozip].filter(Boolean).join(', ');
-const pct = (TAX_RATE * 100).toFixed(TAX_RATE * 1000 % 10 ? 2 : 1).replace(/\.?0+$/, '');
+const pct = (TAX_RATE * 100).toFixed(2).replace(/\.?0+$/, '');
+let P = {}, S = {};
+try { P = JSON.parse(localStorage.getItem('mch_pref') || '{}') || {}; } catch (e) {}
+try { S = JSON.parse(localStorage.getItem('mch_settings') || '{}') || {}; } catch (e) {}
+const det = d.det || { oname: P.name || '', ophone: P.phone || '', oaddr: P.addr || '', oapt: '', ocity: P.city || '', ozip: P.zip || '', onotes: [P.note || '', S.leaveAtDoor ? 'Leave at the door.' : '', S.utensils === false ? 'No utensils needed.' : ''].filter(Boolean).join(' ') };
+const fld = (k, label, req, attrs) => '<div class="fld" data-k="' + k + '"><label for="' + k + '">' + label + (req ? ' <i class="rq">*</i>' : '') + '</label><input id="' + k + '" value="' + esc(det[k] || '') + '" ' + attrs + '><small class="ferr"></small></div>';
 $('#ckBody').innerHTML =
+  '<div class="cksec" style="margin-top:0">Your order</div>' +
   '<div class="cl">' + lines.map(l => { const m = C.items.get(l.id); const ds = C.describe(l).join(' · ');
     return '<div class="ci ro"><div class="cin"><b>' + esc(m.name) + ' x ' + l.q + '</b><small>' + esc(ds) + '</small></div><span class="ip">' + money(C.lineTotal(l)) + '</span></div>'; }).join('') + '</div>' +
+  '<div class="cksec">Delivery details</div>' +
+  '<form id="df" novalidate>' +
+  fld('oname', 'Full name', true, 'maxlength="80" autocomplete="name"') +
+  fld('ophone', 'Phone number', true, 'type="tel" maxlength="30" autocomplete="tel" inputmode="tel"') +
+  fld('oaddr', 'House address', true, 'maxlength="120" autocomplete="street-address" placeholder="Street and number"') +
+  fld('oapt', 'Apartment or door code', false, 'maxlength="60"') +
+  '<div class="row2">' + fld('ocity', 'City', true, 'maxlength="60" autocomplete="address-level2"') + fld('ozip', 'ZIP code', true, 'maxlength="12" autocomplete="postal-code"') + '</div>' +
+  '<div class="fld"><label for="onotes">Notes for the cook (allergies, no onions, leave at the door)</label><textarea id="onotes" maxlength="400" rows="3">' + esc(det.onotes || '') + '</textarea></div>' +
+  '</form>' +
+  '<div class="cksec">Your bill</div>' +
   '<div class="tot"><div><span>Food</span><span>' + money(s) + '</span></div>' +
   '<div><span>Delivery fee</span><span>' + (FEEC ? money(FEEC) : 'Free') + '</span></div>' +
   '<div><span>Sales tax (' + pct + '%)</span><span>' + money(tax) + '</span></div>' +
-  (tip ? '<div><span>Driver tip</span><span>' + money(tip) + '</span></div>' : '') +
   '<div class="g"><span>Total</span><span>' + money(total) + '</span></div></div>' +
-  '<div class="rv"><div><span>Deliver to</span><b>' + esc(det.oname) + '</b><br>' + esc(addr) + '<br>' + esc(det.ophone) + (det.onotes ? '<br><i>' + esc(det.onotes) + '</i>' : '') + '</div></div>' +
-  (alc ? '<p class="paynote">Contains beer. You must be 21 or older and show your ID at the door.</p>' : '') +
+  (alc ? '<label class="chk2"><input type="checkbox" id="oage"><span>I am 21 or older and will show my ID at the door.</span></label>' : '') +
   '<div class="cmsg" id="oerr" role="alert" hidden></div>' +
-  '<div class="two"><a class="sbtn back" href="/cart" style="text-align:center;display:grid;place-items:center">Back to cart</a><button class="sbtn fill" type="button" id="osend"><i class="spin"></i><span class="lbl">Proceed to pay &middot; ' + money(total) + '</span></button></div>';
-document.querySelectorAll('img[data-fb]').forEach(i => i.remove());
+  '<div class="two"><a class="sbtn back" href="/cart/" style="text-align:center;display:grid;place-items:center">Go back to cart</a><button class="sbtn fill" type="button" id="osend"><i class="spin"></i><span class="lbl">Confirm and pay &middot; ' + money(total) + '</span></button></div>';
+
+function readDet() { ['oname', 'ophone', 'oaddr', 'oapt', 'ocity', 'ozip', 'onotes'].forEach(k => { const e = document.getElementById(k); if (e) det[k] = e.value.trim(); }); }
+function valid() {
+  readDet();
+  const f = $('#df'); f.querySelectorAll('.fld').forEach(x => { x.classList.remove('bad'); const r = x.querySelector('.ferr'); if (r) r.textContent = ''; });
+  let bad = 0; const fail = (k, t) => { const x = f.querySelector('.fld[data-k="' + k + '"]'); if (x) { x.classList.add('bad'); x.querySelector('.ferr').textContent = t; } bad++; };
+  if (det.oname.split(/\s+/).filter(Boolean).length < 2) fail('oname', 'Please enter your first and last name.');
+  if (det.ophone.replace(/\D/g, '').length < 7) fail('ophone', 'Please enter a phone number we can call.');
+  if (det.oaddr.length < 5) fail('oaddr', 'Please enter your house address.');
+  if (det.ocity.length < 2) fail('ocity', 'Required.');
+  if (det.ozip.length < 3) fail('ozip', 'Required.');
+  return !bad;
+}
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const withTimeout = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(Object.assign(new Error('timeout'), { code: 'unavailable' })), ms))]);
@@ -443,6 +385,8 @@ async function pay() {
   const fail = (title, text) => { err.hidden = false; err.textContent = text; D.say('error', title, text); };
   const reset = () => { btn.classList.remove('loading'); btn.disabled = false; lbl.innerHTML = 'Try again &middot; ' + money(total); };
   err.hidden = true;
+  if (!valid()) { err.hidden = false; err.textContent = 'Please fix the highlighted fields.'; const b = document.querySelector('.fld.bad'); if (b) b.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+  if (alc && !($('#oage') && $('#oage').checked)) { err.hidden = false; err.textContent = 'Beer is for ages 21 and over. Please confirm that you are 21 or older.'; return; }
   if (!CHECKOUT_URL) { fail('Payments are not live yet', 'Payments are being switched on. Please try again soon. Your cart is saved.'); return; }
   if (navigator.onLine === false) { fail('You are offline', 'No internet connection. Check your Wi-Fi or data and press the button again.'); return; }
   const user = await D.whenUser();
