@@ -4,7 +4,8 @@
 export const CURRENCY = 'USD';
 export const FEE = 3.00;          /* flat delivery fee in dollars (use 0 for free delivery) */
 export const MIN_ORDER = 0;       /* no minimum: one meal or one drink is fine */
-export const CHECKOUT_URL = '';  /* address of the Stripe checkout worker (see worker/README.md) */          /* your Venmo name shown to customers who pay with Venmo, for example '@your-name' (leave empty to hide) */
+/* Your Venmo username WITHOUT the @, for example 'Chris-W' (from venmo.com/u/Chris-W). Customers pay this account. */
+export const VENMO_USER = '';
 export const TIPS = [0, 10, 15, 20];   /* quick tip buttons, in percent */
 
 /* "Fresh and homemade" costs a little more than "Basic". small items +3, meals +4, big dinners +6. */
@@ -275,15 +276,11 @@ const photoUrl = n => 'https://images.pexels.com/photos/' + n + '/pexels-photo-'
 
 /* Every dish gets a picture from /img/menu/<id>.svg by default.
  * To use your own photo, upload it to the img/menu folder and add  img: '/img/menu/yourfile.jpg'  to the dish above. */
-/* Stripe: every dish is a live Stripe product whose id equals the dish id (the delivery fee is product 'delivery-fee').
- * Prices in Stripe are the base prices above. Extras (fresh, options) are sent as ad-hoc line items by the checkout backend. */
 /* Sales tax added to food at checkout (not to delivery). Change this to your local rate, for example 0.0625 for 6.25%. */
 export const TAX_RATE = 0.07;
 /* Coupon codes: percent off the food (not delivery or tax). The checkout worker has the same list. */
 export const COUPONS = { MCHVISITER439BEST: 25 };
-export const STRIPE_FEE_PRODUCT = 'delivery-fee';
 MENU.forEach(m => {
-  m.stripe = m.id;
   m.fb = '/img/menu/' + m.id + '.svg';
   if (!m.img) m.img = (PHOTOS[m.id] && !LOWDATA) ? photoUrl(PHOTOS[m.id]) : m.fb;
   m.set = m.set || DEFAULT_SET[m.cat];

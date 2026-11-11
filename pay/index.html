@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pay with Venmo | MasterChefHub</title>
+<meta name="robots" content="noindex">
+<script>try{var q=new URLSearchParams(location.search),d=JSON.parse(sessionStorage.getItem('mch_pay')||'null');if(!q.get('plan')&&(!d||!d.id||Date.now()-d.t>3*3600*1000))location.replace('/');}catch(e){location.replace('/');}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#f6f6f4;--ink:#0a0a0a;--muted:#737373;--line:#e4e4e1;--blue:#008cff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:22px 16px 60px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.logo{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:800;letter-spacing:.02em}
+.logo i{width:40px;height:40px;border-radius:8px;background:#0a0a0a;display:grid;place-items:center}.logo img{width:24px;height:24px}
+.back{font-weight:700;font-size:.9rem;color:var(--ink);text-decoration:none;border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:11px 16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:28px 24px;box-shadow:0 24px 60px rgba(0,0,0,.06)}
+h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:2.3rem;line-height:1.1;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:6px 0 20px;line-height:1.55}
+.amt{background:#0a0a0a;color:#fff;border-radius:10px;padding:20px;text-align:center;margin-bottom:18px}
+.amt small{display:block;color:#bdbdbd;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.amt b{display:block;font-size:2.6rem;letter-spacing:-.03em;margin-top:4px}
+.code{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1.5px dashed #0a0a0a;border-radius:8px;padding:12px 14px;margin-bottom:18px}
+.code span{color:var(--muted);font-size:.85rem}.code b{font-size:1.15rem;letter-spacing:.08em}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:54px;border-radius:8px;border:0;background:var(--blue);color:#fff;font:800 1rem 'Inter',sans-serif;cursor:pointer;text-decoration:none;transition:.2s}
+.btn:hover{filter:brightness(.92);transform:translateY(-1px)}
+.btn.dark{background:#0a0a0a}.btn.line{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.steps{margin:22px 0 4px;display:grid;gap:12px;counter-reset:s}
+.steps li{list-style:none;display:flex;gap:12px;line-height:1.5;font-size:.95rem}
+.steps li:before{counter-increment:s;content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:#0a0a0a;color:#fff;font-weight:800;font-size:.8rem;display:grid;place-items:center;margin-top:1px}
+#qr{display:grid;place-items:center;margin:18px 0 6px}#qr img,#qr canvas{border:1px solid var(--line);border-radius:8px;padding:8px;background:#fff}
+.qrn{text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:18px}
+.warn{background:#f6f6f4;border-radius:8px;padding:12px 14px;color:#555;font-size:.86rem;line-height:1.55;margin:16px 0}
+.row{display:grid;gap:10px;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a class="logo" href="/"><i><img src="/favicon.svg" alt=""></i>MCH</a><a class="back" href="/cart/">Back to cart</a></div>
+  <div class="card" id="card"><p class="sub">Loading...</p></div>
+</div>
+<script type="module">
+import { VENMO_USER } from '/menu.js';
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const PLANS = { 'sous-chef': ['Sous Chef (Plan 1)', 1999], 'head-chef': ['Head Chef (Plan 2)', 4999], 'executive-chef': ['Executive Chef (Plan 3)', 9999] };
+const q = new URLSearchParams(location.search).get('plan');
+let cents = 0, note = '', title = '', sub = '', isPlan = false;
+if (q && PLANS[q]) {
+  isPlan = true; cents = PLANS[q][1]; title = PLANS[q][0] + ' membership';
+  note = 'MCH ' + PLANS[q][0] + ' membership';
+  sub = 'Your first month. Send the same amount every month to keep your plan. Use the email you use on MasterChefHub in the Venmo note if you can.';
+} else {
+  let d = null; try { d = JSON.parse(sessionStorage.getItem('mch_pay') || 'null'); } catch (e) {}
+  if (!d || !d.id) { location.replace('/'); }
+  cents = d.cents; const code = String(d.id).slice(-6).toUpperCase();
+  title = 'Pay for your order'; note = 'MCH ' + code;
+  sub = 'Your order is saved. It goes into the kitchen as soon as we see your payment.';
+}
+const amount = (cents / 100).toFixed(2);
+const card = $('#card');
+if (!VENMO_USER) {
+  card.innerHTML = '<h1>Venmo is being set up</h1><p class="sub">Payments are not switched on yet. Please check back soon.</p><a class="btn dark" href="/">Back to home</a>';
+} else {
+  const url = 'https://venmo.com/u/' + encodeURIComponent(VENMO_USER) + '?txn=pay&amount=' + amount + '&note=' + encodeURIComponent(note);
+  card.innerHTML =
+    '<h1>' + esc(title) + '</h1><p class="sub">' + esc(sub) + '</p>' +
+    '<div class="amt"><small>Amount to pay</small><b>$' + amount + '</b></div>' +
+    '<div class="code"><span>Put this in the Venmo note</span><b>' + esc(note) + '</b></div>' +
+    '<a class="btn" id="vbtn" href="' + esc(url) + '" target="_blank" rel="noopener">Open Venmo and pay $' + amount + '</a>' +
+    '<div id="qr"></div><p class="qrn">On a computer? Scan this with your phone camera to pay in Venmo.</p>' +
+    '<ol class="steps"><li>Tap the blue button (or scan the code). Venmo opens with the amount and note filled in.</li><li>Check the amount and the note, then send the payment to @' + esc(VENMO_USER) + '.</li><li>Come back here and tap "I have paid".</li></ol>' +
+    '<p class="warn">Please send exactly $' + amount + ' and keep the note as it is, so we can match your payment. Please send it as a normal Venmo payment.</p>' +
+    '<div class="row"><button class="btn dark" id="paid" type="button">I have paid</button></div>';
+  try { new QRCode(document.getElementById('qr'), { text: url, width: 168, height: 168, colorDark: '#0a0a0a', colorLight: '#ffffff' }); } catch (e) { const n = document.getElementById('qr'); if (n) n.remove(); }
+  $('#paid').addEventListener('click', () => {
+    if (isPlan) { try { localStorage.setItem('mch_pay_claim', String(Date.now())); } catch (e) {} location.href = '/membership?joined=' + q; return; }
+    try { localStorage.setItem('mch_pay_claim', String(Date.now())); sessionStorage.removeItem('mch_pay'); } catch (e) {}
+    location.href = '/order-success';
+  });
+}
+</script>
+</body>
+</html>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/loader.js"></script>
 <title>Cart and pay | MasterChefHub</title>
-<meta name="description" content="Review your cart, add your delivery address and place your order. Pay securely by card with Stripe.">
+<meta name="description" content="Review your cart, add your delivery address and place your order. Pay with Venmo.">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -600,7 +600,7 @@ const stLabel = s => (ST.find(x => x[0] === s) || [0, 'New'])[1];
 const ms = t => { try { return t && t.toMillis ? t.toMillis() : (t && t.seconds ? t.seconds * 1000 : (t ? new Date(t).getTime() : 0)) || 0; } catch (e) { return 0; } };
 const when = t => { const x = ms(t); return x ? new Date(x).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : ''; };
 const itemsHtml = o => '<ul class="il">' + (o.items || []).map(i => '<li><b>' + esc(i.qty) + ' x ' + esc(i.name) + '</b>' + ((i.options || []).length ? '<small>' + esc(i.options.join(' · ')) + '</small>' : '') + '</li>').join('') + '</ul>';
-const payName = o => 'Stripe (card)';
+const payName = o => 'Venmo';
 function orderCard(o, isOwner) {
   const total = '$' + Number(o.total || 0).toFixed(2);
   let h = '<div class="oc" data-id="' + esc(o.id) + '"><div class="oh"><div><div class="no">Order #' + esc(String(o.id).slice(-6).toUpperCase()) + '</div><div class="dt">' + esc(when(o.createdAt)) + '</div></div><span class="pill ' + esc(o.status || 'new') + '">' + esc(stLabel(o.status)) + '</span></div>';

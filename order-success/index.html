@@ -40,23 +40,20 @@ p{color:var(--muted);font-size:.95rem;line-height:1.6;margin-bottom:20px}
 <body>
 <main class="card" id="card"><div class="spin" aria-label="Loading"></div><h1>One moment</h1><p>Checking your payment...</p></main>
 <script>
-/* Payment gate. Stripe sends customers back here after paying.
-   A visitor counts as "just paid" only if this browser started a payment (flag set right before going to Stripe)
-   or the link carries a Stripe session id. Anyone else is sent to the home page and told no payment was made.
-   NOTE: this is a courtesy gate, not proof of payment. Real confirmation comes from Stripe (dashboard / webhook). */
+/* After the customer taps "I have paid" on the Venmo page, they land here.
+   This is a courtesy gate, not proof of payment: the real check is the owner seeing the Venmo payment. */
 (function () {
-  var P = new URLSearchParams(location.search), ok = false, started = 0;
-  try { started = +localStorage.getItem('mch_pay_pending') || 0; } catch (e) {}
+  var ok = false, started = 0;
+  try { started = +localStorage.getItem('mch_pay_claim') || 0; } catch (e) {}
   if (started && Date.now() - started < 3 * 60 * 60 * 1000) ok = true;
-  if (/^cs_/.test(P.get('session_id') || '')) ok = true;
   if (!ok) { location.replace('/?unpaid=1'); return; }
-  try { localStorage.removeItem('mch_pay_pending'); localStorage.removeItem('mch_cart2'); } catch (e) {}
+  try { localStorage.removeItem('mch_pay_claim'); localStorage.removeItem('mch_cart2'); } catch (e) {}
   var card = document.getElementById('card');
   card.innerHTML =
     '<a class="logo" href="/"><img src="/favicon.svg" alt="MasterChefHub"></a>' +
     '<div class="ic"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>' +
     '<h1>Thank you, order received</h1>' +
-    '<p>Your payment went through and your order is in the kitchen. We will cook it at home and bring it to your door.</p>' +
+    '<p>We are checking for your Venmo payment. As soon as we see it, your order goes into the kitchen and we bring it to your door.</p>' +
     '<a class="btn" href="/profile">View my orders</a>' +
     '<a class="btn line" href="/food">Order something else</a>';
   document.title = 'Thank you | MasterChefHub';

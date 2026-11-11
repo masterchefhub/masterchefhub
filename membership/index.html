@@ -248,24 +248,24 @@ footer ul a:hover{text-decoration:underline}
         <div class="price"><b>$19.99</b><span>/ month</span></div>
         <p class="pd">A faster kitchen and lower prices.</p>
         <ul><li>Priority queue: your order is cooked first</li><li>10% off all food, every order</li><li>Delivery fee only $1 (instead of $3)</li><li>Free drink with every order over $20</li><li>Early access to new dishes</li><li>Member-only weekly special</li><li>Priority support by text</li></ul>
-        <a class="pbtn" href="https://buy.stripe.com/28E5kEcPMc7A1tL94E7kc02" rel="noopener">Join Sous Chef</a>
+        <a class="pbtn" href="/pay?plan=sous-chef" >Join Sous Chef</a>
       </article>
       <article class="plan best">
         <div class="ptag">Plan 2 &middot; Most popular</div><h2 class="serif">Head Chef</h2>
         <div class="price"><b>$49.99</b><span>/ month</span></div>
         <p class="pd">Everything in Plan 1, plus free delivery and free meals.</p>
         <ul><li><b>Everything in Plan 1</b></li><li>Fastest queue: cooked and out the door first</li><li>20% off all food, every order</li><li>Free delivery on every order</li><li>Free dessert with every order over $30</li><li>Free drink with every order</li><li>One free dinner or platter up to $25 each month</li><li>Free birthday cake each year</li><li>Request a custom dish once a month</li><li>First pick of limited holiday menus</li><li>Free priority re-cook if anything is wrong</li><li>Direct line to the chef</li></ul>
-        <a class="pbtn fill" href="https://buy.stripe.com/3cIbJ2030gnQ7S92Gg7kc03" rel="noopener">Join Head Chef</a>
+        <a class="pbtn fill" href="/pay?plan=head-chef" >Join Head Chef</a>
       </article>
       <article class="plan top">
         <div class="ptag">Plan 3 &middot; The full kitchen</div><h2 class="serif">Executive Chef</h2>
         <div class="price"><b>$99.99</b><span>/ month</span></div>
         <p class="pd">Everything in Plan 2, plus the best the kitchen can do.</p>
         <ul><li><b>Everything in Plan 2</b></li><li>Front of the line: always cooked first</li><li>25% off all food, every order</li><li>Free delivery, no minimum, any time</li><li>Free drink, side and dessert with every order</li><li>Two free dinners or platters up to $40 each, every month</li><li>One free party platter up to $60 every month</li><li>A free meal for a friend every month</li><li>Plan a custom menu with the chef for any event</li><li>Name your own dish: one a month, cooked just for you</li><li>Reserved spot on every holiday menu</li><li>Free birthday cake and birthday dinner</li><li>Free instant re-cook or full refund if anything is wrong</li><li>Text the chef directly, 7 days a week</li></ul>
-        <a class="pbtn" href="https://buy.stripe.com/cNi5kEaHEdbEdctcgQ7kc04" rel="noopener">Join Executive Chef</a>
+        <a class="pbtn" href="/pay?plan=executive-chef" >Join Executive Chef</a>
       </article>
     </div>
-    <p class="pfine">Payments are handled securely by Stripe. Use the same email you use on MasterChefHub so we can find your membership. Membership perks are applied by the kitchen to your orders. Already a member? <a href="/settings#billing" style="text-decoration:underline;font-weight:600">Manage your plan in Settings</a>: change plan, update your card or cancel.</p>
+    <p class="pfine">Memberships are paid monthly with Venmo. Use the same email you use on MasterChefHub so we can find your membership. Perks are applied by the kitchen to your orders. To cancel, just message us before your next payment is due. Already a member? <a href="/settings#billing" style="text-decoration:underline;font-weight:600">See your billing options in Settings</a>.</p>
   </div>
   <footer>
     <div class="fgrid">
@@ -303,7 +303,7 @@ footer ul a:hover{text-decoration:underline}
 .pfine{color:var(--muted);font-size:.85rem;max-width:720px}
 .joined{border:1.5px solid #0a0a0a;background:#fff;padding:16px 18px;border-radius:4px;margin-top:18px;font-weight:600}
 </style>
-<script>(function(){var p=new URLSearchParams(location.search).get('joined'),e=document.getElementById('joined');if(!e||!p)return;e.hidden=false;e.textContent='Welcome to the '+({plan1:'Sous Chef (Plan 1)',plan2:'Head Chef (Plan 2)',plan3:'Executive Chef (Plan 3)'}[p]||'MasterChefHub')+' membership. Your perks start on your next order.';})();</script>
+<script>(function(){var p=new URLSearchParams(location.search).get('joined'),e=document.getElementById('joined');if(!e||!p)return;e.hidden=false;e.textContent='Thank you! Your '+({'sous-chef':'Sous Chef (Plan 1)','head-chef':'Head Chef (Plan 2)','executive-chef':'Executive Chef (Plan 3)'}[p]||'MasterChefHub')+' membership starts when we see your Venmo payment.';})();</script>
 <script src="/site.js"></script>
 <script>window.sfx=window.sfx||{hover(){},click(){},on(){},off(){},open(){},heart(){},success(){},whoops(){},boing(){}};</script>
 <script>

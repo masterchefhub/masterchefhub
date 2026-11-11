@@ -305,7 +305,7 @@ footer ul a:hover{text-decoration:underline}
   <header class="ckhead"><a href="/" class="logo"><div class="logo-mark"><svg class="ico hat"><use href="#i-hat"/></svg></div><div class="logo-text">MCH<small>Master Chef Hub</small></div></a><a class="sbtn back ckback" href="/cart/">Go back to cart</a></header>
   <div class="ckmain">
     <h1 class="serif">Checkout</h1>
-    <p class="cksub">Add your delivery details, check your bill, then confirm and pay.</p>
+    <p class="cksub">Add your delivery details, check your bill, then place your order. Next you pay with Venmo.</p>
     <div class="cartbox" id="cart"><div id="ckBody"><p style="color:var(--muted)">Loading your order...</p></div></div>
   </div>
 </div>
@@ -325,7 +325,7 @@ body{background:var(--bg)}
 <script>window.sfx=window.sfx||{hover(){},click(){},on(){},off(){},open(){},heart(){},success(){},whoops(){},boing(){}};</script>
 <script type="module">
 import * as D from '/data.js';
-import { FEE, TAX_RATE, CHECKOUT_URL, COUPONS } from '/menu.js';
+import { FEE, TAX_RATE, VENMO_USER, COUPONS } from '/menu.js';
 import * as C from '/cartlib.js';
 const $ = s => document.querySelector(s), esc = D.esc, money = C.money;
 let d = null;
@@ -363,7 +363,7 @@ $('#ckBody').innerHTML =
   '<div class="cksec">Your bill</div><div id="bill"></div>' +
   (alc ? '<label class="chk2"><input type="checkbox" id="oage"><span>I am 21 or older and will show my ID at the door.</span></label>' : '') +
   '<div class="cmsg" id="oerr" role="alert" hidden></div>' +
-  '<div class="two"><a class="sbtn back" href="/cart/" style="text-align:center;display:grid;place-items:center">Go back to cart</a><button class="sbtn fill" type="button" id="osend"><i class="spin"></i><span class="lbl">Confirm and pay &middot; ' + money(total) + '</span></button></div>';
+  '<div class="two"><a class="sbtn back" href="/cart/" style="text-align:center;display:grid;place-items:center">Go back to cart</a><button class="sbtn fill" type="button" id="osend"><i class="spin"></i><span class="lbl">Place order and pay &middot; ' + money(total) + '</span></button></div>';
 
 function bill() {
   $('#bill').innerHTML = '<div class="tot"><div><span>Food</span><span>' + money(s) + '</span></div>' +
@@ -371,7 +371,7 @@ function bill() {
     '<div><span>Delivery fee</span><span>' + (FEEC ? money(FEEC) : 'Free') + '</span></div>' +
     '<div><span>Sales tax (' + pct + '%)</span><span>' + money(tax) + '</span></div>' +
     '<div class="g"><span>Total</span><span>' + money(total) + '</span></div></div>';
-  const l = document.querySelector('#osend .lbl'); if (l) l.innerHTML = 'Confirm and pay &middot; ' + money(total);
+  const l = document.querySelector('#osend .lbl'); if (l) l.innerHTML = 'Place order and pay &middot; ' + money(total);
 }
 bill();
 $('#ocapply').addEventListener('click', () => {
@@ -403,14 +403,14 @@ async function pay() {
   err.hidden = true;
   if (!valid()) { err.hidden = false; err.textContent = 'Please fix the highlighted fields.'; const b = document.querySelector('.fld.bad'); if (b) b.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
   if (alc && !($('#oage') && $('#oage').checked)) { err.hidden = false; err.textContent = 'Beer is for ages 21 and over. Please confirm that you are 21 or older.'; return; }
-  if (!CHECKOUT_URL) { fail('Payments are not live yet', 'Payments are being switched on. Please try again soon. Your cart is saved.'); return; }
+  if (!VENMO_USER) { fail('Venmo is being set up', 'Venmo payment is being switched on. Please try again soon. Your cart is saved.'); return; }
   if (navigator.onLine === false) { fail('You are offline', 'No internet connection. Check your Wi-Fi or data and press the button again.'); return; }
   const user = await D.whenUser();
   if (!user) { location.href = '/login?next=/cart'; return; }
   btn.classList.add('loading'); btn.disabled = true;
   const list = lines.map(l => ({ id: l.id, name: C.items.get(l.id).name, qty: l.q, price: C.unit(l) / 100, fresh: !!l.fresh, options: C.describe(l) }));
-  const note = ' [Paid by card online.' + (code ? ' Coupon ' + code + ' -$' + (disc / 100).toFixed(2) + '.' : '') + ' Includes sales tax $' + (tax / 100).toFixed(2) + '.' + (alc ? ' Contains beer: check ID, 21+.' : '') + ']';
-  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: ((det.onotes || '') + note).slice(0, 900), items: list, subtotal: (s - disc) / 100, fee: FEEC / 100, tip: tip / 100, total: total / 100, payment: 'stripe', alcohol: alc, status: 'new' };
+  const note = ' [Pay by Venmo, code ' + String(pendingId || '').slice(-6).toUpperCase() + '.' + (code ? ' Coupon ' + code + ' -$' + (disc / 100).toFixed(2) + '.' : '') + ' Includes sales tax $' + (tax / 100).toFixed(2) + '.' + (alc ? ' Contains beer: check ID, 21+.' : '') + ']';
+  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: ((det.onotes || '') + note).slice(0, 900), items: list, subtotal: (s - disc) / 100, fee: FEEC / 100, tip: tip / 100, total: total / 100, payment: 'venmo', alcohol: alc, status: 'new' };
   if (isFinite(det.lat) && isFinite(det.lon) && det.lat != null) { order.lat = det.lat; order.lon = det.lon; }
   const legacy = () => { const o = Object.assign({}, order); delete o.tip; delete o.alcohol; o.payment = 'cash_on_delivery'; o.notes = (order.notes + ' Tip $' + (tip / 100).toFixed(2)).slice(0, 900); return o; };
   let ok = false, mode = 'modern', unknown = false, last = null;
@@ -435,16 +435,8 @@ async function pay() {
     fail('Could not start your order', code === 'permission-denied' ? 'The database is not accepting orders yet. The owner needs to publish the latest Firestore rules.' : 'We could not reach the server. Check your connection and press the button again.');
     reset(); return;
   }
-  try {
-    lbl.textContent = 'Taking you to payment...';
-    const r = await withTimeout(fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId: pendingId, email: order.email, items: lines.map(l => ({ id: l.id, qty: l.q, unit: C.unit(l), label: C.items.get(l.id).name })), fee: FEEC, tax, tip, coupon: code }) }).then(x => x.json()), 20000);
-    if (!r || !r.url) throw new Error((r && r.error) || 'No link');
-    try { localStorage.setItem('mch_pay_pending', String(Date.now())); sessionStorage.removeItem('mch_ck'); } catch (x) {}
-    location.href = r.url;
-  } catch (er) {
-    fail('Could not open payment', 'We could not open the payment page. You have not been charged. Please try again.');
-    reset();
-  }
+  try { sessionStorage.setItem('mch_pay', JSON.stringify({ id: pendingId, cents: total, t: Date.now() })); sessionStorage.removeItem('mch_ck'); } catch (x) {}
+  location.href = '/pay';
 }
 $('#osend').addEventListener('click', pay);
 </script>
