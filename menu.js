@@ -279,6 +279,8 @@ const photoUrl = n => 'https://images.pexels.com/photos/' + n + '/pexels-photo-'
  * Prices in Stripe are the base prices above. Extras (fresh, options) are sent as ad-hoc line items by the checkout backend. */
 /* Sales tax added to food at checkout (not to delivery). Change this to your local rate, for example 0.0625 for 6.25%. */
 export const TAX_RATE = 0.07;
+/* Coupon codes: percent off the food (not delivery or tax). The checkout worker has the same list. */
+export const COUPONS = { MCHVISITER439BEST: 25 };
 export const STRIPE_FEE_PRODUCT = 'delivery-fee';
 MENU.forEach(m => {
   m.stripe = m.id;

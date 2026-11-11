@@ -319,12 +319,13 @@ body{background:var(--bg)}
 .ckmain h1{font-size:2.6rem;line-height:1.1}.cksub{color:var(--muted);margin:6px 0 20px}
 .ckmain .cartbox{max-width:none}
 .cksec{margin:22px 0 8px;font-weight:800;font-size:1.05rem}
+.cpn{display:flex;gap:8px}.cpn input{flex:1;height:46px;border:1.5px solid var(--line);border-radius:12px;padding:0 14px;font:inherit;text-transform:uppercase}.cpn .sbtn{height:46px;width:auto;padding:0 22px}
 </style>
 <script src="/site.js"></script>
 <script>window.sfx=window.sfx||{hover(){},click(){},on(){},off(){},open(){},heart(){},success(){},whoops(){},boing(){}};</script>
 <script type="module">
 import * as D from '/data.js';
-import { FEE, TAX_RATE, CHECKOUT_URL } from '/menu.js';
+import { FEE, TAX_RATE, CHECKOUT_URL, COUPONS } from '/menu.js';
 import * as C from '/cartlib.js';
 const $ = s => document.querySelector(s), esc = D.esc, money = C.money;
 let d = null;
@@ -334,7 +335,10 @@ if (!d || !Array.isArray(d.lines) || !d.lines.length || Date.now() - d.t > 2 * 3
 const lines = (d && d.lines || []).filter(l => C.items.has(l.id));
 if (!lines.length) home();
 const FEEC = Math.round(FEE * 100), tip = 0;
-const s = C.sub(lines), tax = Math.round(s * TAX_RATE), total = s + FEEC + tax;
+const s = C.sub(lines);
+let code = '', disc = 0, tax = 0, total = 0;
+const calc = () => { disc = code ? Math.round(s * COUPONS[code] / 100) : 0; tax = Math.round((s - disc) * TAX_RATE); total = s - disc + FEEC + tax; };
+calc();
 const alc = C.hasAlcohol(lines);
 const pct = (TAX_RATE * 100).toFixed(2).replace(/\.?0+$/, '');
 let P = {}, S = {};
@@ -355,15 +359,27 @@ $('#ckBody').innerHTML =
   '<div class="row2">' + fld('ocity', 'City', true, 'maxlength="60" autocomplete="address-level2"') + fld('ozip', 'ZIP code', true, 'maxlength="12" autocomplete="postal-code"') + '</div>' +
   '<div class="fld"><label for="onotes">Notes for the cook (allergies, no onions, leave at the door)</label><textarea id="onotes" maxlength="400" rows="3">' + esc(det.onotes || '') + '</textarea></div>' +
   '</form>' +
-  '<div class="cksec">Your bill</div>' +
-  '<div class="tot"><div><span>Food</span><span>' + money(s) + '</span></div>' +
-  '<div><span>Delivery fee</span><span>' + (FEEC ? money(FEEC) : 'Free') + '</span></div>' +
-  '<div><span>Sales tax (' + pct + '%)</span><span>' + money(tax) + '</span></div>' +
-  '<div class="g"><span>Total</span><span>' + money(total) + '</span></div></div>' +
+  '<div class="cksec">Coupon code</div><div class="cpn"><input id="ocode" placeholder="Enter code" maxlength="40" autocomplete="off" autocapitalize="characters"><button type="button" class="sbtn" id="ocapply">Apply</button></div><small id="ocmsg" class="ferr"></small>' +
+  '<div class="cksec">Your bill</div><div id="bill"></div>' +
   (alc ? '<label class="chk2"><input type="checkbox" id="oage"><span>I am 21 or older and will show my ID at the door.</span></label>' : '') +
   '<div class="cmsg" id="oerr" role="alert" hidden></div>' +
   '<div class="two"><a class="sbtn back" href="/cart/" style="text-align:center;display:grid;place-items:center">Go back to cart</a><button class="sbtn fill" type="button" id="osend"><i class="spin"></i><span class="lbl">Confirm and pay &middot; ' + money(total) + '</span></button></div>';
 
+function bill() {
+  $('#bill').innerHTML = '<div class="tot"><div><span>Food</span><span>' + money(s) + '</span></div>' +
+    (disc ? '<div><span>Coupon ' + esc(code) + ' (' + COUPONS[code] + '% off)</span><span>-' + money(disc) + '</span></div>' : '') +
+    '<div><span>Delivery fee</span><span>' + (FEEC ? money(FEEC) : 'Free') + '</span></div>' +
+    '<div><span>Sales tax (' + pct + '%)</span><span>' + money(tax) + '</span></div>' +
+    '<div class="g"><span>Total</span><span>' + money(total) + '</span></div></div>';
+  const l = document.querySelector('#osend .lbl'); if (l) l.innerHTML = 'Confirm and pay &middot; ' + money(total);
+}
+bill();
+$('#ocapply').addEventListener('click', () => {
+  const v = $('#ocode').value.trim().toUpperCase(), msg = $('#ocmsg');
+  if (!v) { code = ''; calc(); bill(); msg.textContent = ''; return; }
+  if (COUPONS[v]) { code = v; calc(); bill(); msg.style.color = '#16a34a'; msg.textContent = 'Coupon applied: ' + COUPONS[v] + '% off your food.'; }
+  else { code = ''; calc(); bill(); msg.style.color = ''; msg.textContent = 'That code is not valid.'; }
+});
 function readDet() { ['oname', 'ophone', 'oaddr', 'oapt', 'ocity', 'ozip', 'onotes'].forEach(k => { const e = document.getElementById(k); if (e) det[k] = e.value.trim(); }); }
 function valid() {
   readDet();
@@ -393,8 +409,8 @@ async function pay() {
   if (!user) { location.href = '/login?next=/cart'; return; }
   btn.classList.add('loading'); btn.disabled = true;
   const list = lines.map(l => ({ id: l.id, name: C.items.get(l.id).name, qty: l.q, price: C.unit(l) / 100, fresh: !!l.fresh, options: C.describe(l) }));
-  const note = ' [Paid by card online. Includes sales tax $' + (tax / 100).toFixed(2) + '.' + (alc ? ' Contains beer: check ID, 21+.' : '') + ']';
-  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: ((det.onotes || '') + note).slice(0, 900), items: list, subtotal: s / 100, fee: FEEC / 100, tip: tip / 100, total: total / 100, payment: 'stripe', alcohol: alc, status: 'new' };
+  const note = ' [Paid by card online.' + (code ? ' Coupon ' + code + ' -$' + (disc / 100).toFixed(2) + '.' : '') + ' Includes sales tax $' + (tax / 100).toFixed(2) + '.' + (alc ? ' Contains beer: check ID, 21+.' : '') + ']';
+  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: ((det.onotes || '') + note).slice(0, 900), items: list, subtotal: (s - disc) / 100, fee: FEEC / 100, tip: tip / 100, total: total / 100, payment: 'stripe', alcohol: alc, status: 'new' };
   if (isFinite(det.lat) && isFinite(det.lon) && det.lat != null) { order.lat = det.lat; order.lon = det.lon; }
   const legacy = () => { const o = Object.assign({}, order); delete o.tip; delete o.alcohol; o.payment = 'cash_on_delivery'; o.notes = (order.notes + ' Tip $' + (tip / 100).toFixed(2)).slice(0, 900); return o; };
   let ok = false, mode = 'modern', unknown = false, last = null;
@@ -421,7 +437,7 @@ async function pay() {
   }
   try {
     lbl.textContent = 'Taking you to payment...';
-    const r = await withTimeout(fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId: pendingId, email: order.email, items: lines.map(l => ({ id: l.id, qty: l.q, unit: C.unit(l), label: C.items.get(l.id).name })), fee: FEEC, tax, tip }) }).then(x => x.json()), 20000);
+    const r = await withTimeout(fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId: pendingId, email: order.email, items: lines.map(l => ({ id: l.id, qty: l.q, unit: C.unit(l), label: C.items.get(l.id).name })), fee: FEEC, tax, tip, coupon: code }) }).then(x => x.json()), 20000);
     if (!r || !r.url) throw new Error((r && r.error) || 'No link');
     try { localStorage.setItem('mch_pay_pending', String(Date.now())); sessionStorage.removeItem('mch_ck'); } catch (x) {}
     location.href = r.url;

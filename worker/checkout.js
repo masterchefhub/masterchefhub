@@ -1,6 +1,7 @@
 /* MasterChefHub Stripe checkout worker (Cloudflare Workers).
  * Receives the cart from the site, checks every price against Stripe, and returns a Stripe Checkout link.
  * Secrets: STRIPE_SECRET_KEY (restricted key with Checkout Sessions write + Products read). */
+const COUPONS = { MCHVISITER439BEST: 25 }; /* keep in step with menu.js */
 const SITE = 'https://masterchefhub.com';
 const CORS = { 'Access-Control-Allow-Origin': SITE, 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' };
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'Content-Type': 'application/json', ...CORS } });
@@ -38,6 +39,12 @@ export default {
         p.set(`line_items[${n}][price_data][unit_amount]`, String(unit));
         p.set(`line_items[${n}][price_data][product]`, prod.id);
         n++;
+      }
+      const code = String(b.coupon || '').toUpperCase();
+      if (COUPONS[code]) {
+        const food = items.reduce((t, it) => t + (Number(it.unit) | 0) * Math.max(1, Math.min(20, Number(it.qty) | 0)), 0);
+        const c = await stripe(env, 'coupons', { amount_off: String(Math.round(food * COUPONS[code] / 100)), currency: 'usd', duration: 'once', name: 'Coupon ' + code, max_redemptions: '1' });
+        p.set('discounts[0][coupon]', c.id);
       }
       const fee = Math.max(0, Math.min(2000, Number(b.fee) | 0)), tax = Math.max(0, Math.min(50000, Number(b.tax) | 0)), tip = Math.max(0, Math.min(20000, Number(b.tip) | 0));
       for (const [name, amt] of [['Delivery fee', fee], ['Sales tax', tax], ['Driver tip', tip]]) {
