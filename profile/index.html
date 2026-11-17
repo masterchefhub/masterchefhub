@@ -329,11 +329,8 @@ footer ul a:hover{text-decoration:underline}
         </section>
 
         <section class="pcard full" id="ownerCard" hidden>
-          <h2>Owner dashboard</h2><p class="sub">Only you can see this. You can add and delete content on the Videos, Recipes, Food and Blog pages.</p>
-          <div class="stat2" id="oStats"></div>
-          <div class="qlinks"><a class="sbtn fill" href="/videos">Upload video</a><a class="sbtn" href="/cart#orders">View orders</a><a class="sbtn" href="/contact#inbox">Read messages</a><a class="sbtn" href="/blog">Write post</a></div>
-          <h2 style="margin-top:26px">Inbox</h2><p class="sub">Messages sent from the contact page.</p>
-          <div class="inbox" id="inbox"></div>
+          <h2>Owner tools</h2><p class="sub">Orders, stock, staff and roles, accounts and messages now live on their own page. Only you can open it.</p>
+          <div class="qlinks"><a class="sbtn fill" href="/owner">Open owner page</a></div>
         </section>
 
         <section class="pcard full danger">
@@ -440,6 +437,7 @@ function start(u) {
   D.cacheUser(u); paint(u);
   $('#pfLoad').hidden = true; $('#pfMain').hidden = false;
   if (D.isOwner(u)) owner();
+  showRole(u);
 
   $('#outBtn').addEventListener('click', async () => {
     try { await c.A.signOut(c.auth); } catch (e) {}
@@ -516,28 +514,14 @@ function start(u) {
   });
 }
 
-async function owner() {
-  $('#ownerCard').hidden = false;
-  const names = [['videos', 'Videos'], ['orders', 'Orders'], ['posts', 'Posts'], ['messages', 'Messages']];
-  $('#oStats').innerHTML = names.map(n => '<div><b id="os-' + n[0] + '">-</b><span>' + n[1] + '</span></div>').join('');
-  names.forEach(async n => { try { $('#os-' + n[0]).textContent = String(await D.count(n[0])); } catch (e) {} });
-  const box = $('#inbox');
-  async function load() {
-    try {
-      const rows = await D.list('messages', { max: 50 });
-      box.innerHTML = rows.length ? rows.map(m => '<div class="msgi" data-id="' + esc(m.id) + '"><header><b>' + esc(m.name || 'Unknown') + ' <small>&lt;' + esc(m.email || '') + '&gt;</small></b><small>' + esc(D.fmtDate(m.createdAt)) + '</small></header>' +
-        '<div class="sj">' + esc(m.subject || '') + '</div><p>' + esc(m.message || '') + '</p><div class="acts"><a class="sbtn" href="mailto:' + esc(m.email || '') + '?subject=' + encodeURIComponent('Re: ' + (m.subject || 'Your message')) + '">Reply</a><button type="button" class="sbtn danger" data-del="' + esc(m.id) + '">Delete</button></div></div>').join('') : '<p class="sub">No messages yet.</p>';
-    } catch (e) { box.innerHTML = '<p class="sub">' + esc(D.explain(e)) + '</p>'; }
-  }
-  let armed = null;
-  box.addEventListener('click', async e => {
-    const b = e.target.closest('[data-del]'); if (!b) return;
-    if (armed !== b) { armed = b; b.textContent = 'Click again to delete'; setTimeout(() => { if (armed === b) { armed = null; b.textContent = 'Delete'; } }, 3000); return; }
-    armed = null; b.disabled = true;
-    try { await D.remove('messages', b.dataset.del); b.closest('.msgi').remove(); const n = $('#os-messages'); if (n) n.textContent = String(Math.max(0, Number(n.textContent) - 1)); D.say('success', 'Deleted', 'The message was removed.'); }
-    catch (er) { b.disabled = false; b.textContent = 'Delete'; D.say('error', 'Could not delete', D.explain(er)); }
-  });
-  load();
+function owner() { $('#ownerCard').hidden = false; }
+
+/* custom role (set by the owner on /owner) shown as a badge */
+async function showRole(u) {
+  try {
+    const r = await D.get('staff', (u.email || '').toLowerCase());
+    if (r && r.roleName && !$('#pBadges .bd.role')) $('#pBadges').insertAdjacentHTML('beforeend', '<span class="bd role">' + esc(r.roleName) + '</span>');
+  } catch (e) { /* no role */ }
 }
 </script>
 </body>

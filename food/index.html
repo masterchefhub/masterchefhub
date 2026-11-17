@@ -396,6 +396,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 import * as D from '/data.js';
 import { MENU, CATS, FEE, MIN_ORDER, freshExtra } from '/menu.js';
 import * as C from '/cartlib.js';
+import * as ST from '/stocklib.js';
 const $ = s => document.querySelector(s), esc = D.esc, money = C.money;
 const FEEC = Math.round(FEE * 100), MINC = Math.round(MIN_ORDER * 100);
 let lines = C.load(), cat = 'all', q = '';
@@ -413,7 +414,7 @@ function drawMenu() {
   const list = MENU.filter(m => (cat === 'all' || m.cat === cat) && (!t || (m.name + ' ' + m.desc).toLowerCase().includes(t)));
   $('#fcount').textContent = list.length + (list.length === 1 ? ' dish' : ' dishes');
   $('#mgrid').innerHTML = list.length ? list.map(m => { const n = inCart(m.id);
-    return '<div class="mi" data-id="' + esc(m.id) + '"><div class="mimg"><img data-fb="/img/menu/' + esc(m.id) + '.svg" src="' + esc(m.img) + '" alt="' + esc(m.name) + '" width="640" height="480" loading="lazy" decoding="async">' + (n ? '<span class="inc">' + n + ' in cart</span>' : '') + '</div><div class="mbody"><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p><div class="mb"><span class="pr">' + money(C.items.get(m.id).c) + (m.groups.length || m.canFresh ? ' <span class="tagf">+ options</span>' : '') + '</span><button class="addb" data-open="' + esc(m.id) + '" type="button"><svg class="ico"><use href="#i-plus"/></svg>Add</button></div></div></div>'; }).join('')
+    return '<div class="mi" data-id="' + esc(m.id) + '"><div class="mimg"><img data-fb="/img/menu/' + esc(m.id) + '.svg" src="' + esc(m.img) + '" alt="' + esc(m.name) + '" width="640" height="480" loading="lazy" decoding="async">' + (n ? '<span class="inc">' + n + ' in cart</span>' : '') + '</div><div class="mbody"><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p><div class="mb"><span class="pr">' + money(C.items.get(m.id).c) + (m.groups.length || m.canFresh ? ' <span class="tagf">+ options</span>' : '') + '</span>' + (ST.soldOut(m.id) ? '<button class="addb" type="button" disabled style="opacity:.45;cursor:not-allowed">Sold out</button>' : (ST.left(m.id) <= 5 ? '<span class="tagf" style="margin-right:8px">Only ' + ST.left(m.id) + ' left</span>' : '') + '<button class="addb" data-open="' + esc(m.id) + '" type="button"><svg class="ico"><use href="#i-plus"/></svg>Add</button>') + '</div></div></div>'; }).join('')
     : '<div class="fempty">Nothing matches that search. Try another word or pick All.</div>';
 }
 function bar() {
@@ -472,6 +473,8 @@ $('#czAdd').addEventListener('click', () => {
     const box = document.querySelector('.cg[data-g="' + miss.id + '"]'); box.classList.add('bad'); box.scrollIntoView({ behavior: 'smooth', block: 'center' });
     D.say('warning', 'Pick an option', 'Please choose: ' + miss.label); return;
   }
+  const room = ST.left(cur.m.id) - inCart(cur.m.id);
+  if (room < cur.q) { D.say('warning', room <= 0 ? 'Sold out' : 'Not enough left', room <= 0 ? cur.m.name + ' is out of stock right now.' : 'Only ' + room + ' more of ' + cur.m.name + ' available.'); return; }
   const l = curLine(); l.k = Math.random().toString(36).slice(2); l.note = ($('#czNote').value || '').trim().slice(0, 120);
   C.add(lines, l); bar(); drawMenu();
   D.say('success', 'Added to cart', cur.m.name + ' x ' + cur.q);
@@ -483,6 +486,7 @@ $('#msearch').addEventListener('input', e => { q = e.target.value.trim(); drawMe
 $('#mgrid').addEventListener('click', e => { const c = e.target.closest('.mi'); if (c) openItem(c.dataset.id); });
 window.addEventListener('storage', e => { if (e.key === C.KEY) { lines = C.load(); bar(); drawMenu(); } });
 drawChips(); stag(); drawMenu(); bar();
+ST.load().then(() => drawMenu());
 try { await D.whenUser(); } catch (e) {}
 </script>
 </body>

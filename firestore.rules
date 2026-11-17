@@ -8,6 +8,21 @@ service cloud.firestore {
     }
     match /users/{uid} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
+      allow read: if isOwner();
+    }
+    /* stock: everyone can see what is left, only the owner changes it */
+    match /stock/{id} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+    /* custom roles (names and permissions) and who has them; owner only writes */
+    match /roles/{id} {
+      allow read: if request.auth != null;
+      allow write: if isOwner();
+    }
+    match /staff/{email} {
+      allow read: if request.auth != null && (request.auth.token.email.lower() == email || isOwner());
+      allow write: if isOwner();
     }
     match /{coll}/{id} {
       allow read: if coll in ['videos','recipes','foods','posts'];

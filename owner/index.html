@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owner | MasterChefHub</title>
+<meta name="robots" content="noindex,nofollow">
+<script>
+/* fast gate: anyone who is not the signed-in owner goes straight to the home page. The page re-checks with Firebase below. */
+try{var u=JSON.parse(localStorage.getItem('mch_user')||'null');if(!u||u.owner!==true)location.replace('/');}catch(e){location.replace('/');}
+</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f2f2;--ink:#0a0a0a;--muted:#6b6b6b;--line:#d9d9d9;--ok:#0a7a3d;--bad:#c0262d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:inherit}
+button,input,select,textarea{font-family:inherit;font-size:.92rem}
+.top{background:#0a0a0a;color:#fff;display:flex;align-items:center;gap:16px;padding:14px 22px;position:sticky;top:0;z-index:20}
+.top b{letter-spacing:.28em;font-size:.82rem;font-weight:800}
+.top span{color:#9a9a9a;font-size:.76rem;letter-spacing:.18em;text-transform:uppercase}
+.top a{margin-left:auto;color:#fff;text-decoration:none;font-size:.82rem;font-weight:600;border:1px solid #444;padding:8px 14px}
+.top a:hover{background:#fff;color:#000}
+.tabs{display:flex;gap:0;overflow-x:auto;background:#fff;border-bottom:2px solid #0a0a0a;position:sticky;top:50px;z-index:19}
+.tabs button{border:0;background:#fff;padding:14px 20px;font-weight:700;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap;border-right:1px solid var(--line);color:#555}
+.tabs button.on{background:#0a0a0a;color:#fff}
+.tabs button:hover:not(.on){background:#f2f2f2;color:#000}
+main{max-width:1060px;margin:0 auto;padding:26px 18px 80px}
+h1{font-size:1.5rem;font-weight:800;margin-bottom:4px}
+.sub{color:var(--muted);font-size:.88rem;margin-bottom:18px}
+.card{background:#fff;border:2px solid #0a0a0a;padding:20px;margin-bottom:18px}
+.card h2{font-size:1rem;font-weight:800;margin-bottom:10px;letter-spacing:.02em}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.stats div{background:#fff;border:2px solid #0a0a0a;padding:16px}
+.stats b{display:block;font-size:1.9rem;font-weight:800;line-height:1}
+.stats span{font-size:.74rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.btn{border:2px solid #0a0a0a;background:#fff;color:#0a0a0a;padding:9px 16px;font-weight:700;cursor:pointer;font-size:.82rem}
+.btn:hover{background:#0a0a0a;color:#fff}
+.btn.fill{background:#0a0a0a;color:#fff}.btn.fill:hover{background:#333}
+.btn.red{border-color:var(--bad);color:var(--bad)}.btn.red:hover{background:var(--bad);color:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.sm{padding:5px 10px;font-size:.76rem}
+input[type=text],input[type=email],input[type=password],input[type=number],select,textarea{border:2px solid #0a0a0a;background:#fff;padding:9px 11px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{box-shadow:4px 4px 0 #0a0a0a}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.bar input[type=text]{max-width:300px}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th{text-align:left;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:2px solid #0a0a0a}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tw{overflow-x:auto}
+.tag{display:inline-block;border:1px solid #0a0a0a;padding:1px 8px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.tag.k{background:#0a0a0a;color:#fff}.tag.g{border-color:var(--ok);color:var(--ok)}.tag.r{border-color:var(--bad);color:var(--bad)}
+.empty{color:var(--muted);padding:26px 0;text-align:center}
+.ord{border:2px solid #0a0a0a;background:#fff;padding:16px;margin-bottom:12px}
+.ord header{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.ord ul{margin:6px 0 10px 18px;font-size:.88rem}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.perms{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 12px}
+.perms label{display:flex;gap:6px;align-items:center;font-size:.86rem;cursor:pointer}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}.tabs button{padding:12px 14px}}
+.q{width:84px!important;padding:6px 8px!important}
+.gate{max-width:420px;margin:12vh auto;padding:0 16px}
+.msg{font-size:.84rem;margin-top:10px;min-height:1.2em}.msg.bad{color:var(--bad)}.msg.good{color:var(--ok)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#0a0a0a;color:#fff;padding:12px 20px;font-weight:600;font-size:.86rem;z-index:99;opacity:0;pointer-events:none;transition:.25s}
+.toast.on{opacity:1}
+</style>
+</head>
+<body data-no-side>
+<div class="top"><b>MASTERCHEFHUB</b><span>Owner</span><a href="/">Back to site</a></div>
+<div id="app"><div class="gate"><p class="sub">Checking your account...</p></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script type="module">
+import * as D from '/data.js';
+import { MENU } from '/menu.js';
+import * as ST from '/stocklib.js';
+const $ = (s, r) => (r || document).querySelector(s), esc = D.esc;
+const WEEK = 7 * 864e5, OKKEY = 'mch_owner_ok';
+const app = $('#app');
+function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('on'), 2400); }
+const money = n => '$' + (Number(n) || 0).toFixed(2);
+const when = ts => { try { const d = ts && ts.toDate ? ts.toDate() : new Date(ts); return isNaN(d) ? '' : d.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); } catch (e) { return ''; } };
+
+/* ---------- who is here ---------- */
+let user = null;
+try { user = await D.whenUser(); } catch (e) {}
+if (!D.isOwner(user)) { try { localStorage.removeItem('mch_owner_ok'); } catch (e) {} location.replace('/'); throw new Error('not owner'); }
+D.cacheUser(user);
+
+/* ---------- weekly check: every 7 days the owner confirms it is really them ---------- */
+const lastOk = () => +localStorage.getItem(OKKEY) || 0;
+function gate() {
+  const c = D.hasPassword(user), g = (user.providerData || []).some(p => p.providerId === 'google.com');
+  app.innerHTML = '<div class="gate"><div class="card"><h2>Weekly security check</h2><p class="sub">For safety, owner tools ask you to confirm your account every 7 days.</p>' +
+    (user.emailVerified ? '' : '<p class="msg bad">Your email is not verified. Press the button to send a new verification email, then open it and come back.</p><button class="btn fill" id="gv" type="button">Send verification email</button><hr style="margin:14px 0;border:0;border-top:1px solid #d9d9d9">') +
+    (c ? '<label class="sub" for="gp">Your password</label><input id="gp" type="password" autocomplete="current-password"><div style="height:10px"></div><button class="btn fill" id="gpw" type="button">Confirm</button> ' : '') +
+    (g ? '<button class="btn" id="gg" type="button">Confirm with Google</button>' : '') +
+    '<div class="msg" id="gm"></div></div></div>';
+  const m = (t, k) => { const e = $('#gm'); e.textContent = t; e.className = 'msg ' + (k || ''); };
+  const done = () => { localStorage.setItem(OKKEY, String(Date.now())); start(); };
+  const gv = $('#gv'); if (gv) gv.onclick = async () => { try { const c2 = await D.init(); await c2.A.sendEmailVerification(user); m('Sent. Check your inbox and spam folder.', 'good'); } catch (e) { m('Could not send it right now. Try again in a minute.', 'bad'); } };
+  const gp = $('#gpw'); if (gp) gp.onclick = async () => {
+    try { const c2 = await D.init(); await c2.A.reauthenticateWithCredential(user, c2.A.EmailAuthProvider.credential(user.email, $('#gp').value)); done(); }
+    catch (e) { m('That password is not right.', 'bad'); }
+  };
+  const gg = $('#gg'); if (gg) gg.onclick = async () => {
+    try { const c2 = await D.init(); await c2.A.reauthenticateWithPopup(user, new c2.A.GoogleAuthProvider()); done(); }
+    catch (e) { m('Google sign-in did not finish.', 'bad'); }
+  };
+  if (!c && !g) { /* other sign-in kinds: allow, but still log the confirmation */ $('#gm').innerHTML = '<button class="btn fill" id="go" type="button">Continue</button>'; $('#go').onclick = done; }
+}
+
+/* ---------- the dashboard ---------- */
+const TABS = [['overview', 'Overview'], ['orders', 'Orders'], ['stock', 'Stock'], ['staff', 'Staff and roles'], ['accounts', 'Accounts'], ['messages', 'Messages']];
+const views = {};
+function start() {
+  app.innerHTML = '<nav class="tabs" id="tabs">' + TABS.map(t => '<button type="button" data-t="' + t[0] + '">' + t[1] + '</button>').join('') + '</nav><main id="view"></main>';
+  $('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) show(b.dataset.t); });
+  show((location.hash || '#overview').slice(1));
+}
+let cur = '';
+async function show(t) {
+  if (!views[t]) t = 'overview';
+  if (t === cur) return; cur = t; history.replaceState(null, '', '#' + t);
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  const v = $('#view'); v.innerHTML = '<p class="sub">Loading...</p>';
+  try { await views[t](v); } catch (e) { v.innerHTML = '<div class="card"><h2>Could not load</h2><p class="sub">' + esc(D.explain(e)) + '</p></div>'; }
+}
+/* every tab re-checks the weekly confirmation */
+setInterval(() => { if (Date.now() - lastOk() > WEEK) { cur = ''; gate(); } }, 60000);
+
+/* ---- overview ---- */
+views.overview = async v => {
+  const names = [['orders', 'Orders'], ['messages', 'Messages'], ['users', 'Accounts'], ['videos', 'Videos'], ['posts', 'Blog posts']];
+  v.innerHTML = '<h1>Welcome back</h1><p class="sub">Only you can see this page (' + esc(user.email) + ').</p><div class="stats">' + names.map(n => '<div><b id="c-' + n[0] + '">-</b><span>' + n[1] + '</span></div>').join('') + '</div>' +
+    '<div class="card"><h2>Quick links</h2><div class="acts"><button class="btn fill" data-go="orders">Open orders</button><button class="btn" data-go="stock">Manage stock</button><button class="btn" data-go="staff">Staff and roles</button><a class="btn" href="/videos">Upload video</a><a class="btn" href="/blog">Write post</a></div></div>';
+  v.querySelectorAll('[data-go]').forEach(b => b.onclick = () => show(b.dataset.go));
+  names.forEach(async n => { try { $('#c-' + n[0]).textContent = String(await D.count(n[0])); } catch (e) { $('#c-' + n[0]).textContent = '0'; } });
+};
+
+/* ---- orders ---- */
+const STAT = { new: 'New', paid: 'Paid', cooking: 'Cooking', out: 'On the way', delivered: 'Delivered', cancelled: 'Cancelled' };
+views.orders = async v => {
+  await ST.load(true);
+  const rows = await D.list('orders', { max: 60 });
+  v.innerHTML = '<h1>Orders</h1><p class="sub">Match the code in each order (and its Venmo note) to the payment, then press <b>Paid</b>. Paid also takes the dishes out of your stock.</p><div class="bar"><button class="btn" id="ref" type="button">Refresh</button></div><div id="ol"></div>';
+  $('#ref').onclick = () => { cur = ''; show('orders'); };
+  const ol = $('#ol');
+  ol.innerHTML = rows.length ? rows.map(o => {
+    const st = o.status || 'new';
+    return '<div class="ord" data-id="' + esc(o.id) + '"><header><div><b>' + esc(o.name || 'Customer') + '</b> <span class="tag ' + (st === 'new' ? 'r' : st === 'delivered' ? 'g' : 'k') + '">' + esc(STAT[st] || st) + '</span><br><small style="color:#6b6b6b">' + esc(when(o.createdAt)) + ' &middot; code ' + esc(String(o.id).slice(-6).toUpperCase()) + '</small></div><div style="text-align:right"><b>' + money(o.total) + '</b><br><small style="color:#6b6b6b">' + esc(o.payment || '') + '</small></div></header>' +
+      '<div style="font-size:.86rem">' + esc(o.address || '') + (o.apt ? ', ' + esc(o.apt) : '') + ', ' + esc(o.city || '') + ' ' + esc(o.zip || '') + '<br>' + esc(o.phone || '') + ' &middot; ' + esc(o.email || '') + '</div>' +
+      '<ul>' + (o.items || []).map(i => '<li>' + esc(i.qty) + ' x ' + esc(i.name) + (i.fresh ? ' (fresh)' : '') + (i.options && i.options.length ? ' <small style="color:#6b6b6b">' + esc(i.options.join(' | ')) + '</small>' : '') + '</li>').join('') + '</ul>' +
+      (o.notes ? '<p style="font-size:.84rem;background:#f2f2f2;padding:8px 10px;margin-bottom:10px">' + esc(o.notes) + '</p>' : '') +
+      '<div class="acts">' + [['paid', 'Paid'], ['cooking', 'Cooking'], ['out', 'On the way'], ['delivered', 'Delivered'], ['cancelled', 'Cancel']].map(s => '<button class="btn sm' + (s[0] === 'cancelled' ? ' red' : '') + '" data-s="' + s[0] + '"' + (st === s[0] ? ' disabled' : '') + '>' + s[1] + '</button>').join('') + '</div></div>';
+  }).join('') : '<div class="empty">No orders yet.</div>';
+  ol.onclick = async e => {
+    const b = e.target.closest('[data-s]'); if (!b) return;
+    const card = b.closest('.ord'), id = card.dataset.id, o = rows.find(r => r.id === id), s = b.dataset.s;
+    b.disabled = true;
+    try {
+      const patch = { status: s };
+      /* take stock once, the first time an order is marked paid */
+      if (s === 'paid' && !o.stockTaken) {
+        const m = ST.peek();
+        for (const i of (o.items || [])) if (typeof m[i.id] === 'number') await D.increment('stock', i.id, 'qty', -(Number(i.qty) || 0));
+        patch.stockTaken = true; ST.forget();
+      }
+      await D.setDoc('orders', id, patch, true);
+      toast('Order set to ' + (STAT[s] || s)); cur = ''; show('orders');
+    } catch (er) { b.disabled = false; toast(D.explain(er)); }
+  };
+};
+
+/* ---- stock ---- */
+views.stock = async v => {
+  const m = await ST.load(true);
+  v.innerHTML = '<h1>Stock</h1><p class="sub">Leave a dish empty to not track it (always available). 0 means sold out. Customers see the change within a minute.</p>' +
+    '<div class="bar"><input type="text" id="sq" placeholder="Search dishes"><input type="number" id="bulk" class="q" min="0" placeholder="10"><button class="btn" id="bulkb" type="button">Set all to this number</button><button class="btn red" id="clr" type="button">Stop tracking all</button></div><div class="card tw"><table><thead><tr><th>Dish</th><th>In stock</th><th></th></tr></thead><tbody id="sb"></tbody></table></div>';
+  const body = $('#sb');
+  const draw = () => {
+    const q = $('#sq').value.trim().toLowerCase();
+    body.innerHTML = MENU.filter(d => !q || d.name.toLowerCase().includes(q)).map(d => {
+      const n = m[d.id];
+      return '<tr data-id="' + esc(d.id) + '"><td><b>' + esc(d.name) + '</b><br><small style="color:#6b6b6b">' + esc(d.cat) + '</small></td><td><input class="q" type="number" min="0" value="' + (typeof n === 'number' ? n : '') + '" placeholder="any"> ' + (typeof n !== 'number' ? '<span class="tag">not tracked</span>' : n <= 0 ? '<span class="tag r">sold out</span>' : n <= 5 ? '<span class="tag">low</span>' : '<span class="tag g">ok</span>') + '</td><td class="acts"><button class="btn sm" data-a="-1">-1</button><button class="btn sm" data-a="1">+1</button><button class="btn sm fill" data-a="save">Save</button><button class="btn sm" data-a="off">Stop tracking</button></td></tr>';
+    }).join('') || '<tr><td colspan="3" class="empty">No dishes match.</td></tr>';
+  };
+  draw();
+  $('#sq').oninput = draw;
+  const save = async (id, qty) => { if (qty == null) { await D.remove('stock', id); delete m[id]; } else { await D.setDoc('stock', id, { qty, updated: Date.now() }, true); m[id] = qty; } ST.forget(); };
+  body.onclick = async e => {
+    const b = e.target.closest('[data-a]'); if (!b) return;
+    const tr = b.closest('tr'), id = tr.dataset.id, inp = tr.querySelector('input'), a = b.dataset.a;
+    try {
+      if (a === 'off') await save(id, null);
+      else {
+        let n = inp.value === '' ? 0 : Math.max(0, Math.floor(Number(inp.value)));
+        if (a === '1') n = (typeof m[id] === 'number' ? m[id] : 0) + 1; else if (a === '-1') n = Math.max(0, (typeof m[id] === 'number' ? m[id] : 0) - 1);
+        await save(id, n);
+      }
+      toast('Saved'); draw();
+    } catch (er) { toast(D.explain(er)); }
+  };
+  $('#bulkb').onclick = async () => {
+    const n = $('#bulk').value; if (n === '') { toast('Type a number first'); return; }
+    try { for (const d of MENU) await save(d.id, Math.max(0, Math.floor(Number(n)))); toast('All dishes set to ' + n); draw(); } catch (er) { toast(D.explain(er)); }
+  };
+  $('#clr').onclick = async () => { if (!confirm('Stop tracking stock for all dishes? Everything becomes always available.')) return; try { for (const d of MENU) if (typeof m[d.id] === 'number') await save(d.id, null); toast('Stock tracking is off'); draw(); } catch (er) { toast(D.explain(er)); } };
+};
+
+/* ---- staff and roles ---- */
+const PERMS = [['orders', 'See orders'], ['deliver', 'Deliver orders'], ['messages', 'Read messages'], ['content', 'Add videos, posts, recipes'], ['stock', 'See stock']];
+const PRESETS = [['Delivery driver', ['orders', 'deliver']], ['Kitchen staff', ['orders', 'stock']], ['Support', ['messages']], ['Manager', ['orders', 'deliver', 'messages', 'content', 'stock']]];
+views.staff = async v => {
+  let roles = await D.listAll('roles', 100), staff = await D.listAll('staff', 200);
+  const draw = () => {
+    v.innerHTML = '<h1>Staff and roles</h1><p class="sub">Make your own roles, then give a role to someone by their email. They need an account on the site with that email.</p>' +
+      '<div class="card"><h2>1. Create a role</h2><div class="grid2"><div><input type="text" id="rn" maxlength="40" placeholder="Role name, for example Delivery driver"></div><div class="acts">' + PRESETS.map((p, i) => '<button class="btn sm" data-pre="' + i + '" type="button">' + esc(p[0]) + '</button>').join('') + '</div></div>' +
+      '<div class="perms">' + PERMS.map(p => '<label><input type="checkbox" value="' + p[0] + '">' + esc(p[1]) + '</label>').join('') + '</div><button class="btn fill" id="rs" type="button">Save role</button></div>' +
+      '<div class="card tw"><h2>Your roles</h2>' + (roles.length ? '<table><thead><tr><th>Role</th><th>Can</th><th></th></tr></thead><tbody>' + roles.map(r => '<tr><td><b>' + esc(r.name) + '</b></td><td>' + (r.perms || []).map(p => '<span class="tag">' + esc((PERMS.find(x => x[0] === p) || [0, p])[1]) + '</span> ').join('') + '</td><td><button class="btn sm red" data-rdel="' + esc(r.id) + '">Delete</button></td></tr>').join('') + '</tbody></table>' : '<div class="empty">No roles yet. Create one above.</div>') + '</div>' +
+      '<div class="card"><h2>2. Give a role to someone</h2><div class="grid2"><input type="email" id="se" placeholder="their@email.com"><select id="sr">' + roles.map(r => '<option value="' + esc(r.id) + '">' + esc(r.name) + '</option>').join('') + '</select></div><div style="height:10px"></div><button class="btn fill" id="sa" type="button"' + (roles.length ? '' : ' disabled') + '>Give role</button></div>' +
+      '<div class="card tw"><h2>Staff</h2>' + (staff.length ? '<table><thead><tr><th>Email</th><th>Role</th><th></th></tr></thead><tbody>' + staff.map(s => '<tr><td>' + esc(s.email || s.id) + '</td><td><span class="tag k">' + esc(s.roleName || '') + '</span></td><td><button class="btn sm red" data-sdel="' + esc(s.id) + '">Remove</button></td></tr>').join('') + '</tbody></table>' : '<div class="empty">No staff yet.</div>') + '</div>' +
+      '<p class="sub">Roles are saved to the person\'s account and shown on their profile. The owner page itself stays owner only.</p>';
+    v.querySelectorAll('[data-pre]').forEach(b => b.onclick = () => { const p = PRESETS[b.dataset.pre]; $('#rn').value = p[0]; v.querySelectorAll('.perms input').forEach(c => c.checked = p[1].includes(c.value)); });
+    $('#rs').onclick = async () => {
+      const name = $('#rn').value.trim(); if (!name) { toast('Give the role a name'); return; }
+      const perms = [...v.querySelectorAll('.perms input:checked')].map(c => c.value);
+      try { const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || ('role-' + Date.now()); await D.setDoc('roles', id, { name, perms, updated: Date.now() }, false); roles = await D.listAll('roles', 100); toast('Role saved'); draw(); } catch (er) { toast(D.explain(er)); }
+    };
+    v.querySelectorAll('[data-rdel]').forEach(b => b.onclick = async () => { try { await D.remove('roles', b.dataset.rdel); roles = await D.listAll('roles', 100); toast('Role deleted'); draw(); } catch (er) { toast(D.explain(er)); } });
+    $('#sa').onclick = async () => {
+      const email = $('#se').value.trim().toLowerCase(); if (!/^\S+@\S+\.\S+$/.test(email)) { toast('Type a full email address'); return; }
+      const r = roles.find(x => x.id === $('#sr').value); if (!r) return;
+      try { await D.setDoc('staff', email, { email, role: r.id, roleName: r.name, perms: r.perms || [], updated: Date.now() }, false); staff = await D.listAll('staff', 200); toast('Role given'); draw(); } catch (er) { toast(D.explain(er)); }
+    };
+    v.querySelectorAll('[data-sdel]').forEach(b => b.onclick = async () => { try { await D.remove('staff', b.dataset.sdel); staff = await D.listAll('staff', 200); toast('Removed'); draw(); } catch (er) { toast(D.explain(er)); } });
+  };
+  draw();
+};
+
+/* ---- accounts ---- */
+views.accounts = async v => {
+  const [users, staff] = await Promise.all([D.listAll('users', 1000), D.listAll('staff', 300).catch(() => [])]);
+  users.sort((a, b) => (b.joined || 0) - (a.joined || 0));
+  const role = e => { const s = staff.find(x => x.id === String(e || '').toLowerCase()); return s ? s.roleName : ''; };
+  v.innerHTML = '<h1>Accounts</h1><p class="sub">' + users.length + ' account' + (users.length === 1 ? '' : 's') + ' so far. An account shows up here after its owner visits the site once.</p><div class="bar"><input type="text" id="aq" placeholder="Search name or email"></div><div class="card tw"><table><thead><tr><th>Name</th><th>Email</th><th>Sign-in</th><th>Verified</th><th>Joined</th><th>Last seen</th><th>Role</th></tr></thead><tbody id="ab"></tbody></table></div>';
+  const draw = () => {
+    const q = $('#aq').value.trim().toLowerCase();
+    const rows = users.filter(u => !q || (u.name + ' ' + u.email).toLowerCase().includes(q));
+    $('#ab').innerHTML = rows.length ? rows.map(u => '<tr><td><b>' + esc(u.name || '-') + '</b></td><td>' + esc(u.email || '') + '</td><td>' + esc((u.provider || '').replace('.com', '')) + '</td><td>' + (u.verified ? '<span class="tag g">yes</span>' : '<span class="tag r">no</span>') + '</td><td>' + esc(u.joined ? new Date(u.joined).toLocaleDateString() : '') + '</td><td>' + esc(u.lastSeen ? new Date(u.lastSeen).toLocaleDateString() : '') + '</td><td>' + (role(u.email) ? '<span class="tag k">' + esc(role(u.email)) + '</span>' : '') + '</td></tr>').join('') : '<tr><td colspan="7" class="empty">No accounts found.</td></tr>';
+  };
+  draw(); $('#aq').oninput = draw;
+};
+
+/* ---- messages ---- */
+views.messages = async v => {
+  const rows = await D.list('messages', { max: 100 });
+  v.innerHTML = '<h1>Messages</h1><p class="sub">Everything sent from the Contact page.</p><div id="ml"></div>';
+  const ml = $('#ml');
+  ml.innerHTML = rows.length ? rows.map(m => '<div class="ord" data-id="' + esc(m.id) + '"><header><div><b>' + esc(m.name || 'Unknown') + '</b> <small style="color:#6b6b6b">&lt;' + esc(m.email || '') + '&gt;</small></div><small style="color:#6b6b6b">' + esc(when(m.createdAt)) + '</small></header><p style="font-weight:700;margin-bottom:4px">' + esc(m.subject || '') + '</p><p style="font-size:.9rem;white-space:pre-wrap;margin-bottom:12px">' + esc(m.message || '') + '</p><div class="acts"><a class="btn sm" href="mailto:' + esc(m.email || '') + '?subject=' + encodeURIComponent('Re: ' + (m.subject || 'Your message')) + '">Reply</a><button class="btn sm red" data-del="' + esc(m.id) + '">Delete</button></div></div>').join('') : '<div class="empty">No messages yet.</div>';
+  let armed = null;
+  ml.onclick = async e => {
+    const b = e.target.closest('[data-del]'); if (!b) return;
+    if (armed !== b) { armed = b; b.textContent = 'Click again to delete'; setTimeout(() => { if (armed === b) { armed = null; b.textContent = 'Delete'; } }, 3000); return; }
+    try { await D.remove('messages', b.dataset.del); b.closest('.ord').remove(); toast('Deleted'); } catch (er) { toast(D.explain(er)); }
+  };
+};
+
+/* go */
+if (Date.now() - lastOk() > WEEK || !user.emailVerified) gate(); else start();
+</script>
+</body>
+</html>

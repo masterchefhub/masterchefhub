@@ -153,16 +153,19 @@ function showMini() {
 
 var pageLoaded = document.readyState === 'complete';
 var run = null;
-var MAX_WAIT = 9000;
+var MAX_WAIT = 2500;   /* never keep the visitor waiting longer than this */
 
 if (S.loader !== false) {
   if (fresh) {
-    if (!pageLoaded) run = Loader(S.loaderFast ? 700 : 1600, false);
+    if (!pageLoaded) run = Loader(S.loaderFast ? 500 : 900, false);
   } else if (!pageLoaded) {
     run = showMini();            /* arriving from another page of the site */
   }
   if (!pageLoaded) {
-    window.addEventListener('load', function () { pageLoaded = true; if (run) run.markLoaded ? run.markLoaded() : run.finish(); });
+    /* the page is ready to use once its HTML and scripts are in; do not wait for every image and font (that was the slow part) */
+    var ready = function () { if (pageLoaded) return; pageLoaded = true; if (run) run.markLoaded ? run.markLoaded() : run.finish(); };
+    if (document.readyState === 'interactive') ready(); else document.addEventListener('DOMContentLoaded', ready);
+    window.addEventListener('load', ready);
     setTimeout(function () {
       if (pageLoaded) return;
       window.__mchSlow = true;

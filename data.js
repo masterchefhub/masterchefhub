@@ -196,3 +196,14 @@ export function explain(err) {
 export function say(type, title, message) {
   try { if (window.MCH && MCH.notify) return MCH.notify({ type, title, message }); } catch (e) { /* ignore */ }
 }
+
+/* every document in a collection (no ordering, so docs without a createdAt are included) */
+export async function listAll(coll, max) {
+  const c = await need();
+  const s = await c.F.getDocs(c.F.query(c.F.collection(c.db, coll), c.F.limit(max || 500)));
+  return s.docs.map(d => Object.assign({ id: d.id }, d.data()));
+}
+export async function increment(coll, id, field, by) {
+  const c = await need();
+  await c.F.setDoc(c.F.doc(c.db, coll, id), { [field]: c.F.increment(by) }, { merge: true });
+}

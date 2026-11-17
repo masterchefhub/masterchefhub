@@ -87,6 +87,14 @@ export async function mount(cfg) {
   /* skeletons */
   els.list.innerHTML = Array(cfg.skeleton || 6).fill('<div class="ccard sk"><div class="cthumb"></div><div class="cbody"><i></i><i></i></div></div>').join('');
 
+  /* start fetching the list right away (in parallel with the sign-in check) and paint the last copy we saved so the page is instant */
+  const CK = 'mch_cms_' + cfg.coll, MAXN = cfg.max || 120;
+  let pre = D.list(cfg.coll, { max: MAXN }).then(r => ({ r }), e => ({ e }));
+  try {
+    const cached = JSON.parse(localStorage.getItem(CK) || 'null');
+    if (cached && Array.isArray(cached) && cached.length) { items = cached; loaded = true; }
+  } catch (e) { /* no saved copy */ }
+
   /* who is here */
   try { const u = await D.whenUser(); owner = D.isOwner(u); if (u) D.cacheUser(u); } catch (e) { owner = false; }
   if (els.add) {
@@ -116,8 +124,11 @@ export async function mount(cfg) {
   /* load */
   async function load() {
     try {
-      items = await D.list(cfg.coll, { max: cfg.max || 120 });
+      const res = pre ? await pre : { r: await D.list(cfg.coll, { max: MAXN }) }; pre = null;
+      if (res.e) throw res.e;
+      items = res.r;
       loaded = true; status('', '');
+      try { localStorage.setItem(CK, JSON.stringify(items.map(x => Object.assign({}, x, { createdAt: x.createdAt && x.createdAt.toMillis ? x.createdAt.toMillis() : x.createdAt })))); } catch (e) { /* storage full or blocked */ }
     } catch (err) {
       loaded = false; items = [];
       status('err', '<b>Could not load ' + esc(nouns) + '.</b> ' + esc(D.explain(err)) + ' <button type="button" class="lnk" id="retry">Try again</button>');
@@ -244,6 +255,7 @@ export async function mount(cfg) {
     setTimeout(() => { const f = form.querySelector('input,textarea,select'); if (f) f.focus(); }, 80);
   }
 
+  if (loaded && items.length) render();
   await load();
   return { reload: load, isOwner: () => owner };
 }

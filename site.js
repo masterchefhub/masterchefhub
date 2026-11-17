@@ -16,6 +16,73 @@ var defaults = {
   cursor: true, textSize: 'normal', posV: 2,
   playerMin: false, sideHidden: false, lowData: false, leaveAtDoor: false, utensils: true, confirmOrder: true, animations: true, density: 'comfortable', sleepMin: 0, orderAlerts: true, saveCart: true
 };
+
+/* ---------------- CUSTOMIZE: many small display and behaviour options (Settings > Customize) ----------------
+   Each one is a switch, a choice or a slider. Its effect is a bit of CSS built from the saved value. */
+var PREFS = [];
+function pSw(k, d, g, l, s, css) { PREFS.push({ k: k, t: 'switch', d: d, g: g, l: l, s: s, c: function (v) { return v ? css : ''; } }); }
+function pSel(k, d, g, l, s, opts, fn) { PREFS.push({ k: k, t: 'select', d: d, g: g, l: l, s: s, o: opts, c: fn }); }
+function pRng(k, d, min, max, step, unit, g, l, s, fn) { PREFS.push({ k: k, t: 'range', d: d, g: g, l: l, s: s, min: min, max: max, step: step, unit: unit, c: fn }); }
+function pFil(k, d, min, max, step, unit, g, l, s, fn) { PREFS.push({ k: k, t: 'range', d: d, g: g, l: l, s: s, min: min, max: max, step: step, unit: unit, f: fn }); }
+/* Text */
+pSel('fontFamily', 'default', 'Text', 'Font style', 'Change the typeface everywhere', [['default', 'Default'], ['serif', 'Serif'], ['mono', 'Typewriter'], ['rounded', 'Soft']], function (v) {
+  var f = { serif: 'Georgia,"Times New Roman",serif', mono: 'ui-monospace,Menlo,Consolas,monospace', rounded: '"Trebuchet MS","Segoe UI",system-ui,sans-serif' }[v];
+  return f ? 'body,button,input,select,textarea{font-family:' + f + '!important}' : '';
+});
+pRng('fontScale', 100, 85, 135, 5, '%', 'Text', 'Text size (fine tune)', 'Make all text smaller or bigger', function (v) { return v !== 100 ? 'html{font-size:' + (16 * v / 100).toFixed(2) + 'px!important}' : ''; });
+pSel('lineHeight', 'normal', 'Text', 'Line spacing', 'Space between lines of text', [['tight', 'Tight'], ['normal', 'Normal'], ['loose', 'Loose'], ['xloose', 'Extra loose']], function (v) { var h = { tight: 1.3, loose: 1.85, xloose: 2.1 }[v]; return h ? 'body,p,li{line-height:' + h + '!important}' : ''; });
+pSel('letterSpacing', 'normal', 'Text', 'Letter spacing', 'Space between letters', [['normal', 'Normal'], ['wide', 'Wide'], ['wider', 'Wider']], function (v) { var h = { wide: '.03em', wider: '.07em' }[v]; return h ? 'body{letter-spacing:' + h + '!important}' : ''; });
+pSw('boldText', false, 'Text', 'Bolder text', 'Heavier letters that are easier to read', 'body,p,li,small{font-weight:600!important}');
+pSw('underlineLinks', false, 'Text', 'Underline links', 'Always underline links', 'a:not(.btn):not(.sbtn){text-decoration:underline!important}');
+pSw('highlightLinks', false, 'Text', 'Highlight links', 'Yellow background on links so they stand out', 'main a:not(.btn):not(.sbtn):not(.addb),.main a:not(.btn):not(.sbtn):not(.addb){background:#fff200!important;color:#000!important}');
+pSw('dyslexiaSpacing', false, 'Text', 'Easy-reading spacing', 'Wider letters and words', 'body{letter-spacing:.12em!important;word-spacing:.16em!important}');
+pSw('readingWidth', false, 'Text', 'Narrow text columns', 'Keeps long text lines short', 'p{max-width:68ch}');
+/* Colors */
+pSel('theme', 'light', 'Colors', 'Theme', 'Light or dark pages', [['light', 'Light'], ['dark', 'Dark']], function (v) { return v === 'dark' ? 'img,video,iframe,canvas,.mimg,.cthumb,.dimg,.sidebar{filter:invert(1) hue-rotate(180deg)}' : ''; });
+PREFS[PREFS.length - 1].f = function (v) { return v === 'dark' ? 'invert(1) hue-rotate(180deg)' : ''; };
+pSel('accent', 'default', 'Colors', 'Accent color', 'The color of highlights', [['default', 'Orange'], ['black', 'Black'], ['green', 'Green'], ['blue', 'Blue'], ['red', 'Red'], ['purple', 'Purple']], function (v) { var c = { black: '#0a0a0a', green: '#12a150', blue: '#1a6bff', red: '#e5252a', purple: '#7a3cff' }[v]; return c ? ':root{--accent:' + c + '!important}' : ''; });
+pSw('highContrast', false, 'Colors', 'High contrast', 'Darker text and borders', ':root{--muted:#1a1a1a!important;--line:#6b6b6b!important}');
+pSw('grayscale', false, 'Colors', 'Black and white only', 'Remove all color', '');
+PREFS[PREFS.length - 1].f = function (v) { return v ? 'grayscale(1)' : ''; };
+pFil('saturation', 100, 40, 160, 10, '%', 'Colors', 'Color strength', 'Less or more color', function (v) { return v !== 100 ? 'saturate(' + v / 100 + ')' : ''; });
+pFil('brightness', 100, 70, 115, 5, '%', 'Colors', 'Brightness', 'Make pages darker or lighter', function (v) { return v !== 100 ? 'brightness(' + v / 100 + ')' : ''; });
+pSw('warmLight', false, 'Colors', 'Warm night light', 'A soft yellow tint that is easier on the eyes', '');
+PREFS[PREFS.length - 1].f = function (v) { return v ? 'sepia(.3)' : ''; };
+pSw('dimImages', false, 'Colors', 'Dim photos', 'Make photos a little darker', 'img:not([src$=".svg"]){opacity:.82}');
+/* Layout */
+pSel('sideWidth', 'normal', 'Layout', 'Sidebar width', 'How wide the left menu is', [['narrow', 'Narrow'], ['normal', 'Normal'], ['wide', 'Wide']], function (v) { var w = { narrow: 224, wide: 316 }[v]; return w ? ':root{--side:' + w + 'px!important}' : ''; });
+pSel('corners', 'default', 'Layout', 'Corner style', 'Rounded or sharp edges', [['default', 'Default'], ['sharp', 'Sharp'], ['soft', 'Soft']], function (v) { return v === 'sharp' ? '.mi,.card,.pcard,.btn,.sbtn,.tbtn,button:not(.switch):not(#mchSideBtn),input,select,textarea,.opt,.ccard,.blk{border-radius:0!important}' : v === 'soft' ? '.mi,.card,.pcard,.btn,.sbtn,.tbtn,input,select,textarea,.opt,.ccard,.blk{border-radius:10px!important}' : ''; });
+pSel('gridSize', 'normal', 'Layout', 'Dish card size', 'How big the food cards are', [['compact', 'Small'], ['normal', 'Normal'], ['roomy', 'Large']], function (v) { var w = { compact: 190, roomy: 340 }[v]; return w ? '#mgrid{grid-template-columns:repeat(auto-fill,minmax(' + w + 'px,1fr))!important}' : ''; });
+pSw('stickyTop', true, 'Layout', 'Keep the top bar in view', 'Top bar stays when you scroll', '');
+PREFS[PREFS.length - 1].c = function (v) { return v ? '' : '.topbar{position:static!important}'; };
+pSw('hideSearch', false, 'Layout', 'Hide the search box', 'Remove the search bar at the top', '.topbar .search{display:none!important}');
+pSw('hideCartBadge', false, 'Layout', 'Hide the cart number', 'No number on the Cart tab', '.cbadge{display:none!important}');
+pSw('hideCartBar', false, 'Layout', 'Hide the cart bar', 'The bar that appears on the Food page', '#cbar{display:none!important}');
+pSw('hideUserChip', false, 'Layout', 'Hide my name in the sidebar', 'Remove the profile chip', '.mchu{display:none!important}');
+pSw('hideVisualizer', false, 'Layout', 'Hide the music bars', 'The little moving bars by the music button', '.eq{display:none!important}');
+pSw('hideScrollbar', false, 'Layout', 'Hide the scrollbar', 'Scroll without the bar', 'html{scrollbar-width:none}html::-webkit-scrollbar{display:none}');
+['videos:Videos', 'blog:Blog', 'about:About', 'contact:Contact', 'membership:Membership', 'terms:Terms', 'privacy:Privacy'].forEach(function (x) {
+  var a = x.split(':'); pSw('hide_' + a[0], false, 'Sidebar tabs', 'Hide ' + a[1], 'Remove the ' + a[1] + ' tab from the sidebar', '.sidebar a[href="/' + a[0] + '"],.sidebar a[href="/' + a[0] + '/"]{display:none!important}');
+});
+/* Food cards */
+pSw('hideDescriptions', false, 'Food', 'Hide dish descriptions', 'Show only name and price', '.mbody p{display:none!important}');
+pSw('hideDishTags', false, 'Food', 'Hide the "+ options" tag', 'Cleaner prices', '.tagf{display:none!important}');
+pSw('hideInCart', false, 'Food', 'Hide "in cart" labels', 'No label on dishes already in your cart', '.inc{display:none!important}');
+pSw('textOnlyFood', false, 'Food', 'Text only menu', 'Hide food pictures completely', '.mimg{display:none!important}');
+pSw('bigPrices', false, 'Food', 'Big prices', 'Make prices larger', '.pr{font-size:1.3rem!important}');
+pSw('noHoverZoom', false, 'Food', 'No zoom on hover', 'Pictures stay still', '.mi:hover img,.ccard:hover .cthumb{transform:none!important}');
+/* Motion and comfort */
+pSw('smoothScroll', true, 'Motion', 'Smooth scrolling', 'Glide instead of jump', '');
+PREFS[PREFS.length - 1].c = function (v) { return v ? '' : 'html{scroll-behavior:auto!important}'; };
+pSw('noBlur', false, 'Motion', 'Turn off blur effects', 'Faster on older phones', '*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}');
+pSw('noShadows', false, 'Motion', 'Turn off shadows', 'Flat look, a little faster', '*{box-shadow:none!important}');
+pSw('focusRings', false, 'Access', 'Strong focus outlines', 'Thick outline on what the keyboard selects', '*:focus-visible{outline:3px solid #0a0a0a!important;outline-offset:2px!important}');
+pSw('bigTargets', false, 'Access', 'Bigger buttons', 'Easier to tap', 'button,.btn,.sbtn,.tbtn,.addb,.opt,.chip{min-height:46px!important}');
+/* Behaviour (needs a little code, see below) */
+pSw('warnLeaveCart', false, 'Behavior', 'Warn me before leaving with a full cart', 'Asks before closing the tab if your cart has items', '');
+pSw('scrollTopBtn', true, 'Behavior', 'Back to top button', 'Appears after you scroll down', '');
+pSw('confirmSignOut', false, 'Behavior', 'Ask before signing out', 'A quick are-you-sure', '');
+PREFS.forEach(function (p) { defaults[p.k] = p.d; });
 var S = Object.assign({}, defaults);
 try {
   var raw = localStorage.getItem(KEY);
@@ -681,6 +748,7 @@ function set(k, v) {
   if (k === 'sfxVolume' && sfxGain) sfxGain.gain.setTargetAtTime(v, ctx.currentTime, 0.05);
   if (k === 'music') { if (v) { ac(); startPlayback(); } else stopAll(); }
   if (k === 'textSize' || k === 'animations' || k === 'density' || k === 'sideHidden') applyDisplay();
+  if (PREFS.some(function (p) { return p.k === k; })) applyPrefs();
   if (k === 'cursor') cursorSet(!!v);
   if (k === 'miniPlayer' && ui) ui.style.display = v ? '' : 'none';
   if (k === 'notifyPos' && nWrap) nWrap.setAttribute('data-pos', v);
@@ -844,20 +912,36 @@ function injectStyle() {
   if (styleDone) return; styleDone = true;
   var st = document.createElement('style'); st.setAttribute('data-sk', '1'); st.textContent = CSS; document.head.appendChild(st);
 }
+
+var prefStyle = null;
+function applyPrefs() {
+  var css = [], fl = [];
+  PREFS.forEach(function (p) {
+    var v = S[p.k]; if (v === undefined) v = p.d;
+    try { if (p.f) { var f = p.f(v); if (f) fl.push(f); } if (p.c) { var c = p.c(v); if (c) css.push(c); } } catch (e) {}
+  });
+  if (fl.length) css.push('html{filter:' + fl.join(' ') + '}');
+  if (!prefStyle) { prefStyle = document.createElement('style'); prefStyle.id = 'mch-prefs'; prefStyle.setAttribute('data-sk', '1'); (document.head || document.documentElement).appendChild(prefStyle); }
+  prefStyle.textContent = css.join('\n');
+}
 function applyDisplay() {
   var r = document.documentElement;
   r.style.fontSize = S.textSize === 'small' ? '15px' : S.textSize === 'large' ? '17.5px' : '';
   r.setAttribute('data-anim', S.animations === false ? 'off' : 'on');
   r.setAttribute('data-density', S.density === 'compact' ? 'compact' : 'comfortable');
   r.setAttribute('data-side', S.sideHidden ? 'off' : 'on');
+  applyPrefs();
   var sbt = document.getElementById('mchSideBtn');
   if (sbt) { sbt.setAttribute('aria-pressed', S.sideHidden ? 'true' : 'false'); sbt.title = S.sideHidden ? 'Show sidebar' : 'Hide sidebar'; sbt.setAttribute('aria-label', sbt.title); }
 }
 
 /* ---------------- SIDEBAR TOGGLE ---------------- */
 function buildSideBtn() {
-  if (document.getElementById('mchSideBtn')) return;
-  if (!document.querySelector('.sidebar')) return;
+  var old = document.getElementById('mchSideBtn');
+  /* pages without a sidebar (login, checkout, pay) must not show the arrow, even after a soft page change */
+  var hasSide = !!document.querySelector('.sidebar') && !document.body.hasAttribute('data-no-side');
+  if (!hasSide) { if (old && old.parentNode) old.parentNode.removeChild(old); return; }
+  if (old) return;
   if (!document.getElementById('mchSprite')) {
     var sp = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     sp.id = 'mchSprite'; sp.setAttribute('width', '0'); sp.setAttribute('height', '0'); sp.setAttribute('style', 'position:absolute'); sp.setAttribute('data-keep', '1');
@@ -1132,7 +1216,23 @@ function refreshAuth() {
   var go = function () {
     import('/data.js').then(function (D) {
       return D.whenUser().then(function (u) {
-        if (u) { D.cacheUser(u); paintUser(); }
+        if (u) {
+          D.cacheUser(u); paintUser();
+          /* keep a small account record so the owner page can list everyone (once a day per browser) */
+          try {
+            var k = 'mch_acct_' + u.uid, last = +localStorage.getItem(k) || 0;
+            if (Date.now() - last > 864e5) {
+              var m = u.metadata || {};
+              D.setDoc('users', u.uid, {
+                email: u.email || '', name: u.displayName || '', photo: u.photoURL || '',
+                provider: u.providerData && u.providerData[0] ? u.providerData[0].providerId : 'password',
+                verified: u.emailVerified === true,
+                joined: m.creationTime ? new Date(m.creationTime).getTime() : Date.now(),
+                lastSeen: Date.now()
+              }, true).then(function () { localStorage.setItem(k, String(Date.now())); }).catch(function () {});
+            }
+          } catch (e) {}
+        }
         else { try { localStorage.removeItem('mch_user'); } catch (e) {} paintUser(); }
       });
     }).catch(function () {});
@@ -1288,6 +1388,13 @@ function softGo(url, push) {
 document.addEventListener('click', function (e) {
   var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
   if (!a) return;
+  /* clicking the tab you are already on does nothing: no reload, no loading screen, no notice */
+  if (!e.defaultPrevented && !e.button && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && !(a.target && a.target !== '_self') && !a.hasAttribute('download')) {
+    try {
+      var same = new URL(a.href, location.href);
+      if (same.origin === location.origin && same.pathname.replace(/\/+$/, '') === location.pathname.replace(/\/+$/, '') && same.search === location.search && !same.hash) { e.preventDefault(); return; }
+    } catch (x) { /* not a normal link */ }
+  }
   var u = softOK(a, e);
   if (!u) return;
   e.preventDefault();
@@ -1325,8 +1432,34 @@ ready(function () {
 /* =====================================================================
    PUBLIC API  (used by settings.html)
    ===================================================================== */
+
+/* ---------------- behaviour options from Settings > Customize ---------------- */
+window.addEventListener('beforeunload', function (e) {
+  if (!S.warnLeaveCart || !cartCount()) return;
+  if (/^\/(checkout|pay|cart|order-success)/.test(location.pathname)) return;
+  e.preventDefault(); e.returnValue = '';
+});
+document.addEventListener('click', function (e) {
+  var a = e.target && e.target.closest ? e.target.closest('a[href*="signout=1"]') : null;
+  if (a && S.confirmSignOut && !window.confirm('Sign out of MasterChefHub?')) { e.preventDefault(); e.stopImmediatePropagation(); }
+}, true);
+(function () {
+  var b = null;
+  function upd() {
+    if (!S.scrollTopBtn) { if (b) b.style.display = 'none'; return; }
+    if (!b) {
+      b = document.createElement('button'); b.id = 'mchTop'; b.type = 'button'; b.setAttribute('data-keep', '1'); b.setAttribute('aria-label', 'Back to top'); b.title = 'Back to top';
+      b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 6-6 6 6"/></svg>';
+      b.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+      if (document.body) document.body.appendChild(b); else return;
+    }
+    b.style.display = (window.scrollY > 700) ? 'grid' : 'none';
+  }
+  window.addEventListener('scroll', upd, { passive: true });
+  on('settings', upd);
+})();
 window.MCH = {
-  settings: S, defaults: defaults, stations: STATIONS,
+  settings: S, defaults: defaults, stations: STATIONS, prefs: PREFS,
   set: set, on: on, reset: reset, toast: toast,
   now: nowInfo, lib: function () { return lib.slice(); },
   toggle: player.toggle, next: player.next, playFile: player.playFile, playStation: player.playStation,

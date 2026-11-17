@@ -349,3 +349,8 @@ html[data-side="off"] #mchSideBtn .sb-ar{transform:rotate(180deg)}
 .side-bottom .mchu-tx small{grid-column:1/-1;font-size:.68rem}
 .side-bottom .mchu-out{width:24px;height:24px;background:transparent}
 .side-bottom .mchu-out svg{width:14px;height:14px}
+
+#mchTop{position:fixed;right:18px;bottom:22px;z-index:205;width:44px;height:44px;display:none;place-items:center;border:2px solid #0a0a0a;background:#fff;color:#0a0a0a;cursor:pointer;border-radius:0;transition:background .2s,color .2s}
+#mchTop:hover{background:#0a0a0a;color:#fff}
+#mchTop svg{width:20px;height:20px}
+@media(max-width:960px){#mchTop{bottom:84px}}

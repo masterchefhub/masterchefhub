@@ -82,7 +82,9 @@ export const SETS = {
 };
 const DEFAULT_SET = { sandwiches: 'sandwich', mains: 'main', pasta: 'pasta', breakfast: 'breakfast', sides: 'side', sweets: 'sweet', drinks: 'cold', dinners: 'dinner' };
 
-export const MENU = [
+/* Dishes that are not on the owner's list. Hidden from the site (not deleted): remove an id here to bring a dish back. */
+const HIDDEN = new Set(['tomato-soup','chicken-soup','chicken-rice','fried-rice','fish-chips','oatmeal','avocado-toast','waffles','french-toast','apple-pie','banana-bread','ice-cream','corn','garlic-bread','bbq-ribs','shrimp-scampi','salmon-dinner','roast-chicken']);
+const ALL_DISHES = [
   { id: 'grilled-cheese', cat: 'sandwiches', name: 'Grilled cheese', price: 11.99, desc: 'Toasted bread with melted cheese.' },
   { id: 'turkey-sandwich', cat: 'sandwiches', name: 'Turkey sandwich', price: 14.99, desc: 'Turkey, lettuce, tomato and mayo on soft bread.' },
   { id: 'blt', cat: 'sandwiches', name: 'BLT sandwich', price: 15.99, desc: 'Crispy bacon, lettuce and tomato on toast.' },
@@ -176,6 +178,7 @@ export const MENU = [
   { id: 'smoothie', cat: 'drinks', name: 'Fruit smoothie', price: 7.99, desc: 'Blended fresh fruit, thick and cold.', set: 'cold' },
   { id: 'iced-coffee', cat: 'drinks', name: 'Iced coffee', price: 5.99, desc: 'Cold brewed coffee over ice.', set: 'coffee' }
 ];
+export const MENU = ALL_DISHES.filter(m => !HIDDEN.has(m.id));
 
 const PHOTOS = {
   'grilled-cheese': 14941252,
