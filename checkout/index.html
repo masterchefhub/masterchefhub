@@ -325,7 +325,7 @@ body{background:var(--bg)}
 <script>window.sfx=window.sfx||{hover(){},click(){},on(){},off(){},open(){},heart(){},success(){},whoops(){},boing(){}};</script>
 <script type="module">
 import * as D from '/data.js';
-import { FEE, TAX_RATE, VENMO_USER, COUPONS } from '/menu.js';
+import { FEE, TAX_RATE, VENMO_USER, COUPONS, CHECKOUT_URL, STRIPE_TEST } from '/menu.js';
 import * as C from '/cartlib.js';
 import * as ST from '/stocklib.js';
 const $ = s => document.querySelector(s), esc = D.esc, money = C.money;
@@ -408,14 +408,14 @@ async function pay() {
   if (gone) { const nm = C.items.get(gone.id).name, n = ST.left(gone.id); fail('Out of stock', n <= 0 ? nm + ' just sold out. Please remove it from your cart.' : 'Only ' + n + ' of ' + nm + ' left. Please lower the amount in your cart.'); return; }
   if (!valid()) { err.hidden = false; err.textContent = 'Please fix the highlighted fields.'; const b = document.querySelector('.fld.bad'); if (b) b.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
   if (alc && !($('#oage') && $('#oage').checked)) { err.hidden = false; err.textContent = 'Beer is for ages 21 and over. Please confirm that you are 21 or older.'; return; }
-  if (!VENMO_USER) { fail('Venmo is being set up', 'Venmo payment is being switched on. Please try again soon. Your cart is saved.'); return; }
+  if (!CHECKOUT_URL && !VENMO_USER) { fail('Payment is being set up', 'Payment is being switched on. Please try again soon. Your cart is saved.'); return; }
   if (navigator.onLine === false) { fail('You are offline', 'No internet connection. Check your Wi-Fi or data and press the button again.'); return; }
   const user = await D.whenUser();
   if (!user) { location.href = '/login?next=/cart'; return; }
   btn.classList.add('loading'); btn.disabled = true;
   const list = lines.map(l => ({ id: l.id, name: C.items.get(l.id).name, qty: l.q, price: C.unit(l) / 100, fresh: !!l.fresh, options: C.describe(l) }));
-  const note = ' [Pay by Venmo, code ' + String(pendingId || '').slice(-6).toUpperCase() + '.' + (code ? ' Coupon ' + code + ' -$' + (disc / 100).toFixed(2) + '.' : '') + ' Includes sales tax $' + (tax / 100).toFixed(2) + '.' + (alc ? ' Contains beer: check ID, 21+.' : '') + ']';
-  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: ((det.onotes || '') + note).slice(0, 900), items: list, subtotal: (s - disc) / 100, fee: FEEC / 100, tip: tip / 100, total: total / 100, payment: 'venmo', alcohol: alc, status: 'new' };
+  const note = ' [Pay by ' + (CHECKOUT_URL ? 'card (Stripe)' : 'Venmo') + ', code ' + String(pendingId || '').slice(-6).toUpperCase() + '.' + (code ? ' Coupon ' + code + ' -$' + (disc / 100).toFixed(2) + '.' : '') + ' Includes sales tax $' + (tax / 100).toFixed(2) + '.' + (alc ? ' Contains beer: check ID, 21+.' : '') + ']';
+  const order = { uid: user.uid, email: (user.email || '').toLowerCase(), name: det.oname, phone: det.ophone, address: det.oaddr, apt: det.oapt || '', city: det.ocity, zip: det.ozip, notes: ((det.onotes || '') + note).slice(0, 900), items: list, subtotal: (s - disc) / 100, fee: FEEC / 100, tip: tip / 100, total: total / 100, payment: CHECKOUT_URL ? 'stripe' : 'venmo', alcohol: alc, status: 'new' };
   if (isFinite(det.lat) && isFinite(det.lon) && det.lat != null) { order.lat = det.lat; order.lon = det.lon; }
   const legacy = () => { const o = Object.assign({}, order); delete o.tip; delete o.alcohol; o.payment = 'cash_on_delivery'; o.notes = (order.notes + ' Tip $' + (tip / 100).toFixed(2)).slice(0, 900); return o; };
   let ok = false, mode = 'modern', unknown = false, last = null;
@@ -439,6 +439,20 @@ async function pay() {
     const code = (last && last.code) || '';
     fail('Could not start your order', code === 'permission-denied' ? 'The database is not accepting orders yet. The owner needs to publish the latest Firestore rules.' : 'We could not reach the server. Check your connection and press the button again.');
     reset(); return;
+  }
+  /* card checkout (Stripe): the worker builds the Stripe page and checks every price */
+  if (CHECKOUT_URL) {
+    lbl.textContent = 'Opening secure checkout...';
+    try {
+      const r = await withTimeout(fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId: pendingId, email: (user.email || '').toLowerCase(), coupon: code, items: lines.map(l => ({ id: l.id, name: C.items.get(l.id).name + (C.describe(l).length ? ' (' + C.describe(l).join(' | ') + ')' : ''), qty: l.q, unit: C.unit(l) })) }) }), 20000);
+      const j = await r.json();
+      if (!r.ok || !j.url) throw new Error(j.error || 'Checkout failed');
+      try { sessionStorage.removeItem('mch_ck'); } catch (x) {}
+      location.href = j.url; return;
+    } catch (er) {
+      fail('Could not open checkout', 'We could not open the secure checkout page. Your order is saved. Please press the button again in a moment.');
+      reset(); return;
+    }
   }
   try { sessionStorage.setItem('mch_pay', JSON.stringify({ id: pendingId, cents: total, t: Date.now() })); sessionStorage.removeItem('mch_ck'); } catch (x) {}
   location.href = '/pay';

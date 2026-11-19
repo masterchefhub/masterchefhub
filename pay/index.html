@@ -48,12 +48,18 @@ h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:2.3rem;line-he
   <div class="card" id="card"><p class="sub">Loading...</p></div>
 </div>
 <script type="module">
-import { VENMO_USER } from '/menu.js';
+import { VENMO_USER, PLAN_LINKS, STRIPE_TEST } from '/menu.js';
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const PLANS = { 'sous-chef': ['Sous Chef (Plan 1)', 1999], 'head-chef': ['Head Chef (Plan 2)', 4999], 'executive-chef': ['Executive Chef (Plan 3)', 9999] };
 const q = new URLSearchParams(location.search).get('plan');
 let cents = 0, note = '', title = '', sub = '', isPlan = false;
+if (q && PLANS[q] && PLAN_LINKS[q]) {
+  /* members pay on Stripe's own page */
+  document.body.innerHTML = '<p style="font-family:Inter,Arial,sans-serif;text-align:center;margin-top:30vh">Taking you to secure checkout' + (STRIPE_TEST ? ' (test mode)' : '') + '...</p>';
+  location.replace(PLAN_LINKS[q]);
+  throw new Error('redirect');
+}
 if (q && PLANS[q]) {
   isPlan = true; cents = PLANS[q][1]; title = PLANS[q][0] + ' membership';
   note = 'MCH ' + PLANS[q][0] + ' membership';

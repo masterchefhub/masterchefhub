@@ -6,6 +6,19 @@ export const FEE = 3.00;          /* flat delivery fee in dollars (use 0 for fre
 export const MIN_ORDER = 0;       /* no minimum: one meal or one drink is fine */
 /* Your Venmo username WITHOUT the @, for example 'Chris-W' (from venmo.com/u/Chris-W). Customers pay this account. */
 export const VENMO_USER = '';
+
+/* ---- STRIPE (sandbox / test mode for now) ----
+ * Memberships: Stripe payment links (one per plan). Orders: the checkout worker in /worker (see worker/README.md);
+ * paste its address here once it is deployed. Leave CHECKOUT_URL empty to turn card checkout off. */
+export const STRIPE_TEST = true;
+export const CHECKOUT_URL = '';
+export const PLAN_LINKS = {
+  'sous-chef': 'https://buy.stripe.com/test_6oUfZhbR8faIfLa46vc3m00',
+  'head-chef': 'https://buy.stripe.com/test_aFa3cv8EWbYwdD246vc3m01',
+  'executive-chef': 'https://buy.stripe.com/test_6oU5kD5sK9Qo42s9qPc3m02'
+};
+/* members cancel, update their card or see invoices here */
+export const PORTAL_URL = 'https://billing.stripe.com/p/login/test_6oUfZhbR8faIfLa46vc3m00';
 export const TIPS = [0, 10, 15, 20];   /* quick tip buttons, in percent */
 
 /* "Fresh and homemade" costs a little more than "Basic". small items +3, meals +4, big dinners +6. */
