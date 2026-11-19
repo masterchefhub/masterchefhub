@@ -1,5 +1,9 @@
 # Stripe checkout worker (orders)
 
+**Easiest way:** open  https://deploy.workers.cloudflare.com/?url=https://github.com/masterchefhub/masterchefhub/tree/main/worker  , sign in to Cloudflare (free), press **Deploy**, and when it asks for `STRIPE_SECRET_KEY` paste your Stripe sandbox secret key (Stripe sandbox > Developers > API keys > Secret key, `sk_test_...`). Copy the worker address it gives you into `CHECKOUT_URL` in `menu.js`.
+
+Manual way:
+
 Memberships already work with Stripe payment links. Orders have changing totals, so they need this small worker.
 It is free on Cloudflare and takes about 5 minutes.
 

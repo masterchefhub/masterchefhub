@@ -1,0 +1,10 @@
+{
+  "name": "mch-checkout",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MasterChefHub Stripe checkout worker",
+  "cloudflare": {
+    "label": "MasterChefHub Stripe checkout",
+    "products": ["Workers"]
+  }
+}
