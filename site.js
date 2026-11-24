@@ -61,7 +61,7 @@ pSw('hideCartBar', false, 'Layout', 'Hide the cart bar', 'The bar that appears o
 pSw('hideUserChip', false, 'Layout', 'Hide my name in the sidebar', 'Remove the profile chip', '.mchu{display:none!important}');
 pSw('hideVisualizer', false, 'Layout', 'Hide the music bars', 'The little moving bars by the music button', '.eq{display:none!important}');
 pSw('hideScrollbar', false, 'Layout', 'Hide the scrollbar', 'Scroll without the bar', 'html{scrollbar-width:none}html::-webkit-scrollbar{display:none}');
-['videos:Videos', 'blog:Blog', 'about:About', 'contact:Contact', 'membership:Membership', 'terms:Terms', 'privacy:Privacy'].forEach(function (x) {
+['videos:Videos', 'community:Community', 'blog:Blog', 'about:About', 'contact:Contact', 'membership:Membership', 'terms:Terms', 'privacy:Privacy'].forEach(function (x) {
   var a = x.split(':'); pSw('hide_' + a[0], false, 'Sidebar tabs', 'Hide ' + a[1], 'Remove the ' + a[1] + ' tab from the sidebar', '.sidebar a[href="/' + a[0] + '"],.sidebar a[href="/' + a[0] + '/"]{display:none!important}');
 });
 /* Food cards */
