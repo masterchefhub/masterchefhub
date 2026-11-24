@@ -537,6 +537,7 @@ const sk = n => Array(n).fill('<div class="ccard sk"><div class="cthumb"></div><
 const empty = (t, p) => '<div class="empty"><div class="eic">' + IC.hat + '</div><h3>' + t + '</h3><p>' + p + '</p></div>';
 const money = v => '$' + Number(v).toFixed(2);
 (function(){ const ids = ['cheeseburger','pizza-slice','spaghetti-meat','pancakes','choc-cake','tacos','fries','lemonade','ribeye-dinner','cupcake','alfredo','wings-24','waffles','milkshake']; const one = ids.map(id => MENU.find(m => m.id === id)).filter(Boolean).map(m => '<figure><img data-fb="/img/menu/' + m.id + '.svg" src="' + m.img + '" alt="" width="320" height="240" loading="lazy"><figcaption>' + D.esc(m.name) + '</figcaption></figure>').join(''); $('#strip').innerHTML = one + one; })();
+[['.c1','ribeye-dinner'],['.c2','cheeseburger'],['.c3','choc-cake'],['.c4','pancakes']].forEach(([c,id]) => { const m = MENU.find(x => x.id === id), im = document.querySelector('.collage ' + c); if (m && im) { im.dataset.fb = '/img/menu/' + id + '.svg'; im.src = m.img; } });
 $('#statDishes').textContent = MENU.length + '+'; $('#fMenu').textContent = MENU.length + '+ dishes';
 const PICK = ['cheeseburger', 'pizza-slice', 'spaghetti-meat', 'pancakes', 'choc-cake', 'milkshake'];
 $('#homeDishes').innerHTML = PICK.map(id => MENU.find(m => m.id === id)).filter(Boolean).map(m =>
