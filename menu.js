@@ -12,6 +12,7 @@ export const VENMO_USER = '';
  * paste its address here once it is deployed. Leave CHECKOUT_URL empty to turn card checkout off. */
 export const STRIPE_TEST = true;
 export const CHECKOUT_URL = '';
+export const STRIPE_PK = '';   /* Stripe PUBLISHABLE key (pk_test_...), safe to be public */
 export const PLAN_LINKS = {
   'sous-chef': 'https://buy.stripe.com/test_6oUfZhbR8faIfLa46vc3m00',
   'head-chef': 'https://buy.stripe.com/test_aFa3cv8EWbYwdD246vc3m01',

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Secure checkout | MasterChefHub</title>
+<meta name="robots" content="noindex">
+<script>try{var d=JSON.parse(sessionStorage.getItem('mch_secure')||'null');if(!d||!d.cs||Date.now()-d.t>3*3600*1000)location.replace('/cart/');}catch(e){location.replace('/cart/');}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+:root{--bg:#f6f6f4;--ink:#0a0a0a;--muted:#737373;--line:#e4e4e1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+.bar{background:#0a0a0a;color:#fff}
+.bar div{max-width:1040px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:800;letter-spacing:.14em;font-size:.9rem}
+.logo i{width:34px;height:34px;border:1.5px solid #fff;display:grid;place-items:center}.logo img{width:20px;height:20px;filter:invert(1)}
+.lock{font-size:.76rem;letter-spacing:.14em;font-weight:700;color:#cfcfcf;display:flex;align-items:center;gap:8px}
+.lock svg{width:14px;height:14px}
+.test{background:#fff3b0;color:#3d3300;text-align:center;font-size:.85rem;padding:10px 14px;font-weight:600}
+.test b{letter-spacing:.04em}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 18px 70px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px;align-items:start}
+.sum{background:#fff;border:2px solid #0a0a0a;padding:24px}
+h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:2.1rem;line-height:1.1;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:.9rem;margin:6px 0 18px}
+.ln{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-top:1px solid var(--line);font-size:.93rem}
+.ln small{display:block;color:var(--muted);margin-top:3px;font-size:.78rem;line-height:1.4}
+.ln b{white-space:nowrap}
+.tot{display:flex;justify-content:space-between;font-size:.9rem;color:var(--muted);padding:5px 0}
+.tot.big{border-top:2px solid #0a0a0a;margin-top:10px;padding-top:14px;color:var(--ink);font-size:1.25rem;font-weight:800}
+.back{display:inline-block;margin-top:16px;font-weight:700;font-size:.85rem;color:var(--ink)}
+.pay{background:#fff;border:2px solid #0a0a0a;padding:22px;min-height:420px}
+.pay h2{font-size:.76rem;letter-spacing:.18em;font-weight:800;margin-bottom:14px}
+.msg{padding:30px 10px;text-align:center;color:var(--muted);line-height:1.6}
+.msg a{color:var(--ink);font-weight:700}
+.trust{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;color:var(--muted);font-size:.78rem}
+@media(max-width:820px){.wrap{grid-template-columns:1fr;padding-top:18px}.sum{order:2}.pay{order:1}}
+</style>
+</head>
+<body data-no-side>
+<div class="bar"><div>
+  <a class="logo" href="/"><i><img src="/favicon.svg" alt=""></i>MASTERCHEFHUB</a>
+  <span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>SECURE CHECKOUT</span>
+</div></div>
+<div class="test" id="test" hidden><b>TEST MODE.</b> No real money is charged. Use card <b>4242 4242 4242 4242</b>, any future date, any 3 digits, any ZIP.</div>
+<div class="wrap">
+  <section class="sum" id="sum"></section>
+  <section class="pay">
+    <h2>PAYMENT</h2>
+    <div id="embed"><p class="msg">Loading secure payment form...</p></div>
+    <div class="trust"><span>Card details go straight to Stripe. MasterChefHub never sees them.</span></div>
+  </section>
+</div>
+<script type="module">
+import { STRIPE_PK, STRIPE_TEST } from '/menu.js';
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const m = c => '$' + (c / 100).toFixed(2);
+let d = null; try { d = JSON.parse(sessionStorage.getItem('mch_secure')); } catch (e) {}
+if (!d) { location.replace('/cart/'); throw 0; }
+if (STRIPE_TEST) document.getElementById('test').hidden = false;
+document.getElementById('sum').innerHTML =
+  '<h1>Your order</h1><p class="sub">Order ' + esc(String(d.orderId || '').slice(-6).toUpperCase()) + '</p>' +
+  d.lines.map(l => '<div class="ln"><div>' + esc(l.name) + ' x ' + l.q + (l.opts && l.opts.length ? '<small>' + esc(l.opts.join(' | ')) + '</small>' : '') + '</div><b>' + m(l.c) + '</b></div>').join('') +
+  '<div class="tot"><span>Subtotal</span><span>' + m(d.sub) + '</span></div>' +
+  (d.disc ? '<div class="tot"><span>Coupon ' + esc(d.code) + '</span><span>-' + m(d.disc) + '</span></div>' : '') +
+  '<div class="tot"><span>Delivery fee</span><span>' + m(d.fee) + '</span></div>' +
+  '<div class="tot"><span>Sales tax</span><span>' + m(d.tax) + '</span></div>' +
+  '<div class="tot big"><span>Total</span><span>' + m(d.total) + '</span></div>' +
+  '<a class="back" href="/cart/">Back to cart</a>';
+const box = document.getElementById('embed');
+(async () => {
+  try {
+    if (!window.Stripe) throw new Error('stripe.js blocked');
+    const stripe = Stripe(STRIPE_PK);
+    const co = await stripe.initEmbeddedCheckout({ fetchClientSecret: async () => d.cs });
+    box.innerHTML = ''; co.mount('#embed');
+  } catch (e) {
+    box.innerHTML = '<p class="msg">The payment form could not load. Check your connection, turn off any ad blocker for this page, and <a href="/secure/">try again</a>, or <a href="/cart/">go back to your cart</a>.</p>';
+  }
+})();
+</script>
+</body>
+</html>

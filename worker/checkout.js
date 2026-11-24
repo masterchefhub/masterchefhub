@@ -1,5 +1,5 @@
 /* MasterChefHub Stripe checkout worker (Cloudflare Workers). Works in Stripe TEST mode and live mode: it follows whatever key you give it.
- * POST  {orderId, email, coupon, items:[{id,name,qty,unit}]}  ->  {url}  (Stripe Checkout page)
+ * POST  {orderId, email, coupon, items:[{id,name,qty,unit}]}  ->  {url}  (clientSecret for the embedded card form on /secure)
  * GET   ?session_id=cs_...                                   ->  {paid:true|false}
  * The worker works out the delivery fee, tax and coupon itself, and checks every price, so the browser can not change them.
  * Secret: STRIPE_SECRET_KEY = a restricted key with  Checkout Sessions: Write  and  Coupons: Write  (read is fine too). */
@@ -69,10 +69,11 @@ export default {
       p['payment_intent_data[metadata][orderId]'] = b.orderId;
       p['payment_intent_data[description]'] = 'MasterChefHub order ' + b.orderId.slice(-6).toUpperCase();
       if (b.email) p.customer_email = String(b.email).slice(0, 200);
-      p.success_url = SITE + '/order-success?session_id={CHECKOUT_SESSION_ID}';
-      p.cancel_url = SITE + '/cart?unpaid=1';
+      /* embedded: the card form is shown inside masterchefhub.com/secure instead of on a Stripe page */
+      p.ui_mode = 'embedded';
+      p.return_url = SITE + '/order-success?session_id={CHECKOUT_SESSION_ID}';
       const s = await stripe(env, 'checkout/sessions', p);
-      return json({ url: s.url });
+      return json({ clientSecret: s.client_secret, id: s.id });
     } catch (e) {
       return json({ error: 'Checkout failed' }, 500);
     }
