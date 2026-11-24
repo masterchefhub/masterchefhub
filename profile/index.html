@@ -410,6 +410,16 @@ const setBad = (id, t) => { const f = $('#' + id); f.classList.toggle('bad', !!t
 const msg = (el, type, t) => { el.hidden = !t; el.className = 'pmsg ' + type; el.textContent = t || ''; };
 const busy = (btn, on) => { btn.classList.toggle('loading', on); btn.disabled = on; };
 
+/* show who you are right away from the saved copy, then let Firebase confirm it */
+try {
+  const cu = JSON.parse(localStorage.getItem('mch_user') || 'null');
+  if (cu && cu.uid) {
+    const nm = cu.name || (cu.email ? cu.email.split('@')[0] : 'Account');
+    $('#pAv').innerHTML = cu.photo ? '<img src="' + esc(cu.photo) + '" alt="" referrerpolicy="no-referrer">' : esc(nm.charAt(0).toUpperCase());
+    $('#pName').textContent = nm; $('#pEmail').textContent = cu.email || '';
+    $('#pfLoad').hidden = true; $('#pfMain').hidden = false;
+  }
+} catch (e) {}
 const c = await D.init();
 const showErr = t => { $('#pfLoad').hidden = true; const e = $('#pfErr'); e.hidden = false; e.innerHTML = esc(t); };
 if (!c) { showErr(D.state.error === 'not-configured' ? 'Firebase is not connected yet. Add your keys to firebase-config.js.' : 'Could not load your profile. Check your connection and refresh.'); }

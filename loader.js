@@ -159,7 +159,7 @@ if (S.loader !== false) {
   if (fresh) {
     if (!pageLoaded) run = Loader(S.loaderFast ? 200 : 350, false);
   } else if (!pageLoaded) {
-    run = showMini();            /* arriving from another page of the site */
+    run = null;                  /* moving between tabs: no loading screen at all */
   }
   if (!pageLoaded) {
     /* the page is ready to use once its HTML and scripts are in; do not wait for every image and font (that was the slow part) */
@@ -173,20 +173,10 @@ if (S.loader !== false) {
       pageLoaded = true; if (run) run.markLoaded ? run.markLoaded() : run.finish();   /* never trap the visitor */
     }, MAX_WAIT);
   }
-  /* leaving: show the same simple loader as soon as a link to another page of the site is clicked */
-  document.addEventListener('click', function (e) {
-    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
-    if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
-    var u; try { u = new URL(a.href, location.href); } catch (x) { return; }
-    if (u.origin !== location.origin || /^(mailto|tel|javascript):/i.test(a.getAttribute('href'))) return;
-    if (u.pathname === location.pathname && u.search === location.search) return;
-    setTimeout(function () { if (!e.defaultPrevented || true) showMini(); }, 60);
-  }, false);
   window.addEventListener('pageshow', function (e) { if (e.persisted && mini) mini.finish(); });
 }
 
-window.MCHLoader = { mini: showMini };
+window.MCHLoader = { mini: function () { return null; } };   /* tab changes never show a loader */
 
 /* ---- speed: open the connections to Google/Firebase early ---- */
 try {
