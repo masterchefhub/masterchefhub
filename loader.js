@@ -26,7 +26,7 @@ try { internal = !!document.referrer && new URL(document.referrer).origin === lo
 var fresh = navType === 'reload' || (navType === 'navigate' && !internal);
 
 var CSS =
-'.mld{position:fixed;inset:0;z-index:2147483000;background:#0a0a0a;color:#fff;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;will-change:transform;transition:transform .75s cubic-bezier(.76,0,.24,1)}' +
+'.mld{position:fixed;inset:0;z-index:2147483000;background:#0a0a0a;color:#fff;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;will-change:transform;transition:transform .45s cubic-bezier(.76,0,.24,1)}' +
 '.mld.out{transform:translate3d(0,-100%,0)}' +
 'html.mld-lock,html.mld-lock body{overflow:hidden!important}' +
 '.mld *,.mld *::before,.mld *::after{box-sizing:border-box;margin:0;padding:0}' +
@@ -100,9 +100,9 @@ function Loader(minMs, loadedAlready) {
   function frame() {
     if (done) return;
     var t = Date.now() - t0;
-    var target = loaded ? 100 : Math.min(90, 90 * (1 - Math.exp(-t / 1100)));
+    var target = loaded ? 100 : Math.min(90, 90 * (1 - Math.exp(-t / 500)));
     if (loaded && t < minMs) target = Math.min(100, Math.max(target, 100 * t / minMs));
-    p += (target - p) * 0.14;
+    p += (target - p) * 0.3;
     if (loaded && p > 99.3) p = 100;
     line.style.transform = 'scaleX(' + (p / 100).toFixed(4) + ')';
     num.textContent = Math.round(p);
@@ -113,8 +113,8 @@ function Loader(minMs, loadedAlready) {
     if (done) return; done = true;
     clearInterval(tipTimer); cancelAnimationFrame(raf);
     line.style.transform = 'scaleX(1)'; num.textContent = '100'; tip.classList.remove('sw'); tip.textContent = 'Ready';
-    setTimeout(function () { el.classList.add('out'); }, 180);
-    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); root.classList.remove('mld-lock'); }, 1100);
+    setTimeout(function () { el.classList.add('out'); }, 60);
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); root.classList.remove('mld-lock'); }, 650);
   }
   raf = requestAnimationFrame(frame);
   return { markLoaded: function () { loaded = true; }, finish: finish, el: el };
@@ -141,7 +141,7 @@ function showMini() {
   mini = {
     finish: function () {
       if (fin) return; fin = true; clearInterval(timer);
-      var wait = Math.max(0, 420 - (Date.now() - t0));
+      var wait = Math.max(0, 200 - (Date.now() - t0));
       setTimeout(function () {
         bar.style.width = '100%';
         setTimeout(function () { el.classList.remove('on'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); root.classList.remove('mld2-lock'); mini = null; }, 260); }, 180);
@@ -153,11 +153,11 @@ function showMini() {
 
 var pageLoaded = document.readyState === 'complete';
 var run = null;
-var MAX_WAIT = 2500;   /* never keep the visitor waiting longer than this */
+var MAX_WAIT = 2000;   /* never keep the visitor waiting longer than this */
 
 if (S.loader !== false) {
   if (fresh) {
-    if (!pageLoaded) run = Loader(S.loaderFast ? 500 : 900, false);
+    if (!pageLoaded) run = Loader(S.loaderFast ? 200 : 350, false);
   } else if (!pageLoaded) {
     run = showMini();            /* arriving from another page of the site */
   }
@@ -187,4 +187,37 @@ if (S.loader !== false) {
 }
 
 window.MCHLoader = { mini: showMini };
+
+/* ---- speed: open the connections to Google/Firebase early ---- */
+try {
+  ['https://www.gstatic.com', 'https://firestore.googleapis.com', 'https://identitytoolkit.googleapis.com', 'https://fonts.gstatic.com'].forEach(function (h) {
+    var l = document.createElement('link'); l.rel = 'preconnect'; l.href = h; if (/gstatic/.test(h)) l.crossOrigin = ''; (document.head || root).appendChild(l);
+  });
+} catch (e) {}
+
+/* ---- no internet: a full-screen notice until the connection is back ---- */
+(function () {
+  var box = null;
+  function show() {
+    if (box) return;
+    if (!document.getElementById('mch-off-css')) {
+      var st = document.createElement('style'); st.id = 'mch-off-css';
+      st.textContent = '#mchoff{position:fixed;inset:0;z-index:2147483600;background:#0a0a0a;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:28px;font-family:Inter,system-ui,-apple-system,sans-serif}#mchoff svg{width:64px;height:64px}#mchoff b{font-size:.8rem;letter-spacing:.3em;font-weight:800}#mchoff p{color:#b5b5b5;max-width:320px;line-height:1.6;font-size:.95rem}#mchoff button{margin-top:6px;background:#fff;color:#0a0a0a;border:2px solid #fff;padding:14px 26px;font:800 .8rem Inter,sans-serif;letter-spacing:.14em;cursor:pointer}';
+      (document.head || root).appendChild(st);
+    }
+    box = document.createElement('div'); box.id = 'mchoff'; box.setAttribute('role', 'alert');
+    box.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1" fill="#fff"/><path d="M3 3l18 18"/></svg><b>NO CONNECTION</b><p>Reconnect to WiFi to continue MasterChefHub.</p><button type="button">TRY AGAIN</button>';
+    box.querySelector('button').addEventListener('click', function () { if (navigator.onLine !== false) { hide(); location.reload(); } });
+    (document.body || root).appendChild(box);
+  }
+  function hide() { if (box && box.parentNode) box.parentNode.removeChild(box); box = null; }
+  function check() { if (navigator.onLine === false) show(); }
+  window.addEventListener('offline', show);
+  window.addEventListener('online', function () { var was = !!box; hide(); if (was) { try { window.dispatchEvent(new CustomEvent('mch:online')); } catch (e) {} } });
+  if (document.body) check(); else document.addEventListener('DOMContentLoaded', check);
+  window.addEventListener('pageshow', check);
+})();
+
+/* ---- service worker: only so a page can say "no connection" when you open it offline ---- */
+try { if ('serviceWorker' in navigator && location.protocol === 'https:') window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); }); } catch (e) {}
 })();

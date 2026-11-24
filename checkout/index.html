@@ -404,7 +404,7 @@ async function pay() {
   const reset = () => { btn.classList.remove('loading'); btn.disabled = false; lbl.innerHTML = 'Try again &middot; ' + money(total); };
   err.hidden = true;
   /* stock check: make sure nothing in the cart ran out while the customer was shopping */
-  await ST.load(true);
+  try { await withTimeout(ST.load(true), 3000); } catch (e) {}
   const gone = lines.find(l => ST.left(l.id) < lines.filter(x => x.id === l.id).reduce((t, x) => t + x.q, 0));
   if (gone) { const nm = C.items.get(gone.id).name, n = ST.left(gone.id); fail('Out of stock', n <= 0 ? nm + ' just sold out. Please remove it from your cart.' : 'Only ' + n + ' of ' + nm + ' left. Please lower the amount in your cart.'); return; }
   if (!valid()) { err.hidden = false; err.textContent = 'Please fix the highlighted fields.'; const b = document.querySelector('.fld.bad'); if (b) b.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
@@ -420,11 +420,11 @@ async function pay() {
   if (isFinite(det.lat) && isFinite(det.lon) && det.lat != null) { order.lat = det.lat; order.lon = det.lon; }
   const legacy = () => { const o = Object.assign({}, order); delete o.tip; delete o.alcohol; o.payment = 'cash_on_delivery'; o.notes = (order.notes + ' Tip $' + (tip / 100).toFixed(2)).slice(0, 900); return o; };
   let ok = false, mode = 'modern', unknown = false, last = null;
-  for (let n = 0; n < 4 && !ok; n++) {
+  for (let n = 0; n < 3 && !ok; n++) {
     if (n) lbl.textContent = 'Trying again (' + n + ')...';
     try {
-      if (!pendingId) pendingId = await withTimeout(D.newId('orders'), 15000);
-      await withTimeout(D.put('orders', pendingId, mode === 'modern' ? order : legacy()), 15000);
+      if (!pendingId) pendingId = await withTimeout(D.newId('orders'), 5000);
+      await withTimeout(D.put('orders', pendingId, mode === 'modern' ? order : legacy()), 6000);
       ok = true;
     } catch (er) {
       last = er; const code = (er && er.code) || '';
@@ -433,7 +433,7 @@ async function pay() {
         if (mode === 'modern') { mode = 'legacy'; continue; }
         break;
       }
-      unknown = true; await sleep(1000 * (n + 1));
+      unknown = true; await sleep(400 * (n + 1));
     }
   }
   if (!ok) {
@@ -445,7 +445,7 @@ async function pay() {
   {
     lbl.textContent = 'Opening secure checkout...'; if (window.MCHPay) MCHPay.show('Loading secure payment', 'Getting your order ready. Please do not close this page.');
     try {
-      const r = await withTimeout(fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId: pendingId, email: (user.email || '').toLowerCase(), coupon: code, items: lines.map(l => ({ id: l.id, name: C.items.get(l.id).name + (C.describe(l).length ? ' (' + C.describe(l).join(' | ') + ')' : ''), qty: l.q, unit: C.unit(l) })) }) }), 20000);
+      const r = await withTimeout(fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId: pendingId, email: (user.email || '').toLowerCase(), coupon: code, items: lines.map(l => ({ id: l.id, name: C.items.get(l.id).name + (C.describe(l).length ? ' (' + C.describe(l).join(' | ') + ')' : ''), qty: l.q, unit: C.unit(l) })) }) }), 9000);
       const j = await r.json();
       if (!r.ok || !j.clientSecret) throw new Error(j.error || 'Checkout failed');
       try { sessionStorage.removeItem('mch_ck'); } catch (x) {}
