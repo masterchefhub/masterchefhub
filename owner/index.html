@@ -150,7 +150,7 @@ const STAT = { new: 'New', paid: 'Paid', cooking: 'Cooking', out: 'On the way', 
 views.orders = async v => {
   await ST.load(true);
   const rows = await D.list('orders', { max: 60 });
-  v.innerHTML = '<h1>Orders</h1><p class="sub">Match the code in each order (and its Venmo note) to the payment, then press <b>Paid</b>. Paid also takes the dishes out of your stock.</p><div class="bar"><button class="btn" id="ref" type="button">Refresh</button></div><div id="ol"></div>';
+  v.innerHTML = '<h1>Orders</h1><p class="sub">Match the code in each order to the payment, then press <b>Paid</b>. Paid also takes the dishes out of your stock.</p><div class="bar"><button class="btn" id="ref" type="button">Refresh</button></div><div id="ol"></div>';
   $('#ref').onclick = () => { cur = ''; show('orders'); };
   const ol = $('#ol');
   ol.innerHTML = rows.length ? rows.map(o => {

@@ -363,7 +363,7 @@ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll
 const params=new URLSearchParams(location.search);
 const NEXT=(function(){ const n=params.get('next'); return n&&n.charAt(0)==='/'&&n.charAt(1)!=='/'?n:'/'; })();
 const FBV='10.14.1';
-let mode='login', busy=false, fb=null, auth=null, db=null, fs=null, setupErr=null, justSignedIn=false, view='auth';
+let persistDone=false, mode='login', busy=false, fb=null, auth=null, db=null, fs=null, setupErr=null, justSignedIn=false, view='auth';
 
 /* ---------- helpers ---------- */
 const say=(type,title,message)=>{ try{ if(window.MCH&&MCH.notify) MCH.notify({type:type,title:title,message:message}); }catch(e){} };
@@ -629,11 +629,12 @@ $$('.soc[data-p]').forEach(b=>b.addEventListener('click',async()=>{
   if(busy) return;
   const name=b.dataset.p;
   clearErrs();
-  if(!(await needAuth())) return;
+  /* phones only allow the sign-in window if it opens straight from the tap, so do NOT wait for anything here when Firebase is already loaded */
+  if(!(fb&&auth) && !(await needAuth())) return;
   busyOn(b,true);
   let provider, doneAuth=false, cancelNow=null;
   try{
-    await fb.setPersistence(auth,fb.browserLocalPersistence);
+    if(!persistDone) await fb.setPersistence(auth,fb.browserLocalPersistence);
     if(name==='google'){ provider=new fb.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'}); }
     else if(name==='apple'){ provider=new fb.OAuthProvider('apple.com'); provider.addScope('email'); provider.addScope('name'); }
     else{ provider=new fb.OAuthProvider('microsoft.com'); provider.setCustomParameters({prompt:'select_account'}); }
@@ -742,6 +743,7 @@ $('#resend').addEventListener('click',async()=>{
 (async function boot(){
   if(params.get('mode')==='signup') setMode('signup'); else setMode('login');
   const ok=await ready;
+  if(ok&&fb&&auth){ try{ await fb.setPersistence(auth,fb.browserLocalPersistence); persistDone=true; }catch(e){} }
   if(!ok){
     if(setupErr==='not-configured') $('#setup').hidden=false;
     if(params.get('signout')){ try{ localStorage.removeItem('mch_user'); }catch(e){} say('info','Signed out','See you next time.'); history.replaceState(null,'',location.pathname); }

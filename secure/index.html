@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="/payload.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
 <style>
 :root{--bg:#f6f6f4;--ink:#0a0a0a;--muted:#737373;--line:#e4e4e1}
@@ -74,13 +75,15 @@ document.getElementById('sum').innerHTML =
   '<div class="tot big"><span>Total</span><span>' + m(d.total) + '</span></div>' +
   '<a class="back" href="/cart/">Back to cart</a>';
 const box = document.getElementById('embed');
+if (window.MCHPay) MCHPay.show('Loading secure payment', 'Almost there.');
 (async () => {
   try {
     if (!window.Stripe) throw new Error('stripe.js blocked');
     const stripe = Stripe(STRIPE_PK);
     const co = await stripe.initEmbeddedCheckout({ fetchClientSecret: async () => d.cs });
-    box.innerHTML = ''; co.mount('#embed');
+    box.innerHTML = ''; co.mount('#embed'); setTimeout(() => window.MCHPay && MCHPay.hide(), 900);
   } catch (e) {
+    if (window.MCHPay) MCHPay.hide();
     box.innerHTML = '<p class="msg">The payment form could not load. Check your connection, turn off any ad blocker for this page, and <a href="/secure/">try again</a>, or <a href="/cart/">go back to your cart</a>.</p>';
   }
 })();

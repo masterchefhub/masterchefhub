@@ -354,3 +354,36 @@ html[data-side="off"] #mchSideBtn .sb-ar{transform:rotate(180deg)}
 #mchTop:hover{background:#0a0a0a;color:#fff}
 #mchTop svg{width:20px;height:20px}
 @media(max-width:960px){#mchTop{bottom:84px}}
+
+/* ============ iPhone / touch scrolling ============ */
+html{scroll-behavior:auto;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%;overscroll-behavior-y:auto}
+body{-webkit-overflow-scrolling:touch;touch-action:manipulation}
+.sidebar{overflow-y:auto;-webkit-overflow-scrolling:touch;height:100vh;height:100dvh}
+.strip,.strip *{touch-action:pan-y}
+.chips{touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
+.scrim:not(.show){pointer-events:none!important}
+input,select,textarea{font-size:max(16px,1em)}
+.main{min-height:100vh;min-height:100dvh}
+button,.btn,a{touch-action:manipulation}
+
+/* ============ REVAMP: sharp black and white, bold and editorial ============ */
+:root{--r:0px;--line:#0a0a0a22}
+.hero,.big,.coll,.cta,.card,.cat,.ccard,.stat,.step,.hw,.fact,.plan,.pcard,.blk,.cm-box,.dm,.pkg,.tile,.ctile,.mi,.thumb,.cthumb,.mimg,.strip figure,.hero-img,.sum,.pay{border-radius:0!important}
+.btn,.sbtn,.addb,.pbtn,.tbtn,.cz-add,button.primary,.chip,.chips button,.burger,.search,.search input,input,select,textarea,.fld input,.pill,.badge,.tag{border-radius:0!important}
+.card,.cat,.ccard,.mi,.stat,.fact,.blk,.plan,.pcard{border:1.5px solid #0a0a0a!important;box-shadow:none!important;transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s!important}
+@media(hover:hover){.card:hover,.cat:hover,.ccard:hover,.mi:hover,.plan:hover,.pcard:hover{transform:translate(-4px,-4px)!important;box-shadow:6px 6px 0 #0a0a0a!important}}
+.btn,.sbtn,.pbtn,.tbtn{border:2px solid #0a0a0a;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem}
+.btn:active,.sbtn:active,.pbtn:active,.addb:active{transform:translate(2px,2px)}
+h1,h2,.serif{letter-spacing:-.025em}
+h1.serif,.phead h1,.hero h1{font-weight:400}
+.topbar{border-bottom:2px solid #0a0a0a;background:#fff}
+.sidebar a{border-radius:0!important;letter-spacing:.04em}
+.sidebar a.on,.sidebar a.active,.sidebar a[aria-current]{background:#fff!important;color:#0a0a0a!important}
+.search{border:1.5px solid #0a0a0a!important;background:#fff}
+input,select,textarea{border:1.5px solid #0a0a0a}
+input:focus,select:focus,textarea:focus{outline:3px solid #0a0a0a;outline-offset:2px}
+.eyebrow,.kicker,.lbl,.cap{letter-spacing:.2em;text-transform:uppercase;font-weight:800}
+footer{border-top:2px solid #0a0a0a}
+::selection{background:#0a0a0a;color:#fff}
+.mchn,#mch-upd,.mchp,#mchTop{border-radius:0!important}

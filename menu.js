@@ -4,8 +4,6 @@
 export const CURRENCY = 'USD';
 export const FEE = 3.00;          /* flat delivery fee in dollars (use 0 for free delivery) */
 export const MIN_ORDER = 0;       /* no minimum: one meal or one drink is fine */
-/* Your Venmo username WITHOUT the @, for example 'Chris-W' (from venmo.com/u/Chris-W). Customers pay this account. */
-export const VENMO_USER = '';
 
 /* ---- STRIPE (sandbox / test mode for now) ----
  * Memberships: Stripe payment links (one per plan). Orders: the checkout worker in /worker (see worker/README.md);

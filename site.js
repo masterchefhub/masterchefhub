@@ -1298,7 +1298,12 @@ var pageListeners = [], pageTimers = [], navBusy = false, curPath = location.pat
     return id;
   };
 })();
+/* phones and tablets: plain page loads. The in-page swap can leave iPhone scrolling stuck. */
+var TOUCHY = (function () { try { return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform)) || window.matchMedia('(pointer:coarse)').matches; } catch (e) { return false; } })();
+function unlockScroll() { try { var r = document.documentElement; r.classList.remove('cm-lock'); r.style.overflow = ''; document.body.style.overflow = ''; document.body.style.position = ''; } catch (e) {} }
+window.addEventListener('pageshow', unlockScroll);
 function softOK(a, e) {
+  if (TOUCHY) return null;
   if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return null;
   if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download') || a.hasAttribute('data-hard')) return null;
   var raw = a.getAttribute('href') || '';
@@ -1368,7 +1373,7 @@ function softGo(url, push) {
       Array.prototype.forEach.call(imp.querySelectorAll ? imp.querySelectorAll('script') : [], function (x) { scripts.push(x); x.parentNode.removeChild(x); });
       document.body.insertBefore(imp, first);
     });
-    window.scrollTo(0, 0);
+    unlockScroll(); window.scrollTo(0, 0);
     applyDisplay(); buildSideBtn(); paintUser(); paintCart(); refreshAuth();
     if (document.body.getAttribute('data-mch-player') === 'off') { if (ui) ui.style.display = 'none'; }
     else { if (!ui) buildUI(); if (ui) ui.style.display = S.miniPlayer === false ? 'none' : ''; }
