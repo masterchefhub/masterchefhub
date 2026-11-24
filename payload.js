@@ -4,7 +4,7 @@
   if (window.MCHPay) return;
   var css = '#mchpay{position:fixed;inset:0;z-index:2147483500;background:#0a0a0a;color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-family:Inter,system-ui,-apple-system,sans-serif;text-align:center;padding:24px;opacity:0;transition:opacity .25s}' +
     '#mchpay.on{display:flex}#mchpay.vis{opacity:1}' +
-    '#mchpay svg{width:min(62vw,230px);height:auto;overflow:visible}' +
+    '#mchpay .gf{background:#fff;border:3px solid #fff;width:min(70vw,260px);height:min(70vw,260px);display:grid;place-items:center;margin-bottom:8px}#mchpay .gf img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}' +
     '#mchpay b{font-size:.78rem;letter-spacing:.28em;font-weight:800;margin-top:4px}' +
     '#mchpay small{color:#9a9a9a;font-size:.86rem;line-height:1.5;max-width:300px}' +
     '#mchpay .dots i{display:inline-block;width:5px;height:5px;background:#fff;margin:0 3px;animation:mchpd 1s infinite ease-in-out}' +
@@ -28,12 +28,15 @@
     '</g>' +
     '<g class="ball"><circle cx="128" cy="134" r="14" fill="#ff6a1a" stroke="#0a0a0a" stroke-width="1.5"/><path d="M114 134h28M128 120v28M118 124q10 10 0 20M138 124q-10 10 0 20" fill="none" stroke="#0a0a0a" stroke-width="1.4"/></g>' +
     '</svg>';
+  var GIFS = ['/img/loading/dribble-1.gif', '/img/loading/dribble-2.gif'], last = -1;
+  GIFS.forEach(function (u) { var i = new Image(); i.src = u; });   /* warm the cache */
+  function pick() { var n; do { n = Math.floor(Math.random() * GIFS.length); } while (GIFS.length > 1 && n === last); last = n; return GIFS[n]; }
   var el = null;
   function build() {
     if (el) return el;
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
     el = document.createElement('div'); el.id = 'mchpay'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite');
-    el.innerHTML = svg + '<b id="mchpayT">LOADING SECURE PAYMENT</b><span class="dots"><i></i><i></i><i></i></span><small id="mchpayS">Please do not close this page.</small>';
+    el.innerHTML = '<div class="gf"><img id="mchpayG" alt="" width="220" height="220"></div><b id="mchpayT">LOADING SECURE PAYMENT</b><span class="dots"><i></i><i></i><i></i></span><small id="mchpayS">Please do not close this page.</small>';
     document.body.appendChild(el); return el;
   }
   window.MCHPay = {
@@ -41,6 +44,7 @@
       var e = build();
       if (title) e.querySelector('#mchpayT').textContent = String(title).toUpperCase();
       if (sub != null) e.querySelector('#mchpayS').textContent = sub;
+      e.querySelector('#mchpayG').src = pick();
       e.classList.add('on'); requestAnimationFrame(function () { e.classList.add('vis'); });
     },
     hide: function () { if (!el) return; el.classList.remove('vis'); setTimeout(function () { el.classList.remove('on'); }, 260); }
