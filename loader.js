@@ -157,7 +157,7 @@ var MAX_WAIT = 2000;   /* never keep the visitor waiting longer than this */
 
 if (S.loader !== false) {
   if (fresh) {
-    if (!pageLoaded) run = Loader(S.loaderFast ? 200 : 350, false);
+    if (!pageLoaded) run = Loader(S.loaderFast ? 350 : 750, false);   /* about one second on a fresh visit */
   } else if (!pageLoaded) {
     run = null;                  /* moving between tabs: no loading screen at all */
   }
@@ -177,6 +177,33 @@ if (S.loader !== false) {
 }
 
 window.MCHLoader = { mini: function () { return null; } };   /* tab changes never show a loader */
+
+/* ---- tab changes: the page you are on fades out (0.3 s), the new page fades in (0.3 s) ---- */
+(function () {
+  var reduce = false;
+  try { reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) || S.animations === false; } catch (e) {}
+  if (reduce || S.pageFade === false) return;
+  var st = document.createElement('style'); st.id = 'mch-pt-css';
+  var K = 'body>*:not([data-keep]):not(#mchld):not(#mchld2):not(#mchoff)';
+  st.textContent = '@keyframes mchPageIn{from{opacity:0}to{opacity:1}}' +
+    'html.mch-in ' + K + '{animation:mchPageIn .3s ease-out backwards}' +
+    'html.mch-out ' + K + '{animation:none!important;opacity:0!important;transition:opacity .3s ease-in;pointer-events:none}';
+  (document.head || root).appendChild(st);
+  root.classList.add('mch-in');
+  var busy = false;
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || busy || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
+    var u; try { u = new URL(a.href, location.href); } catch (x) { return; }
+    if (u.origin !== location.origin || !/^https?:$/.test(u.protocol)) return;
+    if (u.pathname === location.pathname && u.search === location.search) return;   /* same page or #anchor */
+    e.preventDefault(); busy = true;
+    root.classList.add('mch-out');
+    setTimeout(function () { location.href = u.href; }, 300);
+  }, false);
+  window.addEventListener('pageshow', function (e) { if (e.persisted) { busy = false; root.classList.remove('mch-out'); } });
+})();
 
 /* ---- speed: open the connections to Google/Firebase early ---- */
 try {

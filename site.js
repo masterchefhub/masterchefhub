@@ -1334,13 +1334,16 @@ function softGo(url, push) {
   if (navBusy) return false;
   navBusy = true;
   var mini = null; try { mini = window.MCHLoader && MCHLoader.mini ? MCHLoader.mini() : null; } catch (e) {}
-  var hard = function () { navBusy = false; location.href = url.href || url; };
+  var hard = function () { navBusy = false; document.documentElement.classList.remove('mch-out'); location.href = url.href || url; };
   var u = typeof url === 'string' ? new URL(url, location.href) : url;
-  fetch(u.pathname + u.search, { credentials: 'same-origin', headers: { Accept: 'text/html' } }).then(function (r) {
+  /* the page you are on fades out (0.3 s) while the next one loads; the new page then fades in (0.3 s) */
+  document.documentElement.classList.add('mch-out');
+  Promise.all([fetch(u.pathname + u.search, { credentials: 'same-origin', headers: { Accept: 'text/html' } }).then(function (r) {
     var ct = r.headers.get('content-type') || '';
     if (!r.ok || ct.indexOf('text/html') < 0) throw new Error('not a page');
     return r.text();
-  }).then(function (html) {
+  }), new Promise(function (ok) { setTimeout(ok, 300); })]).then(function (res) {
+    var html = res[0];
     var doc = new DOMParser().parseFromString(html, 'text/html');
     if (!doc.body || !doc.body.children.length) throw new Error('empty');
     /* leave the old page */
@@ -1374,6 +1377,7 @@ function softGo(url, push) {
       document.body.insertBefore(imp, first);
     });
     unlockScroll(); window.scrollTo(0, 0);
+    document.documentElement.classList.remove('mch-out');
     applyDisplay(); buildSideBtn(); paintUser(); paintCart(); refreshAuth();
     if (document.body.getAttribute('data-mch-player') === 'off') { if (ui) ui.style.display = 'none'; }
     else { if (!ui) buildUI(); if (ui) ui.style.display = S.miniPlayer === false ? 'none' : ''; }
