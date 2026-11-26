@@ -1,1 +1,2 @@
 Disallow: /secret.html
+Disallow: /vids
