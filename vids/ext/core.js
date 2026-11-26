@@ -35,7 +35,8 @@
     '.pill{display:inline-block;border:1px solid #555;padding:2px 7px;font-size:.58rem;letter-spacing:.12em;font-weight:800;color:#bbb;margin:0 4px 4px 0}',
     '.kb{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.74rem;color:#bbb}',
     '.kb b{color:#fff;font-weight:800}',
-    'header .b.s{padding:6px 9px}'
+    'header .b.s{padding:6px 9px}',
+    '.acts .b{white-space:normal;text-align:center;line-height:1.3}'
   ].join('\n');
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 

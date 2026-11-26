@@ -543,6 +543,7 @@ function cur(){return get(S.sel)}
 
 /* ===== drawing ===== */
 function drawItem(c,it,t,w,h){
+  if(it.kf&&EXT.kf)it=EXT.kf(it,t);
   var k=EXT.kinds[it.kind],clip=k?null:CBY[it.ref];if(!k&&!clip)return;var sp=it.spd||1,local=(t-it.start)*sp+(it.off||0),rem=it.start+it.dur-t;
   var a=it.op==null?1:it.op;if(it.fade>0)a*=Math.min(1,(t-it.start)/it.fade,rem/it.fade);
   c.save();
@@ -556,7 +557,7 @@ function drawItem(c,it,t,w,h){
 }
 function render(){
   var w=cv.width,h=cv.height,t=S.t;cx.save();cx.setTransform(1,0,0,1,0,0);cx.fillStyle='#000';cx.fillRect(0,0,w,h);if(EXT.view)EXT.view(cx,w,h);else cx.scale(w/W,h/H);
-  EXT.videoTracks.forEach(function(tr){S.items.filter(function(i){return !EXT.isAud(i)&&(i.kind==='clip'||EXT.kinds[i.kind])&&i.track===tr&&t>=i.start&&t<i.start+i.dur&&!i.hide}).sort(function(a,b){return a.start-b.start}).forEach(function(it){cx.save();cx.beginPath();cx.rect(0,0,W,H);cx.clip();drawItem(cx,it,t,W,H);cx.restore()})});
+  EXT.videoTracks.forEach(function(tr){S.items.filter(function(i){return !EXT.isAud(i)&&(i.kind==='clip'||EXT.kinds[i.kind])&&i.track===tr&&t>=i.start&&t<i.start+i.dur&&!i.hide&&!(S.meta&&S.meta.off&&S.meta.off[i.track])}).sort(function(a,b){return a.start-b.start}).forEach(function(it){cx.save();cx.beginPath();cx.rect(0,0,W,H);cx.clip();drawItem(cx,it,t,W,H);cx.restore()})});
   cx.restore();EXT.emit('render',t);
 }
 function drawThumb(cvs,clip,t){
@@ -582,7 +583,7 @@ function placePH(){$('#ph').style.left=pxs(S.t)+'px'}
 function ui(){$('#time').textContent=fmt(S.t)+' / '+fmt(total());$('#bPlay').textContent=S.playing?'Pause':'Play';placePH()}
 var drag=null;
 function trackAt(y,kind){var rows=document.querySelectorAll('.row');for(var i=0;i<rows.length;i++){var b=rows[i].getBoundingClientRect();if(y>=b.top&&y<b.bottom){var tr=+rows[i].dataset.tr;if(kind==='snd'||kind==='aud'?EXT.isAudTrack(tr):!EXT.isAudTrack(tr))return tr}}return null}
-function snap(v,id){var best=v,bd=.08;[0,S.t].concat(S.items.filter(function(i){return i.id!==id}).reduce(function(a,i){a.push(i.start,i.start+i.dur);return a},[])).forEach(function(p){if(Math.abs(p-v)<bd){bd=Math.abs(p-v);best=p}});return Math.max(0,Math.round(best*100)/100)}
+function snap(v,id){var best=v,bd=.08;[0,S.t].concat(S.items.filter(function(i){return i.id!==id}).reduce(function(a,i){a.push(i.start,i.start+i.dur);return a},[])).forEach(function(p){if(Math.abs(p-v)<bd){bd=Math.abs(p-v);best=p}});if(EXT.snapBeat){var bb=EXT.snapBeat(v);if(bb!=null&&Math.abs(bb-v)<Math.max(bd,.12))best=bb}return Math.max(0,Math.round(best*100)/100)}
 $('#tli').addEventListener('pointerdown',function(e){
   var it=e.target.closest('.it');
   if(it){var o=get(+it.dataset.id);S.sel=o.id;drag=o.lock?null:{id:o.id,x:e.clientX,start:o.start,dur:o.dur,mode:e.target.dataset.rh?'rs':'mv',moved:false};if(drag)try{it.setPointerCapture(e.pointerId)}catch(x){}drawTL();insp();if(isM())setTab('edit');return}
@@ -661,9 +662,9 @@ var raf=0,t0=0;
 function stopSounds(){if(MASTER){try{MASTER.gain.cancelScheduledValues(0);MASTER.gain.setValueAtTime(0,ACX.currentTime);var m=MASTER;setTimeout(function(){try{m.disconnect()}catch(e){}},50)}catch(e){}MASTER=null}}
 function play(){
   if(!total())return;var x=audio();if(S.t>=total()-.05&&!S.stopAt)S.t=0;S.playing=true;t0=performance.now()-S.t*1000;
-  if(x){MASTER=x.createGain();MASTER.gain.value=1;MASTER.connect(x.destination);MASTER.connect(DEST);var base=x.currentTime+.05;
-    S.items.forEach(function(it){if(it.kind==='snd'&&!it.mute&&it.start>=S.t-.01&&(!S.stopAt||it.start<S.stopAt))try{SBY[it.ref].play(x,MASTER,base+(it.start-S.t),it.vol==null?1:it.vol)}catch(e){}
-      var k=EXT.kinds[it.kind];if(k&&k.play&&!it.mute&&it.start+it.dur>S.t&&(!S.stopAt||it.start<S.stopAt))try{k.play(it,x,MASTER,base,S.t)}catch(e){}})}
+  if(x){MASTER=x.createGain();MASTER.gain.value=EXT.masterVol?EXT.masterVol():1;EXT.playStart&&EXT.playStart();MASTER.connect(x.destination);MASTER.connect(DEST);var base=x.currentTime+.05;
+    S.items.forEach(function(it){var dd=EXT.destFor?EXT.destFor(it,x,MASTER):MASTER;if(!dd)return;if(it.kind==='snd'&&!it.mute&&it.start>=S.t-.01&&(!S.stopAt||it.start<S.stopAt))try{SBY[it.ref].play(x,dd,base+(it.start-S.t),it.vol==null?1:it.vol)}catch(e){}
+      var k=EXT.kinds[it.kind];if(k&&k.play&&!it.mute&&it.start+it.dur>S.t&&(!S.stopAt||it.start<S.stopAt))try{k.play(it,x,dd,base,S.t)}catch(e){}})}
   EXT.emit('play',S.t);
   cancelAnimationFrame(raf);raf=requestAnimationFrame(tick);ui();
 }
@@ -802,6 +803,11 @@ window.__S=S;window.__addClip=addClip;window.__SBY=SBY;window.__mkNoise=mkNoise;
 <script src="/vids/ext/shapes.js"></script>
 <script src="/vids/ext/media.js"></script>
 <script src="/vids/ext/project.js"></script>
+<script src="/vids/ext/keys.js"></script>
+<script src="/vids/ext/devices.js"></script>
+<script src="/vids/ext/audio.js"></script>
+<script src="/vids/ext/captions.js"></script>
+<script src="/vids/ext/timeline.js"></script>
 <script type="module">
 import * as D from '/data.js';
 let user=null;try{user=await D.whenUser()}catch(e){}

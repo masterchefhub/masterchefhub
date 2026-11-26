@@ -22,6 +22,7 @@
     var m = meta(), mode = m.fit || 'fit', s = mode === 'fill' ? Math.max(w / W, h / H) : Math.min(w / W, h / H);
     var px = (m.pan || 0) / 100 * (W * s - w) / 2;
     if (mode === 'fit' && m.bg && m.bg !== '#000000') { c.fillStyle = m.bg; c.fillRect(0, 0, w, h); }
+    EXT.lastView = { s: s, ox: (w - W * s) / 2 - (mode === 'fill' ? px : 0), oy: (h - H * s) / 2 };
     c.translate((w - W * s) / 2 - (mode === 'fill' ? px : 0), (h - H * s) / 2); c.scale(s, s);
     c.beginPath(); c.rect(0, 0, W, H); c.clip();
   };

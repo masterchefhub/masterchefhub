@@ -116,10 +116,10 @@
   var FIT = [['fit', 'Fit inside'], ['fill', 'Fill the screen'], ['stretch', 'Stretch']];
 
   function place(c, w, h, it) {
-    var fit = it.fit || 'fit', s;
-    if (fit === 'stretch') return { x: 0, y: 0, w: W, h: H };
-    s = fit === 'fill' ? Math.max(W / w, H / h) : Math.min(W / w, H / h);
-    return { x: (W - w * s) / 2, y: (H - h * s) / 2, w: w * s, h: h * s };
+    var fit = it.fit || 'fit', s, dw = it._dw || W, dh = it._dh || H;
+    if (fit === 'stretch') return { x: 0, y: 0, w: dw, h: dh };
+    s = fit === 'fill' ? Math.max(dw / w, dh / h) : Math.min(dw / w, dh / h);
+    return { x: (dw - w * s) / 2, y: (dh - h * s) / 2, w: w * s, h: h * s };
   }
   function frame(c, p, it) {
     var r = it.rad || 0, bw = it.bw || 0;
@@ -323,4 +323,6 @@
   function preloadAll() { S.items.forEach(function (i) { if (i.media && (i.kind === 'vid' || i.kind === 'aud')) buffer(i.media); }); }
   EXT.on('started', preloadAll); EXT.on('restored', preloadAll);
   EXT.mediaReady = function () { return LIB.length; };
+  EXT.mediaList = function () { return LIB; };
+  EXT.mediaRec = rec;
 })();
