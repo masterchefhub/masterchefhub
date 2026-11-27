@@ -243,6 +243,20 @@ footer ul a:hover{text-decoration:underline}
       </div>
       <div class="chips" id="chips"></div>
       <div id="status" class="cstat" hidden></div>
+      <section class="mfeat" aria-label="Mac OS showcase">
+        <style>
+          .mfeat{margin:0 0 28px;border:1px solid var(--line,#0a0a0a22);background:#0a0a0a;color:#fff;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+          .mfeat video{display:block;width:100%;height:100%;min-height:240px;object-fit:cover;background:#000}
+          .mfeat .mf-t{padding:clamp(18px,3vw,34px);display:flex;flex-direction:column;justify-content:center;gap:12px}
+          .mfeat .mf-k{font-size:.72rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:#9a9a9a}
+          .mfeat h2{font-size:clamp(1.5rem,3vw,2.3rem);line-height:1.08;margin:0;color:#fff}
+          .mfeat p{color:#c9c9c9;line-height:1.5;margin:0}
+          .mfeat .mf-m{font-size:.8rem;color:#8d8d8d}
+          @media(max-width:760px){.mfeat{grid-template-columns:1fr}}
+        </style>
+        <video controls playsinline preload="metadata" poster="/videos/mac-showcase.jpg" aria-label="MasterChefHub Mac OS showcase"><source src="/videos/mac-showcase.mp4" type="video/mp4"></video>
+        <div class="mf-t"><span class="mf-k">Mac OS showcase</span><h2 class="serif">The site, in a Mac window</h2><p>A quick tour of MasterChefHub in Safari on a Mac: the menu, plans, community and signing in.</p><span class="mf-m">41 seconds</span></div>
+      </section>
       <div class="cgrid vgrid" id="list"></div>
     </div>
   </div>

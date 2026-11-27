@@ -122,8 +122,12 @@ function Loader(minMs, loadedAlready) {
 
 /* ------------------------------------------------------------------ */
 /* Simple loader used when moving between pages: just a progress bar and the word "Loading" */
-var MCSS = '.mld2{position:fixed;inset:0;z-index:2147483000;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;opacity:0;transition:opacity .22s ease;-webkit-font-smoothing:antialiased}' +
-'.mld2.on{opacity:1}' +
+var MCSS = '.mld2{position:fixed;inset:0;z-index:2147483000;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;clip-path:inset(100% 0 0 0);transition:clip-path .34s cubic-bezier(.7,0,.2,1);-webkit-font-smoothing:antialiased}' +
+'.mld2.on{clip-path:inset(0 0 0 0)}' +
+'.mld2.off{clip-path:inset(0 0 100% 0)}' +
+'.mld2 b,.mld2 s{transition:transform .5s cubic-bezier(.2,.9,.3,1) .12s,opacity .4s ease .12s;transform:translate3d(0,22px,0) scale(.94);opacity:0}' +
+'.mld2.on b,.mld2.on s{transform:none;opacity:1}' +
+'.mld2.off b,.mld2.off s{transform:translate3d(0,-18px,0);opacity:0;transition-delay:0s;transition-duration:.25s}' +
 '.mld2 b{color:#fff;font-weight:600;font-size:.82rem;letter-spacing:.22em;text-transform:uppercase}' +
 '.mld2 s{display:block;width:min(220px,60vw);height:3px;border-radius:3px;background:#262626;overflow:hidden}' +
 '.mld2 s i{display:block;height:100%;width:0;background:#fff;border-radius:3px;transition:width .3s ease}' +
@@ -144,7 +148,7 @@ function showMini() {
       var wait = Math.max(0, 600 - (Date.now() - t0));
       setTimeout(function () {
         bar.style.width = '100%';
-        setTimeout(function () { el.classList.remove('on'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); root.classList.remove('mld2-lock'); mini = null; }, 260); }, 180);
+        setTimeout(function () { el.classList.add('off'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); root.classList.remove('mld2-lock'); mini = null; }, 380); }, 180);
       }, wait);
     }
   };

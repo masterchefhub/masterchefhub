@@ -157,9 +157,9 @@ footer ul a:hover{text-decoration:underline}
 .mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:16px;margin-top:6px}
 .mi{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s,border-color .28s}
 .mi:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(0,0,0,.1);border-color:#d6d6d1}
-.mimg{background:#f0f0ed;overflow:hidden}
-.mimg img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
-.mi:hover .mimg img{transform:scale(1.05)}
+.mimg{position:relative;aspect-ratio:4/3;background:#f0f0ed;overflow:hidden;flex:none}
+.mimg img{position:absolute;left:0;top:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;object-position:center;display:block;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+@media(hover:hover){.mi:hover .mimg img{transform:scale(1.05)}}
 .mbody{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
 .mi h3{font-size:1.02rem;line-height:1.25}
 .mi p{color:var(--muted);font-size:.86rem;flex:1}
@@ -415,7 +415,7 @@ function drawMenu() {
   const list = MENU.filter(m => (cat === 'all' || m.cat === cat) && (!t || (m.name + ' ' + m.desc).toLowerCase().includes(t)));
   $('#fcount').textContent = list.length + (list.length === 1 ? ' dish' : ' dishes');
   $('#mgrid').innerHTML = list.length ? list.map(m => { const n = inCart(m.id);
-    return '<div class="mi" data-id="' + esc(m.id) + '"><div class="mimg"><img data-fb="/img/menu/' + esc(m.id) + '.svg" src="' + esc(m.img) + '" alt="' + esc(m.name) + '" width="640" height="480" loading="lazy" decoding="async">' + (n ? '<span class="inc">' + n + ' in cart</span>' : '') + '</div><div class="mbody"><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p><div class="mb"><span class="pr">' + money(C.items.get(m.id).c) + (m.groups.length || m.canFresh ? ' <span class="tagf">+ options</span>' : '') + '</span>' + (ST.soldOut(m.id) ? '<button class="addb" type="button" disabled style="opacity:.45;cursor:not-allowed">Sold out</button>' : (ST.left(m.id) <= 5 ? '<span class="tagf" style="margin-right:8px">Only ' + ST.left(m.id) + ' left</span>' : '') + '<button class="addb" data-open="' + esc(m.id) + '" type="button"><svg class="ico"><use href="#i-plus"/></svg>Add</button>') + '</div></div></div>'; }).join('')
+    return '<div class="mi" data-id="' + esc(m.id) + '"><div class="mimg"><img data-fb="/img/menu/' + esc(m.id) + '.svg" src="' + esc(m.img) + '" alt="' + esc(m.name) + '" width="640" height="480" loading="lazy">' + (n ? '<span class="inc">' + n + ' in cart</span>' : '') + '</div><div class="mbody"><h3>' + esc(m.name) + '</h3><p>' + esc(m.desc) + '</p><div class="mb"><span class="pr">' + money(C.items.get(m.id).c) + (m.groups.length || m.canFresh ? ' <span class="tagf">+ options</span>' : '') + '</span>' + (ST.soldOut(m.id) ? '<button class="addb" type="button" disabled style="opacity:.45;cursor:not-allowed">Sold out</button>' : (ST.left(m.id) <= 5 ? '<span class="tagf" style="margin-right:8px">Only ' + ST.left(m.id) + ' left</span>' : '') + '<button class="addb" data-open="' + esc(m.id) + '" type="button"><svg class="ico"><use href="#i-plus"/></svg>Add</button>') + '</div></div></div>'; }).join('')
     : '<div class="fempty">Nothing matches that search. Try another word or pick All.</div>';
 }
 function bar() {

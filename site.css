@@ -296,7 +296,7 @@ h1,h2,h3,.head h2,.phead h1{letter-spacing:-.03em}
 .cz-card{box-shadow:0 30px 80px rgba(0,0,0,.4)}
 .mimg,.cthumb{border-radius:12px 12px 0 0;overflow:hidden}
 .mimg img,.cthumb img{transition:transform .7s var(--ease)}
-.mi:hover .mimg img,.ccard:hover .cthumb img{transform:scale(1.06)}
+@media(hover:hover){.mi:hover .mimg img,.ccard:hover .cthumb img{transform:scale(1.06)}}
 /* snappier motion */
 .main{animation:pgIn .35s var(--ease) both}
 .reveal{transition:opacity .55s var(--ease),transform .55s var(--ease)}
