@@ -153,11 +153,11 @@ function showMini() {
 
 var pageLoaded = document.readyState === 'complete';
 var run = null;
-var MAX_WAIT = 2000;   /* never keep the visitor waiting longer than this */
+var MAX_WAIT = 3000;   /* never keep the visitor waiting longer than this */
 
 if (S.loader !== false) {
   if (fresh) {
-    if (!pageLoaded) run = Loader(S.loaderFast ? 350 : 750, false);   /* about one second on a fresh visit */
+    if (!pageLoaded) run = Loader(S.loaderFast ? 900 : 1600, false);   /* long enough to see the whole loading screen */
   } else if (!pageLoaded) {
     run = null;                  /* moving between tabs: no loading screen at all */
   }
@@ -185,9 +185,25 @@ window.MCHLoader = { mini: function () { return null; } };   /* tab changes neve
   if (reduce || S.pageFade === false) return;
   var st = document.createElement('style'); st.id = 'mch-pt-css';
   var K = 'body>*:not([data-keep]):not(#mchld):not(#mchld2):not(#mchoff)';
-  st.textContent = '@keyframes mchPageIn{from{opacity:0}to{opacity:1}}' +
-    'html.mch-in ' + K + '{animation:mchPageIn .3s ease-out backwards}' +
-    'html.mch-out ' + K + '{animation:none!important;opacity:0!important;transition:opacity .3s ease-in;pointer-events:none}';
+  /* Windows-style tab switch: the page you are on slides away, the new one slides in from the other side */
+  st.textContent = '@keyframes mchSlideIn{from{opacity:0;transform:translateX(var(--min,9vw)) scale(.96)}to{opacity:1;transform:none}}' +
+    'html.mch-in ' + K + '{animation:mchSlideIn .4s cubic-bezier(.16,1,.3,1) backwards}' +
+    'html.mch-out ' + K + '{animation:none!important;opacity:0!important;transform:translateX(var(--mdx,-9vw)) scale(.96);transition:opacity .26s ease-in,transform .26s cubic-bezier(.5,0,.9,.5);pointer-events:none}' +
+    'html.mch-slide{overflow-x:hidden}';
+  /* direction: moving to a tab further down the menu slides left, back up slides right */
+  window.MCHDir = function (href) {
+    var d = 1;
+    try {
+      var u = new URL(href, location.href), links = [].slice.call(document.querySelectorAll('.menu a[href]')), np = function (p) { return p.replace(/\/index\.html$/, '/').replace(/(.)\/$/, '$1'); };
+      var ci = -1, ti = -1, cp = np(location.pathname), tp = np(u.pathname);
+      links.forEach(function (a, i) { var p = np(new URL(a.getAttribute('href'), location.href).pathname); if (p === cp && ci < 0) ci = i; if (p === tp && ti < 0) ti = i; });
+      if (ci >= 0 && ti >= 0 && ti < ci) d = -1;
+    } catch (e) {}
+    root.style.setProperty('--mdx', d > 0 ? '-9vw' : '9vw'); root.style.setProperty('--min', d > 0 ? '9vw' : '-9vw');
+    try { sessionStorage.setItem('mch_dir', String(d)); } catch (e) {}
+    return d;
+  };
+  try { var pd = sessionStorage.getItem('mch_dir'); if (pd) root.style.setProperty('--min', pd === '-1' ? '-9vw' : '9vw'); } catch (e) {}
   (document.head || root).appendChild(st);
   root.classList.add('mch-in');
   var busy = false;
@@ -199,8 +215,8 @@ window.MCHLoader = { mini: function () { return null; } };   /* tab changes neve
     if (u.origin !== location.origin || !/^https?:$/.test(u.protocol)) return;
     if (u.pathname === location.pathname && u.search === location.search) return;   /* same page or #anchor */
     e.preventDefault(); busy = true;
-    root.classList.add('mch-out');
-    setTimeout(function () { location.href = u.href; }, 300);
+    window.MCHDir(u.href); root.classList.add('mch-out');
+    setTimeout(function () { location.href = u.href; }, 270);
   }, false);
   window.addEventListener('pageshow', function (e) { if (e.persisted) { busy = false; root.classList.remove('mch-out'); } });
 })();
