@@ -141,7 +141,7 @@ function showMini() {
   mini = {
     finish: function () {
       if (fin) return; fin = true; clearInterval(timer);
-      var wait = Math.max(0, 200 - (Date.now() - t0));
+      var wait = Math.max(0, 600 - (Date.now() - t0));
       setTimeout(function () {
         bar.style.width = '100%';
         setTimeout(function () { el.classList.remove('on'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); root.classList.remove('mld2-lock'); mini = null; }, 260); }, 180);
@@ -176,19 +176,23 @@ if (S.loader !== false) {
   window.addEventListener('pageshow', function (e) { if (e.persisted && mini) mini.finish(); });
 }
 
-window.MCHLoader = { mini: function () { return null; } };   /* tab changes never show a loader */
+window.MCHLoader = { mini: function () { return S.loader === false ? null : showMini(); } };   /* tab changes show the loading animation */
 
 /* ---- tab changes: the page you are on fades out (0.3 s), the new page fades in (0.3 s) ---- */
 (function () {
-  var reduce = false;
-  try { reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) || S.animations === false; } catch (e) {}
-  if (reduce || S.pageFade === false) return;
-  /* simple tab change: the new page eases in quickly; nothing slides and nothing waits */
-  var K = 'body>*:not([data-keep]):not(#mchld):not(#mchld2):not(#mchoff)';
-  var st = document.createElement('style'); st.id = 'mch-pt-css';
-  st.textContent = '@keyframes mchPageIn{from{opacity:0}to{opacity:1}}html.mch-in ' + K + '{animation:mchPageIn .15s ease-out backwards}';
-  (document.head || root).appendChild(st);
-  root.classList.add('mch-in');
+  /* tab change = the loading animation: a short loading screen shows while the next page comes in */
+  var busy = false;
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || busy || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
+    var u; try { u = new URL(a.href, location.href); } catch (x) { return; }
+    if (u.origin !== location.origin || !/^https?:$/.test(u.protocol)) return;
+    if (u.pathname === location.pathname && u.search === location.search) return;   /* same page or #anchor */
+    e.preventDefault(); busy = true; showMini();
+    setTimeout(function () { location.href = u.href; }, 550);
+  }, false);
+  window.addEventListener('pageshow', function (e) { if (e.persisted) { busy = false; var o = document.getElementById('mchld2'); if (o && o.parentNode) o.parentNode.removeChild(o); root.classList.remove('mld2-lock'); mini = null; } });
 })();
 
 /* ---- speed: open the connections to Google/Firebase early ---- */
