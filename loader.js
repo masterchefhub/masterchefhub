@@ -183,42 +183,12 @@ window.MCHLoader = { mini: function () { return null; } };   /* tab changes neve
   var reduce = false;
   try { reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) || S.animations === false; } catch (e) {}
   if (reduce || S.pageFade === false) return;
-  var st = document.createElement('style'); st.id = 'mch-pt-css';
+  /* simple tab change: the new page eases in quickly; nothing slides and nothing waits */
   var K = 'body>*:not([data-keep]):not(#mchld):not(#mchld2):not(#mchoff)';
-  /* Windows-style tab switch: the page you are on slides away, the new one slides in from the other side */
-  st.textContent = '@keyframes mchSlideIn{from{transform:translateX(var(--min,9vw)) scale(.96)}to{transform:none}}' +
-    'html.mch-in ' + K + '{animation:mchSlideIn .4s cubic-bezier(.16,1,.3,1) backwards}' +
-    'html.mch-out ' + K + '{animation:none!important;transform:translateX(var(--mdx,-9vw)) scale(.96);transition:transform .26s cubic-bezier(.5,0,.9,.5);pointer-events:none}' +
-    'html.mch-slide{overflow-x:hidden}';
-  /* direction: moving to a tab further down the menu slides left, back up slides right */
-  window.MCHDir = function (href) {
-    var d = 1;
-    try {
-      var u = new URL(href, location.href), links = [].slice.call(document.querySelectorAll('.menu a[href]')), np = function (p) { return p.replace(/\/index\.html$/, '/').replace(/(.)\/$/, '$1'); };
-      var ci = -1, ti = -1, cp = np(location.pathname), tp = np(u.pathname);
-      links.forEach(function (a, i) { var p = np(new URL(a.getAttribute('href'), location.href).pathname); if (p === cp && ci < 0) ci = i; if (p === tp && ti < 0) ti = i; });
-      if (ci >= 0 && ti >= 0 && ti < ci) d = -1;
-    } catch (e) {}
-    root.style.setProperty('--mdx', d > 0 ? '-9vw' : '9vw'); root.style.setProperty('--min', d > 0 ? '9vw' : '-9vw');
-    try { sessionStorage.setItem('mch_dir', String(d)); } catch (e) {}
-    return d;
-  };
-  try { var pd = sessionStorage.getItem('mch_dir'); if (pd) root.style.setProperty('--min', pd === '-1' ? '-9vw' : '9vw'); } catch (e) {}
+  var st = document.createElement('style'); st.id = 'mch-pt-css';
+  st.textContent = '@keyframes mchPageIn{from{opacity:0}to{opacity:1}}html.mch-in ' + K + '{animation:mchPageIn .15s ease-out backwards}';
   (document.head || root).appendChild(st);
   root.classList.add('mch-in');
-  var busy = false;
-  document.addEventListener('click', function (e) {
-    if (e.defaultPrevented || busy || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
-    if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
-    var u; try { u = new URL(a.href, location.href); } catch (x) { return; }
-    if (u.origin !== location.origin || !/^https?:$/.test(u.protocol)) return;
-    if (u.pathname === location.pathname && u.search === location.search) return;   /* same page or #anchor */
-    e.preventDefault(); busy = true;
-    window.MCHDir(u.href); root.classList.add('mch-out');
-    setTimeout(function () { location.href = u.href; }, 270);
-  }, false);
-  window.addEventListener('pageshow', function (e) { if (e.persisted) { busy = false; root.classList.remove('mch-out'); } });
 })();
 
 /* ---- speed: open the connections to Google/Firebase early ---- */

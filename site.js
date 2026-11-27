@@ -1337,13 +1337,11 @@ function softGo(url, push) {
   var hard = function () { navBusy = false; document.documentElement.classList.remove('mch-out'); location.href = url.href || url; };
   var u = typeof url === 'string' ? new URL(url, location.href) : url;
   /* the page you are on fades out (0.3 s) while the next one loads; the new page then fades in (0.3 s) */
-  if (window.MCHDir) window.MCHDir(u.href);
-  document.documentElement.classList.add('mch-out');
   Promise.all([fetch(u.pathname + u.search, { credentials: 'same-origin', headers: { Accept: 'text/html' } }).then(function (r) {
     var ct = r.headers.get('content-type') || '';
     if (!r.ok || ct.indexOf('text/html') < 0) throw new Error('not a page');
     return r.text();
-  }), new Promise(function (ok) { setTimeout(ok, 270); })]).then(function (res) {
+  }), new Promise(function (ok) { setTimeout(ok, 0); })]).then(function (res) {
     var html = res[0];
     var doc = new DOMParser().parseFromString(html, 'text/html');
     if (!doc.body || !doc.body.children.length) throw new Error('empty');
