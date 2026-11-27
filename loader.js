@@ -186,9 +186,9 @@ window.MCHLoader = { mini: function () { return null; } };   /* tab changes neve
   var st = document.createElement('style'); st.id = 'mch-pt-css';
   var K = 'body>*:not([data-keep]):not(#mchld):not(#mchld2):not(#mchoff)';
   /* Windows-style tab switch: the page you are on slides away, the new one slides in from the other side */
-  st.textContent = '@keyframes mchSlideIn{from{opacity:0;transform:translateX(var(--min,9vw)) scale(.96)}to{opacity:1;transform:none}}' +
+  st.textContent = '@keyframes mchSlideIn{from{transform:translateX(var(--min,9vw)) scale(.96)}to{transform:none}}' +
     'html.mch-in ' + K + '{animation:mchSlideIn .4s cubic-bezier(.16,1,.3,1) backwards}' +
-    'html.mch-out ' + K + '{animation:none!important;opacity:0!important;transform:translateX(var(--mdx,-9vw)) scale(.96);transition:opacity .26s ease-in,transform .26s cubic-bezier(.5,0,.9,.5);pointer-events:none}' +
+    'html.mch-out ' + K + '{animation:none!important;transform:translateX(var(--mdx,-9vw)) scale(.96);transition:transform .26s cubic-bezier(.5,0,.9,.5);pointer-events:none}' +
     'html.mch-slide{overflow-x:hidden}';
   /* direction: moving to a tab further down the menu slides left, back up slides right */
   window.MCHDir = function (href) {
